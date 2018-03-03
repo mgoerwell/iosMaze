@@ -19,6 +19,8 @@
 		DE6B813B204B5B3B0034A4F0 /* GLESRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6B8133204B5B3B0034A4F0 /* GLESRenderer.cpp */; };
 		DE6B8149204B5C030034A4F0 /* CPlusPlusCounter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6B8145204B5C030034A4F0 /* CPlusPlusCounter.cpp */; };
 		DE6B814A204B5C030034A4F0 /* ObjectiveCCounter.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE6B8147204B5C030034A4F0 /* ObjectiveCCounter.mm */; };
+		DE6B8152204B5EE50034A4F0 /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6B814F204B5EE40034A4F0 /* maze.cpp */; };
+		DE6B8153204B5EE50034A4F0 /* DisjointSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +44,10 @@
 		DE6B8146204B5C030034A4F0 /* CPlusPlusCounter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPlusPlusCounter.h; sourceTree = "<group>"; };
 		DE6B8147204B5C030034A4F0 /* ObjectiveCCounter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjectiveCCounter.mm; sourceTree = "<group>"; };
 		DE6B8148204B5C030034A4F0 /* ObjectiveCCounter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectiveCCounter.h; sourceTree = "<group>"; };
+		DE6B814E204B5EE40034A4F0 /* maze.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maze.h; sourceTree = "<group>"; };
+		DE6B814F204B5EE40034A4F0 /* maze.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = maze.cpp; sourceTree = "<group>"; };
+		DE6B8150204B5EE40034A4F0 /* DisjointSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DisjointSet.h; sourceTree = "<group>"; };
+		DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisjointSet.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +80,10 @@
 		DE5947BE204B5AB500FCC2D9 /* iosMaze */ = {
 			isa = PBXGroup;
 			children = (
+				DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */,
+				DE6B8150204B5EE40034A4F0 /* DisjointSet.h */,
+				DE6B814F204B5EE40034A4F0 /* maze.cpp */,
+				DE6B814E204B5EE40034A4F0 /* maze.h */,
 				DE6B814C204B5C240034A4F0 /* MixedLanguage */,
 				DE6B812B204B5B3A0034A4F0 /* AppDelegate.h */,
 				DE6B812D204B5B3A0034A4F0 /* AppDelegate.m */,
@@ -181,9 +191,11 @@
 				DE6B8149204B5C030034A4F0 /* CPlusPlusCounter.cpp in Sources */,
 				DE6B814A204B5C030034A4F0 /* ObjectiveCCounter.mm in Sources */,
 				DE6B813B204B5B3B0034A4F0 /* GLESRenderer.cpp in Sources */,
+				DE6B8153204B5EE50034A4F0 /* DisjointSet.cpp in Sources */,
 				DE6B8137204B5B3B0034A4F0 /* AppDelegate.m in Sources */,
 				DE6B8138204B5B3B0034A4F0 /* Renderer.mm in Sources */,
 				DE6B813A204B5B3B0034A4F0 /* ViewController.m in Sources */,
+				DE6B8152204B5EE50034A4F0 /* maze.cpp in Sources */,
 				DE6B8135204B5B3B0034A4F0 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
