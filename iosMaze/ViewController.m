@@ -8,6 +8,8 @@
 
 #import "ViewController.h"
 #import "ObjectiveCCounter.h"
+#import "DisjointSetWrapper.h"
+#import "MazeWrapper.h"
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
@@ -23,6 +25,7 @@ bool isRotating = false;
 float rotationSpeed = 5.0f;
 float movementSpeed = 5.0f;
 ObjectiveCCounter *counter;
+MazeWrapper *maze;
 
 - (IBAction)theButton:(id)sender {
     NSLog(@"You pressed the Button!");
@@ -38,8 +41,16 @@ ObjectiveCCounter *counter;
     [glesRenderer loadModels];
     // ### >>>
     
+    // TODO REMOVE
     counter = [[ObjectiveCCounter alloc] init];
     [self updateCounterDisplay];
+    
+    // Maze creation
+    maze = [[MazeWrapper alloc] initWithSize :10 :10];
+    [self printMazeData];
+    
+    [maze create];
+    [self printMazeData];
 }
 
 
@@ -47,6 +58,25 @@ ObjectiveCCounter *counter;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+// REGION: MAZE
+
+-(void)printMazeData
+{
+    NSLog(@"===== Maze Data ======");
+    for (int x = 0; x < 10; x++)
+    {
+        for (int y = 0; y < 10; y++)
+        {
+            struct MazeCellObjC cell = [maze getCell:x :y];
+            NSLog(@"Cell x:%d y:%d N:%d E:%d S:%d W:%d", x, y, cell.northWallPresent, cell.eastWallPresent, cell.southWallPresent, cell.westWallPresent);
+        }
+    }
+    NSLog(@"===== end maze data =====");
+}
+
+// endregion
 
 
 

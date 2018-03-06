@@ -11,7 +11,7 @@
 
 
 
-struct CPlusPlusCounterWrapper
+struct CPlusPlusCounterStruct
 {
     CPlusPlusCounter obj;
 };
@@ -29,7 +29,7 @@ struct CPlusPlusCounterWrapper
     if (self) {
         useObjC = YES;
         value = 0;
-        cPlusPlusObject = new CPlusPlusCounterWrapper;
+        cPlusPlusObject = new CPlusPlusCounterStruct;
     }
     return self;
 };

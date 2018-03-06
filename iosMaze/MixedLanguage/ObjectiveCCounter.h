@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-struct CPlusPlusCounterWrapper;
+struct CPlusPlusCounterStruct;
 
 @interface ObjectiveCCounter : NSObject
 {
     @private
-    struct CPlusPlusCounterWrapper *cPlusPlusObject;
+    struct CPlusPlusCounterStruct *cPlusPlusObject;
 }
 
 @property (nonatomic) int value;
