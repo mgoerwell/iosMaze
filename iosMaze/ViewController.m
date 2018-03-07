@@ -38,7 +38,7 @@ MazeWrapper *maze;
     glesRenderer = [[Renderer alloc] init];
     GLKView *view = (GLKView *)self.view;
     [glesRenderer setup:view];
-    [glesRenderer loadModels];
+//    [glesRenderer loadModels];
     // ### >>>
     
     // TODO REMOVE
