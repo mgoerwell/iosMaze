@@ -13,6 +13,8 @@
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
+    Renderer *renderers [100];
+    NSMutableArray *models;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
 }
@@ -34,6 +36,8 @@ MazeWrapper *maze;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    models = [NSMutableArray array];
+    
     // ### <<<
     glesRenderer = [[Renderer alloc] init];
     GLKView *view = (GLKView *)self.view;
@@ -51,6 +55,9 @@ MazeWrapper *maze;
     
     [maze create];
     [self printMazeData];
+    
+    [self generateMazeWall];
+    // [models addObject:glesRenderer];
 }
 
 
@@ -76,6 +83,51 @@ MazeWrapper *maze;
     NSLog(@"===== end maze data =====");
 }
 
+-(void)generateMazeWall
+{
+    for (int x = 0; x < 10; x++)
+    {
+        for (int y = 0; y < 10; y++)
+        {
+            struct MazeCellObjC cell = [maze getCell:x :y];
+         
+            if (cell.northWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                // r.position = GLKVector3Make(x, 0, y + 0.4);
+                [models addObject:r];
+            }
+            
+            if (cell.eastWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                r.position = GLKVector3Make(x + 0.4, 0, y);
+                r.yRotationAngle = 90;
+                [models addObject:r];
+            }
+            
+            if (cell.southWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                r.position = GLKVector3Make(x, 0, y - 0.4);
+                [models addObject:r];
+            }
+            
+            if (cell.westWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                r.position = GLKVector3Make(x - 0.4, 0, y);
+                r.yRotationAngle = 90;
+                [models addObject:r];
+            }
+        }
+    }
+}
+
 // endregion
 
 
@@ -85,13 +137,17 @@ MazeWrapper *maze;
 - (void)update
 {
     [glesRenderer update]; // ###
-    
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    [glesRenderer draw:rect]; // ###
+//     [glesRenderer draw:rect]; // ###
     [self updateTransformDisplay];
+    
+    for (int i = 0; i < models.count; i++)
+    {
+        [((Renderer *)models[i]) draw:rect];
+    }
 }
 
 // endregion

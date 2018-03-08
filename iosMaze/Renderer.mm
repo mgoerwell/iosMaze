@@ -100,7 +100,7 @@ enum
 
 - (void)loadModels
 {
-    numIndices = glesRenderer.GenCube(1.0f, &vertices, &normals, &texCoords, &indices);
+    numIndices = glesRenderer.GenWall(1.0f, &vertices, &normals, &texCoords, &indices);
     
     [self setupBuffer];
 }
