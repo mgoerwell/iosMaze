@@ -13,8 +13,10 @@
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
+    NSMutableArray *models;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
+    GLKView *glkView;
 }
 @end
 
@@ -29,16 +31,19 @@ MazeWrapper *maze;
 
 - (IBAction)theButton:(id)sender {
     NSLog(@"You pressed the Button!");
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    models = [NSMutableArray array];
+    
     // ### <<<
+    glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
-    GLKView *view = (GLKView *)self.view;
-    [glesRenderer setup:view];
-//    [glesRenderer loadModels];
+    [glesRenderer setup:glkView];
+    //    [glesRenderer loadModels];
     // ### >>>
     
     // TODO REMOVE
@@ -51,6 +56,8 @@ MazeWrapper *maze;
     
     [maze create];
     [self printMazeData];
+    
+    [self generateMazeWall];
 }
 
 
@@ -76,6 +83,51 @@ MazeWrapper *maze;
     NSLog(@"===== end maze data =====");
 }
 
+-(void)generateMazeWall
+{
+    for (int x = 0; x < 10; x++)
+    {
+        for (int y = 0; y < 10; y++)
+        {
+            struct MazeCellObjC cell = [maze getCell:x :y];
+            
+            if (cell.northWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                // r.position = GLKVector3Make(x, 0, y + 0.4);
+                [models addObject:r];
+            }
+            
+            if (cell.eastWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                r.position = GLKVector3Make(x + 0.4, 0, y);
+                r.yRotationAngle = 90;
+                [models addObject:r];
+            }
+            
+            if (cell.southWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                r.position = GLKVector3Make(x, 0, y - 0.4);
+                [models addObject:r];
+            }
+            
+            if (cell.westWallPresent)
+            {
+                Renderer *r = [[Renderer alloc] init];
+                [r setup:(GLKView * )self.view];
+                r.position = GLKVector3Make(x - 0.4, 0, y);
+                r.yRotationAngle = 90;
+                [models addObject:r];
+            }
+        }
+    }
+}
+
 // endregion
 
 
@@ -84,14 +136,28 @@ MazeWrapper *maze;
 
 - (void)update
 {
-    [glesRenderer update]; // ###
+//    [glesRenderer update]; // ###
     
+    for (int i = 0; i < models.count; i++)
+    {
+        [((Renderer *)models[i]) update];
+    }
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    [glesRenderer draw:rect]; // ###
+    // clean up
+    glViewport(0, 0, (int)self->glkView.drawableWidth, (int)self->glkView.drawableHeight);
+    glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    // draw
+//     [glesRenderer draw:rect]; // ###
     [self updateTransformDisplay];
+    
+    for (int i = 0; i < models.count; i++)
+    {
+        [((Renderer *)models[i]) draw:rect];
+    }
 }
 
 // endregion
