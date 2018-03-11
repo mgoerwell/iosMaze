@@ -125,7 +125,7 @@ enum
     
     rotAngle = 0.0f;
     rotSpeed = 0.001f;
-    self.rotating = true;
+    self.rotating = false;
     self.fov = 60.0f;
     self.position = GLKVector3Make(0, 0, 0);
     
@@ -227,9 +227,6 @@ enum
 // Use exactly 0 or 1 of the #define's below (commenting out both means use single VBO)
 - (void)draw:(CGRect)drawRect;
 {
-    // clean up
-    glViewport(0, 0, (int)theView.drawableWidth, (int)theView.drawableHeight);
-    glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glUseProgram ( programObject );
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
