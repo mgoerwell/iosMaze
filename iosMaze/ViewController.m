@@ -167,7 +167,10 @@ MazeWrapper *maze;
 // REGION: GESTURES
 
 - (IBAction)OnTapGesture:(id)sender {
-    glesRenderer.rotating = !glesRenderer.rotating;
+    // toggle day
+    [Renderer setIsDaytime:![Renderer getIsDaytime]];
+    
+    // glesRenderer.rotating = !glesRenderer.rotating;
 }
 
 

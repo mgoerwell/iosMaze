@@ -16,6 +16,8 @@ enum
     UNIFORM_PASSTHROUGH,
     UNIFORM_SHADEINFRAG,
     UNIFORM_TEXTURE,
+    UNIFORM_IS_DAYTIME,
+    UNIFORM_IS_FLASHLIGHT_ON,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -53,6 +55,16 @@ enum
 
 @implementation Renderer
 
+// STATIC VARIABLES
+static bool isDaytime;
+static bool isFlashlightOn;
+
+// STATIC GETTERS/SETTERS
++(void)setIsDaytime :(bool)isOn { isDaytime = isOn; }
++(bool)getIsDaytime { return isDaytime; }
+
++(void)setIsFlashlightOn :(bool)isOn { isFlashlightOn = isOn; }
++(bool)getIsFlashlightOn { return isFlashlightOn; }
 
 
 // REGION: ADDITIONS
@@ -180,6 +192,8 @@ enum
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(programObject, "normalMatrix");
     uniforms[UNIFORM_PASSTHROUGH] = glGetUniformLocation(programObject, "passThrough");
     uniforms[UNIFORM_SHADEINFRAG] = glGetUniformLocation(programObject, "shadeInFrag");
+    uniforms[UNIFORM_IS_DAYTIME] = glGetUniformLocation(programObject, "u_isDaytime");
+    uniforms[UNIFORM_IS_FLASHLIGHT_ON] = glGetUniformLocation(programObject, "u_isFlashlightOn");
 
     return true;
 }
@@ -236,6 +250,8 @@ enum
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normalMatrix.m);
     glUniform1i(uniforms[UNIFORM_PASSTHROUGH], false);
     glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
+    glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
+    glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
     
     // textures
     glActiveTexture(GL_TEXTURE0);

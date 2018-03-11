@@ -8,6 +8,11 @@
 
 @interface Renderer : NSObject
 
++ (void)setIsDaytime :(bool)isOn;
++ (void)setIsFlashlightOn :(bool)isOn;
++ (bool)getIsDaytime;
++ (bool)getIsFlashlightOn;
+
 - (void)setup:(GLKView *)view;
 - (void)loadModels;
 - (void)update;

@@ -23,13 +23,20 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </glkView>
                         </subviews>
+                        <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="i19-2q-nLa"/>
                         <connections>
                             <outlet property="delegate" destination="zjr-sC-J6G" id="iWS-xZ-3g5"/>
+                            <outletCollection property="gestureRecognizers" destination="L2X-nI-Mhk" appends="YES" id="4zc-Uy-TRg"/>
                         </connections>
                     </glkView>
                 </glkViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lbo-es-nPB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="L2X-nI-Mhk">
+                    <connections>
+                        <action selector="OnTapGesture:" destination="zjr-sC-J6G" id="E2X-Vl-RFw"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="794" y="107"/>
         </scene>
