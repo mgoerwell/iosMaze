@@ -9,6 +9,8 @@ out vec3 v_normal;
 out vec2 v_texcoord;
 
 uniform mat4 modelViewProjectionMatrix;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
 uniform mat3 normalMatrix;
 uniform bool passThrough;
 uniform bool shadeInFrag;
@@ -37,7 +39,7 @@ void main()
         v_texcoord = vec2(0, 0);
     }
     
-    gl_Position = modelViewProjectionMatrix * position;
+    gl_Position = projectionMatrix * modelViewMatrix * position;
 }
 
 /* OPENGL ES 2.0 */

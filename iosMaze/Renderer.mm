@@ -12,6 +12,8 @@
 enum
 {
     UNIFORM_MODELVIEWPROJECTION_MATRIX,
+    UNIFORM_MODELVIEW_MATRIX,
+    UNIFORM_PROJECTION_MATRIX,
     UNIFORM_NORMAL_MATRIX,
     UNIFORM_PASSTHROUGH,
     UNIFORM_SHADEINFRAG,
@@ -49,6 +51,10 @@ enum
 
     float *vertices, *normals, *texCoords;
     int *indices, numIndices;
+    
+    // debug variables
+    GLKVector3 camPos;
+    float camXRot, camYRot;
 }
 
 @end
@@ -141,6 +147,10 @@ static bool isFlashlightOn;
     self.fov = 60.0f;
     self.position = GLKVector3Make(0, 0, 0);
     
+    camPos = GLKVector3Make(0,0,-5);
+    camXRot = 0;
+    camYRot = 0;
+    
     glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
     glEnable(GL_DEPTH_TEST);
     lastTime = std::chrono::steady_clock::now();
@@ -162,20 +172,20 @@ static bool isFlashlightOn;
         self.yRotationAngle += 0.01f * deltaTime;
     }
 
-    // View
-    mvp = GLKMatrix4Translate(GLKMatrix4Identity, 0.0, 0.0, -5.0);
-    
-    // Model
-    mvp = GLKMatrix4Translate(mvp, self.position.x, self.position.y, self.position.z);
-    mvp = GLKMatrix4Rotate(mvp, GLKMathDegreesToRadians(self.yRotationAngle), 0.0, 1.0, 0.0 );
-    mvp = GLKMatrix4Rotate(mvp, GLKMathDegreesToRadians(self.xRotationAngle), 1.0, 0.0, 0.0 );
-    normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(mvp), NULL);
-
-    // Perspective
-    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
-    GLKMatrix4 perspective = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
-
-    mvp = GLKMatrix4Multiply(perspective, mvp);
+//    // View
+//    mvp = GLKMatrix4Translate(GLKMatrix4Identity, 0.0, 0.0, -5.0);
+//
+//    // Model
+//    mvp = GLKMatrix4Translate(mvp, self.position.x, self.position.y, self.position.z);
+//    mvp = GLKMatrix4Rotate(mvp, GLKMathDegreesToRadians(self.yRotationAngle), 0.0, 1.0, 0.0 );
+//    mvp = GLKMatrix4Rotate(mvp, GLKMathDegreesToRadians(self.xRotationAngle), 1.0, 0.0, 0.0 );
+//    normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(mvp), NULL);
+//
+//    // Perspective
+//    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
+//    GLKMatrix4 perspective = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
+//
+//    mvp = GLKMatrix4Multiply(perspective, mvp);
 }
 
 - (bool)setupShaders
@@ -189,6 +199,8 @@ static bool isFlashlightOn;
     
     // Set up uniform variables
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(programObject, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_MODELVIEW_MATRIX] = glGetUniformLocation(programObject, "modelViewMatrix");
+    uniforms[UNIFORM_PROJECTION_MATRIX] = glGetUniformLocation(programObject, "projectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(programObject, "normalMatrix");
     uniforms[UNIFORM_PASSTHROUGH] = glGetUniformLocation(programObject, "passThrough");
     uniforms[UNIFORM_SHADEINFRAG] = glGetUniformLocation(programObject, "shadeInFrag");
@@ -245,8 +257,29 @@ static bool isFlashlightOn;
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
+    // calculate matrices
+    
+    // View
+    GLKMatrix4 v = GLKMatrix4Translate(GLKMatrix4Identity, camPos.x, camPos.y, camPos.z);
+    v = GLKMatrix4RotateX(v, GLKMathDegreesToRadians(camXRot));
+    v = GLKMatrix4RotateY(v, GLKMathDegreesToRadians(camYRot));
+    
+    // Model
+    GLKMatrix4 m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
+    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.yRotationAngle), 0.0, 1.0, 0.0 );
+    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.xRotationAngle), 1.0, 0.0, 0.0 );
+    
+    GLKMatrix4 mv = GLKMatrix4Multiply(v, m);
+    
+    // Projection
+    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
+    GLKMatrix4 p = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
+    
+    
     // uniforms
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, FALSE, (const float *)mvp.m);
+//     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, FALSE, (const float *)mvp.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, FALSE, (const float *)p.m);
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normalMatrix.m);
     glUniform1i(uniforms[UNIFORM_PASSTHROUGH], false);
     glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
