@@ -14,6 +14,7 @@
 + (bool)getIsDaytime;
 + (bool)getIsFlashlightOn;
 + (bool)getIsFogOn;
+- (GLuint)setupTexture:(NSString *)fileName;
 
 - (void)setup:(GLKView *)view;
 - (void)loadModels;
@@ -25,6 +26,7 @@
 @property float xRot;
 @property float fov;
 @property GLKVector3 position;
+@property GLuint texture;
 
 @end
 

@@ -41,6 +41,7 @@ enum
     GLESRenderer glesRenderer;
     GLuint programObject;
     GLuint crateTexture;
+    GLuint floorTexture;
     std::chrono::time_point<std::chrono::steady_clock> lastTime;
 
     GLKMatrix4 mvp;
@@ -139,10 +140,11 @@ static bool isFogOn;
     glEnable(GL_DEPTH_TEST);
     lastTime = std::chrono::steady_clock::now();
     
-    // setup texture and buffers
+    // setup textures and buffers
     [self loadModels];
     [self setupBuffer];
     crateTexture = [self setupTexture:@"crate.jpg"];
+    floorTexture = [self setupTexture:@"floor.jpg"];
 }
 
 // Called by [self setup] to compile shader and retrieve uniform locations
@@ -327,7 +329,8 @@ static bool isFogOn;
     
     // textures
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, crateTexture);
+    //glBindTexture(GL_TEXTURE_2D, crateTexture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     // 3. Bind VAO
