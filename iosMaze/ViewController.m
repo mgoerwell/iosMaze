@@ -43,6 +43,7 @@ MazeWrapper *maze;
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
+    glesRenderer.rotating = true;
     //    [glesRenderer loadModels];
     // ### >>>
     
@@ -52,12 +53,11 @@ MazeWrapper *maze;
     
     // Maze creation
     maze = [[MazeWrapper alloc] initWithSize :10 :10];
-    [self printMazeData];
-    
     [maze create];
     [self printMazeData];
-    
+
     [self generateMazeWall];
+    [models addObject:glesRenderer];
 }
 
 
@@ -136,8 +136,6 @@ MazeWrapper *maze;
 
 - (void)update
 {
-//    [glesRenderer update]; // ###
-    
     for (int i = 0; i < models.count; i++)
     {
         [((Renderer *)models[i]) update];

@@ -20,6 +20,8 @@ enum
     UNIFORM_TEXTURE,
     UNIFORM_IS_DAYTIME,
     UNIFORM_IS_FLASHLIGHT_ON,
+    UNIFORM_FLASHLIGHT_DIR,
+    UNIFORM_FLASHLIGHT_POS,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -171,21 +173,6 @@ static bool isFlashlightOn;
     {
         self.yRotationAngle += 0.01f * deltaTime;
     }
-
-//    // View
-//    mvp = GLKMatrix4Translate(GLKMatrix4Identity, 0.0, 0.0, -5.0);
-//
-//    // Model
-//    mvp = GLKMatrix4Translate(mvp, self.position.x, self.position.y, self.position.z);
-//    mvp = GLKMatrix4Rotate(mvp, GLKMathDegreesToRadians(self.yRotationAngle), 0.0, 1.0, 0.0 );
-//    mvp = GLKMatrix4Rotate(mvp, GLKMathDegreesToRadians(self.xRotationAngle), 1.0, 0.0, 0.0 );
-//    normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(mvp), NULL);
-//
-//    // Perspective
-//    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
-//    GLKMatrix4 perspective = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
-//
-//    mvp = GLKMatrix4Multiply(perspective, mvp);
 }
 
 - (bool)setupShaders
@@ -206,6 +193,8 @@ static bool isFlashlightOn;
     uniforms[UNIFORM_SHADEINFRAG] = glGetUniformLocation(programObject, "shadeInFrag");
     uniforms[UNIFORM_IS_DAYTIME] = glGetUniformLocation(programObject, "u_isDaytime");
     uniforms[UNIFORM_IS_FLASHLIGHT_ON] = glGetUniformLocation(programObject, "u_isFlashlightOn");
+    uniforms[UNIFORM_FLASHLIGHT_DIR] = glGetUniformLocation(programObject, "u_flashlightDir");
+    uniforms[UNIFORM_FLASHLIGHT_POS] = glGetUniformLocation(programObject, "u_flashlightPos");
 
     return true;
 }
@@ -260,9 +249,12 @@ static bool isFlashlightOn;
     // calculate matrices
     
     // View
-    GLKMatrix4 v = GLKMatrix4Translate(GLKMatrix4Identity, camPos.x, camPos.y, camPos.z);
-    v = GLKMatrix4RotateX(v, GLKMathDegreesToRadians(camXRot));
-    v = GLKMatrix4RotateY(v, GLKMathDegreesToRadians(camYRot));
+    GLKMatrix4 v = GLKMatrix4MakeLookAt(0, 0, -5,   // cam pos
+                         0, 0, 0,                   // target pos
+                         0, 1, 0);                  // up dir
+    
+    GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
+    GLKVector3 flashlightDir = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
     
     // Model
     GLKMatrix4 m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
@@ -285,7 +277,8 @@ static bool isFlashlightOn;
     glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
     glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
     glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
-    
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
     // textures
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, crateTexture);
