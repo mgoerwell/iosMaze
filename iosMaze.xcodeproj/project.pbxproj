@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C954592C20582ADD004A9342 /* floor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592720582ADD004A9342 /* floor.jpg */; };
+		C954592D20582ADD004A9342 /* wallBothSides.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592820582ADD004A9342 /* wallBothSides.jpg */; };
+		C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592920582ADD004A9342 /* wallLeftSide.jpg */; };
+		C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592A20582ADD004A9342 /* wallNoSides.jpg */; };
+		C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592B20582ADD004A9342 /* wallRightSide.jpg */; };
 		DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C5204B5AB500FCC2D9 /* Main.storyboard */; };
 		DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */; };
 		DE5947CC204B5AB500FCC2D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947CA204B5AB500FCC2D9 /* LaunchScreen.storyboard */; };
@@ -26,6 +31,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C954592720582ADD004A9342 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
+		C954592820582ADD004A9342 /* wallBothSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallBothSides.jpg; sourceTree = "<group>"; };
+		C954592920582ADD004A9342 /* wallLeftSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallLeftSide.jpg; sourceTree = "<group>"; };
+		C954592A20582ADD004A9342 /* wallNoSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallNoSides.jpg; sourceTree = "<group>"; };
+		C954592B20582ADD004A9342 /* wallRightSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallRightSide.jpg; sourceTree = "<group>"; };
 		DE5947BC204B5AB500FCC2D9 /* iosMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5947C6204B5AB500FCC2D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -67,6 +77,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C954592620582ADD004A9342 /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				C954592720582ADD004A9342 /* floor.jpg */,
+				C954592820582ADD004A9342 /* wallBothSides.jpg */,
+				C954592920582ADD004A9342 /* wallLeftSide.jpg */,
+				C954592A20582ADD004A9342 /* wallNoSides.jpg */,
+				C954592B20582ADD004A9342 /* wallRightSide.jpg */,
+			);
+			path = Textures;
+			sourceTree = "<group>";
+		};
 		DE5947B3204B5AB500FCC2D9 = {
 			isa = PBXGroup;
 			children = (
@@ -110,6 +132,7 @@
 				DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */,
 				DE5947CA204B5AB500FCC2D9 /* LaunchScreen.storyboard */,
 				DE5947CD204B5AB500FCC2D9 /* Info.plist */,
+				C954592620582ADD004A9342 /* Textures */,
 			);
 			path = iosMaze;
 			sourceTree = "<group>";
@@ -183,11 +206,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C954592C20582ADD004A9342 /* floor.jpg in Resources */,
+				C954592D20582ADD004A9342 /* wallBothSides.jpg in Resources */,
 				DE6B8136204B5B3B0034A4F0 /* Shader.fsh in Resources */,
 				DE5947CC204B5AB500FCC2D9 /* LaunchScreen.storyboard in Resources */,
 				DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */,
 				DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */,
 				DE6B8139204B5B3B0034A4F0 /* Shader.vsh in Resources */,
+				C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */,
+				C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */,
+				C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
