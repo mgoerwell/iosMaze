@@ -249,7 +249,8 @@ static bool isFlashlightOn;
     // calculate matrices
     
     // View
-    GLKMatrix4 v = GLKMatrix4MakeLookAt(0, 0, -5,   // cam pos
+    // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
+    GLKMatrix4 v = GLKMatrix4MakeLookAt(3, 1, -3,   // cam pos
                          0, 0, 0,                   // target pos
                          0, 1, 0);                  // up dir
     
