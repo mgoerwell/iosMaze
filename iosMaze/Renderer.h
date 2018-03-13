@@ -21,8 +21,8 @@
 - (void)draw:(CGRect)drawRect;
 
 @property bool rotating;
-@property float yRotationAngle;
-@property float xRotationAngle;
+@property float yRot;
+@property float xRot;
 @property float fov;
 @property GLKVector3 position;
 

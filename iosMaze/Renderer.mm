@@ -35,7 +35,8 @@ enum
     NUM_ATTRIBUTES
 };
 
-@interface Renderer () {
+@interface Renderer ()
+{
     GLKView *theView;
     GLESRenderer glesRenderer;
     GLuint programObject;
@@ -59,8 +60,8 @@ enum
     GLKVector3 camPos;
     float camXRot, camYRot;
 }
-
 @end
+
 
 @implementation Renderer
 
@@ -79,56 +80,33 @@ static bool isFogOn;
 +(void)setIsFogOn :(bool)isOn { isFogOn = isOn; }
 +(bool)getIsFogOn { return isFogOn; }
 
-// REGION: ADDITIONS
-
-@synthesize xRotationAngle = _xRotationAngle;
-- (float)xRotationAngle
+// PROPERTIES
+@synthesize xRot = _xRot;
+- (float)xRot { return _xRot; }
+- (void)setXRot :(float)newRot
 {
-    return _xRotationAngle;
-}
-- (void)setXRotationAngle:(float)xRotationAngle
-{
-    if (xRotationAngle > 360.0f)
-        _xRotationAngle = xRotationAngle - 360.0f;
-    else if (xRotationAngle < 0.0f)
-        _xRotationAngle = xRotationAngle + 360.0f;
-    else
-        _xRotationAngle = xRotationAngle;
+    if (newRot > 360.0f)     _xRot = newRot - 360.0f;
+    else if (newRot < 0.0f)  _xRot = newRot + 360.0f;
+    else                     _xRot = newRot;
 }
 
-@synthesize yRotationAngle = _yRotationAngle;
-- (float)yRotationAngle
+@synthesize yRot = _yRot;
+- (float)yRot { return _yRot; }
+- (void)setYRot :(float)newRot
 {
-    return _yRotationAngle;
-}
-- (void)setYRotationAngle:(float)yRotationAngle
-{
-    if (yRotationAngle > 360.0f)
-        _yRotationAngle = yRotationAngle - 360.0f;
-    else if (yRotationAngle < 0.0f)
-        _yRotationAngle = yRotationAngle + 360.0f;
-    else
-        _yRotationAngle = yRotationAngle;
+    if (newRot > 360.0f)     _yRot = newRot - 360.0f;
+    else if (newRot < 0.0f)  _yRot = newRot + 360.0f;
+    else                     _yRot = newRot;
 }
 
-// endregion
-
-
-
+// FUNCTIONS: VIEW
 - (void)dealloc
 {
     glDeleteProgram(programObject);
 }
 
-
-
-- (void)loadModels
-{
-    numIndices = glesRenderer.GenWall(1.0f, &vertices, &normals, &texCoords, &indices);
-    
-    [self setupBuffer];
-}
-
+// FUNCTIONS: INITIALIZATION
+// Use this after [init] to instantiate to default values
 - (void)setup:(GLKView *)view
 {
     view.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES3];
@@ -167,18 +145,7 @@ static bool isFogOn;
     crateTexture = [self setupTexture:@"crate.jpg"];
 }
 
-- (void)update
-{
-    auto currentTime = std::chrono::steady_clock::now();
-    auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
-    lastTime = currentTime;
-    
-    if (self.rotating)
-    {
-        self.yRotationAngle += 0.01f * deltaTime;
-    }
-}
-
+// Called by [self setup] to compile shader and retrieve uniform locations
 - (bool)setupShaders
 {
     // Load shaders
@@ -186,7 +153,7 @@ static bool isFogOn;
     char *fShaderStr = glesRenderer.LoadShaderFile([[[NSBundle mainBundle] pathForResource:[[NSString stringWithUTF8String:"Shader.fsh"] stringByDeletingPathExtension] ofType:[[NSString stringWithUTF8String:"Shader.fsh"] pathExtension]] cStringUsingEncoding:1]);
     programObject = glesRenderer.LoadProgram(vShaderStr, fShaderStr);
     if (programObject == 0)
-        return false;
+    return false;
     
     // Set up uniform variables
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(programObject, "modelViewProjectionMatrix");
@@ -200,107 +167,18 @@ static bool isFogOn;
     uniforms[UNIFORM_IS_FOG_ON] = glGetUniformLocation(programObject, "u_isFogOn");
     uniforms[UNIFORM_FLASHLIGHT_DIR] = glGetUniformLocation(programObject, "u_flashlightDir");
     uniforms[UNIFORM_FLASHLIGHT_POS] = glGetUniformLocation(programObject, "u_flashlightPos");
-
+    
     return true;
 }
 
-// Load in and set up texture image (adapted from Ray Wenderlich)
-- (GLuint)setupTexture:(NSString *)fileName
+// TODO: Used to load vertex data (only handles rectangular model right now)
+- (void)loadModels
 {
-    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
-    if (!spriteImage) {
-        NSLog(@"Failed to load image %@", fileName);
-        exit(1);
-    }
-    
-    size_t width = CGImageGetWidth(spriteImage);
-    size_t height = CGImageGetHeight(spriteImage);
-    
-    GLubyte *spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
-    
-    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
-    
-    CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
-    
-    CGContextRelease(spriteContext);
-    
-    GLuint texName;
-    glGenTextures(1, &texName);
-    glBindTexture(GL_TEXTURE_2D, texName);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
-    
-    free(spriteData);
-    return texName;
+    numIndices = glesRenderer.GenWall(1.0f, &vertices, &normals, &texCoords, &indices);
+    [self setupBuffer];
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Sample code to demonstrate difference between vertex arrays. single and multiple VBOs
-//
-// (c) Borna Noureddin, BCIT
-//
-//////////////////////////////////////////////////////////////////////////////////////////
-
-// Use exactly 0 or 1 of the #define's below (commenting out both means use single VBO)
-- (void)draw:(CGRect)drawRect;
-{
-    glUseProgram ( programObject );
-
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
-
-    // calculate matrices
-    
-    // View
-    // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
-    GLKMatrix4 v = GLKMatrix4MakeLookAt(3, 1, -3,   // cam pos
-                         0, 0, 0,                   // target pos
-                         0, 1, 0);                  // up dir
-    
-    GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
-    GLKVector3 flashlightDir = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
-    
-    // Model
-    GLKMatrix4 m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
-    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.yRotationAngle), 0.0, 1.0, 0.0 );
-    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.xRotationAngle), 1.0, 0.0, 0.0 );
-    
-    GLKMatrix4 mv = GLKMatrix4Multiply(v, m);
-    
-    // Projection
-    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
-    GLKMatrix4 p = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
-    
-    
-    // uniforms
-//     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, FALSE, (const float *)mvp.m);
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
-    glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, FALSE, (const float *)p.m);
-    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normalMatrix.m);
-    glUniform1i(uniforms[UNIFORM_PASSTHROUGH], false);
-    glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
-    glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
-    glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
-    glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
-    // textures
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, crateTexture);
-    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
-    
-    // vao
-    glBindVertexArray(vertArr);
-    
-    // draw
-    glDrawElements ( GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, (void *)0 );
-
-    // unbind
-    glBindVertexArray(0);
-}
-
+// Call to create and bind VAO's and VBO's. Only call this after raw vertex data has been loaded (eg. [self loadModels])
 -(void) setupBuffer
 {
     // ----- Translate individual array data to VBO data ------
@@ -310,9 +188,9 @@ static bool isFogOn;
         GLfloat normal[3];
         GLfloat uv[2];
     };
-
+    
     struct glVertStruct vertBuf[24];
-
+    
     for (int v=0; v<24; v++) {
         memcpy(vertBuf[v].position, &vertices[v*3], sizeof(vertBuf[0].position));
         vertBuf[v].color[0] = 1.0f;
@@ -352,13 +230,117 @@ static bool isFogOn;
                            GL_FALSE, sizeof ( vertBuf[0] ),
                            (void *)offsetof(glVertStruct, uv) );
     glEnableVertexAttribArray ( 3 );
-
+    
     // ----- Translate index data to VBO data -----
     // Create Index VBO
     glGenBuffers(1, &idxBuf);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxBuf);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices*sizeof(indices[0]), indices, GL_STATIC_DRAW);
 }
+
+// Load in and set up texture image (adapted from Ray Wenderlich)
+- (GLuint)setupTexture:(NSString *)fileName
+{
+    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
+    if (!spriteImage) {
+        NSLog(@"Failed to load image %@", fileName);
+        exit(1);
+    }
+    
+    size_t width = CGImageGetWidth(spriteImage);
+    size_t height = CGImageGetHeight(spriteImage);
+    
+    GLubyte *spriteData = (GLubyte *) calloc(width*height*4, sizeof(GLubyte));
+    
+    CGContextRef spriteContext = CGBitmapContextCreate(spriteData, width, height, 8, width*4, CGImageGetColorSpace(spriteImage), kCGImageAlphaPremultipliedLast);
+    
+    CGContextDrawImage(spriteContext, CGRectMake(0, 0, width, height), spriteImage);
+    
+    CGContextRelease(spriteContext);
+    
+    GLuint texName;
+    glGenTextures(1, &texName);
+    glBindTexture(GL_TEXTURE_2D, texName);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    
+    free(spriteData);
+    return texName;
+}
+
+// FUNCTIONS: GLKIT UPDATING & DRAWING
+// Update object
+- (void)update
+{
+    auto currentTime = std::chrono::steady_clock::now();
+    auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+    lastTime = currentTime;
+    
+    if (self.rotating)
+    {
+        self.yRot += 0.01f * deltaTime;
+    }
+}
+
+// Draw this object
+- (void)draw:(CGRect)drawRect;
+{
+    glUseProgram ( programObject );
+
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+    // 1. Calculate matrices
+    // View
+    // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
+    GLKMatrix4 v = GLKMatrix4MakeLookAt(3, 1, -3,   // cam pos
+                         0, 0, 0,                   // target pos
+                         0, 1, 0);                  // up dir
+    
+    GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
+    GLKVector3 flashlightDir = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
+    
+    // Model
+    GLKMatrix4 m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
+    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.yRot), 0.0, 1.0, 0.0 );
+    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.xRot), 1.0, 0.0, 0.0 );
+    
+    GLKMatrix4 mv = GLKMatrix4Multiply(v, m);
+    
+    // Projection
+    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
+    GLKMatrix4 p = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
+    
+    // 2.Load uniforms
+    // uniforms
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, FALSE, (const float *)p.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normalMatrix.m);
+    glUniform1i(uniforms[UNIFORM_PASSTHROUGH], false);
+    glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
+    glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
+    glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
+    glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
+    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
+    
+    // textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, crateTexture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+    
+    // 3. Bind VAO
+    glBindVertexArray(vertArr);
+    
+    // 4. Draw
+    glDrawElements ( GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, (void *)0 );
+
+    // 5. Unbind
+    glBindVertexArray(0);
+}
+
+
 
 
 @end
