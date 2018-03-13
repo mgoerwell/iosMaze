@@ -14,6 +14,7 @@ uniform bool shadeInFrag;
 
 uniform bool u_isDaytime;
 uniform bool u_isFlashlightOn;
+uniform bool u_isFogOn;
 uniform vec3 u_flashlightPos;
 uniform vec3 u_flashlightDir;
 
@@ -42,7 +43,7 @@ void main()
     vec4 ambient = (u_isDaytime) ? k_dayAmbientColor : k_nightAmbientColor;
 
     // flashlight
-    if (debug_flashOn)
+    if (u_isFlashlightOn)
     {
         float angleToFragment = dot(normalize(v_position), vec3(0.0,0.0,-1.0));
         if (angleToFragment > k_flashlightAngle)
@@ -51,7 +52,7 @@ void main()
         }
     }
 
-    if (debug_fogOn)
+    if (u_isFogOn)
     {
         // exponential fog (where 0.05 is fog density)
         // float fogFactor = (1.0 / exp(length(v_position) * 0.05));

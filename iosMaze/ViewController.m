@@ -246,6 +246,15 @@ float moveSpeed = 0.01f;
 // endregion
 
 // REGION: UI
+- (IBAction)onDayNightPress:(id)sender {
+    [Renderer setIsDaytime: ![Renderer getIsDaytime]];
+}
+- (IBAction)onFlashlightPress:(id)sender {
+    [Renderer setIsFlashlightOn: ![Renderer getIsFlashlightOn]];
+}
+- (IBAction)onFogPress:(id)sender {
+    [Renderer setIsFogOn: ![Renderer getIsFogOn]];
+}
 
 - (IBAction)onResetPress:(id)sender {
     glesRenderer.position = GLKVector3Make(0, 0, 0);

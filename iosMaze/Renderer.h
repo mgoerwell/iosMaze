@@ -10,8 +10,10 @@
 
 + (void)setIsDaytime :(bool)isOn;
 + (void)setIsFlashlightOn :(bool)isOn;
++ (void)setIsFogOn :(bool)isOn;
 + (bool)getIsDaytime;
 + (bool)getIsFlashlightOn;
++ (bool)getIsFogOn;
 
 - (void)setup:(GLKView *)view;
 - (void)loadModels;

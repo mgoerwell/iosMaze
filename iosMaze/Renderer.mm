@@ -20,6 +20,7 @@ enum
     UNIFORM_TEXTURE,
     UNIFORM_IS_DAYTIME,
     UNIFORM_IS_FLASHLIGHT_ON,
+    UNIFORM_IS_FOG_ON,
     UNIFORM_FLASHLIGHT_DIR,
     UNIFORM_FLASHLIGHT_POS,
     NUM_UNIFORMS
@@ -66,6 +67,7 @@ enum
 // STATIC VARIABLES
 static bool isDaytime;
 static bool isFlashlightOn;
+static bool isFogOn;
 
 // STATIC GETTERS/SETTERS
 +(void)setIsDaytime :(bool)isOn { isDaytime = isOn; }
@@ -74,6 +76,8 @@ static bool isFlashlightOn;
 +(void)setIsFlashlightOn :(bool)isOn { isFlashlightOn = isOn; }
 +(bool)getIsFlashlightOn { return isFlashlightOn; }
 
++(void)setIsFogOn :(bool)isOn { isFogOn = isOn; }
++(bool)getIsFogOn { return isFogOn; }
 
 // REGION: ADDITIONS
 
@@ -193,6 +197,7 @@ static bool isFlashlightOn;
     uniforms[UNIFORM_SHADEINFRAG] = glGetUniformLocation(programObject, "shadeInFrag");
     uniforms[UNIFORM_IS_DAYTIME] = glGetUniformLocation(programObject, "u_isDaytime");
     uniforms[UNIFORM_IS_FLASHLIGHT_ON] = glGetUniformLocation(programObject, "u_isFlashlightOn");
+    uniforms[UNIFORM_IS_FOG_ON] = glGetUniformLocation(programObject, "u_isFogOn");
     uniforms[UNIFORM_FLASHLIGHT_DIR] = glGetUniformLocation(programObject, "u_flashlightDir");
     uniforms[UNIFORM_FLASHLIGHT_POS] = glGetUniformLocation(programObject, "u_flashlightPos");
 
@@ -278,6 +283,7 @@ static bool isFlashlightOn;
     glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
     glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
     glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
+    glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
     // textures

@@ -18,12 +18,56 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28F-fN-RK3">
+                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28F-fN-RK3">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
+                                        <rect key="frame" x="0.0" y="567" width="375" height="100"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hrl-Ou-MKe">
+                                                <rect key="frame" x="0.0" y="35" width="114.5" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Day/Night"/>
+                                                <connections>
+                                                    <action selector="onDayNightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="wbe-cl-gbM"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L4O-i4-mte">
+                                                <rect key="frame" x="130.5" y="35" width="114" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Flashlight"/>
+                                                <connections>
+                                                    <action selector="onFlashlightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="V0E-03-01S"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
+                                                <rect key="frame" x="260.5" y="35" width="114.5" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Fog"/>
+                                                <connections>
+                                                    <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="3X5-hX-KkC"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="CWF-na-lEb" secondAttribute="trailing" id="08b-EI-ay3"/>
+                                    <constraint firstAttribute="bottom" secondItem="CWF-na-lEb" secondAttribute="bottom" id="qIx-yO-Xei"/>
+                                    <constraint firstItem="CWF-na-lEb" firstAttribute="leading" secondItem="28F-fN-RK3" secondAttribute="leading" id="xCv-EB-6kL"/>
+                                </constraints>
                             </glkView>
                         </subviews>
                         <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="28F-fN-RK3" firstAttribute="trailing" secondItem="i19-2q-nLa" secondAttribute="trailing" id="8i1-GH-w2a"/>
+                            <constraint firstItem="28F-fN-RK3" firstAttribute="leading" secondItem="i19-2q-nLa" secondAttribute="leading" id="B3U-OB-Fag"/>
+                            <constraint firstItem="28F-fN-RK3" firstAttribute="bottom" secondItem="i19-2q-nLa" secondAttribute="bottom" id="df6-5n-2B6"/>
+                            <constraint firstItem="28F-fN-RK3" firstAttribute="top" secondItem="cad-PF-Uap" secondAttribute="top" id="pCv-NM-pDv"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="i19-2q-nLa"/>
                         <connections>
                             <outlet property="delegate" destination="zjr-sC-J6G" id="iWS-xZ-3g5"/>
@@ -38,7 +82,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="794" y="107"/>
+            <point key="canvasLocation" x="792.79999999999995" y="106.59670164917542"/>
         </scene>
     </scenes>
 </document>
