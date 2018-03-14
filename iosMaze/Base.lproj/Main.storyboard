@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zjr-sC-J6G">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zjr-sC-J6G">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -65,11 +65,17 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="CWF-na-lEb" secondAttribute="trailing" id="08b-EI-ay3"/>
                                     <constraint firstAttribute="bottom" secondItem="CWF-na-lEb" secondAttribute="bottom" id="qIx-yO-Xei"/>
                                     <constraint firstItem="CWF-na-lEb" firstAttribute="leading" secondItem="28F-fN-RK3" secondAttribute="leading" id="xCv-EB-6kL"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="rbT-lv-mjX" appends="YES" id="Ahg-Fn-Oda"/>
+                                    <outletCollection property="gestureRecognizers" destination="dFf-54-iqT" appends="YES" id="4Ae-1k-TVy"/>
+                                    <outletCollection property="gestureRecognizers" destination="9Mt-Xp-6pQ" appends="YES" id="3lu-ea-gar"/>
+                                </connections>
                             </glkView>
                         </subviews>
                         <gestureRecognizers/>
@@ -84,8 +90,26 @@
                             <outlet property="delegate" destination="zjr-sC-J6G" id="iWS-xZ-3g5"/>
                         </connections>
                     </glkView>
+                    <connections>
+                        <outlet property="doubleTapRcognizer" destination="rbT-lv-mjX" id="TyL-kS-t8O"/>
+                    </connections>
                 </glkViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Lbo-es-nPB" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="rbT-lv-mjX">
+                    <connections>
+                        <action selector="DoubleTap:" destination="zjr-sC-J6G" id="f11-lA-iUp"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="dFf-54-iqT">
+                    <connections>
+                        <action selector="OnDragGesture:" destination="zjr-sC-J6G" id="08F-1E-AZx"/>
+                    </connections>
+                </panGestureRecognizer>
+                <pinchGestureRecognizer id="9Mt-Xp-6pQ">
+                    <connections>
+                        <action selector="Pinch:" destination="zjr-sC-J6G" id="L9v-6s-PlO"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="792.79999999999995" y="106.59670164917542"/>
         </scene>

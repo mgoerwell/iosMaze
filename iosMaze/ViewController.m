@@ -39,6 +39,7 @@ MazeWrapper *maze;
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
+    [self resetCamera];
     glesRenderer.rotating = true;
     glesRenderer.texture = TEX_CRATE;
     // [glesRenderer loadModels];
@@ -47,7 +48,7 @@ MazeWrapper *maze;
     // Maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
-    [self printMazeData];
+    //[self printMazeData];
 
     [self generateMazeWall];
     [models addObject:glesRenderer];
@@ -285,6 +286,12 @@ MazeWrapper *maze;
     }
 }
 
+-(void)resetCamera {
+    [glesRenderer setCameraPosition:GLKVector3Make(5, 0, 3)];
+    [glesRenderer setCameraYRotation:0];
+    [glesRenderer setCameraXRotation:0];
+}
+
 // endregion
 
 
@@ -296,71 +303,28 @@ float xInitialRotation;
 float yInitialRotation;
 
 - (IBAction)OnDragGesture:(UIPanGestureRecognizer *)sender {   
-    if (glesRenderer.rotating) return;
+    //if (glesRenderer.rotating) return;
     
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        // save initial position and rotations
-        dragInitialPosition = [sender translationInView:sender.view];
-        xInitialRotation = glesRenderer.xRot;
-        yInitialRotation = glesRenderer.yRot;
-    }
-    else
-    {
-        // calculate final displacements
-        CGPoint currentPos = [sender translationInView:sender.view];
-        float xDisplacement = currentPos.x - dragInitialPosition.x;
-        float yDisplacement = currentPos.y - dragInitialPosition.y;
-        // rotate
-        glesRenderer.xRot = yInitialRotation + yDisplacement;
-        glesRenderer.yRot = xInitialRotation + xDisplacement;
-    }
+    [glesRenderer rotateCam:sender];
+    
 
 }
 
-float initialFov;
-
-- (IBAction)OnPinchGesture:(UIPinchGestureRecognizer *)sender {
-    
-    if (glesRenderer.rotating) return;
-    
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        initialFov = glesRenderer.fov;
-    }
-    else
-    {
-        glesRenderer.fov = initialFov / sender.scale;
-    }
-    
-}
-
-GLKVector3 initialPosition;
-float moveSpeed = 0.01f;
-
-- (IBAction)OnTwoTouchDragGesture:(UIPanGestureRecognizer *)sender {
-
-    if (glesRenderer.rotating) return;
-
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        // save initial position and rotations
-        dragInitialPosition = [sender translationInView:sender.view];
-        initialPosition = GLKVector3Make(glesRenderer.position.x, glesRenderer.position.y, glesRenderer.position.z);
-    }
-    else
-    {
-        // calculate final displacements
-        CGPoint currentPos = [sender translationInView:sender.view];
-        float xDisplacement = currentPos.x - dragInitialPosition.x;
-        float yDisplacement = currentPos.y - dragInitialPosition.y;
-        // move
-        glesRenderer.position = GLKVector3Make(
-            initialPosition.x + xDisplacement * moveSpeed,
-            initialPosition.y - yDisplacement * moveSpeed,
-            initialPosition.z);
+- (IBAction)DoubleTap:(id)sender {
+    UITapGestureRecognizer * info = (UITapGestureRecognizer *) sender;
+    if (info.numberOfTouches == 1) {
+        [self resetCamera];
+    } else if (info.numberOfTouches == 2) {
+        
     }
 }
+
+- (IBAction)Pinch:(id)sender {
+    [glesRenderer moveCam];
+}
+
+
+
 
 // endregion
 

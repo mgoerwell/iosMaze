@@ -62,8 +62,7 @@ GLint textures[NUM_TEXTURES];
     int *indices, numIndices;
     
     // debug variables
-    GLKVector3 camPos;
-    float camXRot, camYRot;
+
 }
 @end
 
@@ -76,7 +75,9 @@ static bool isFlashlightOn;
 static bool isFogOn;
 static int fogMode;
 static float fogIntensity;
-
+static GLKVector3 camPos;
+static float camXRotation;
+static float camYRotation;
 // STATIC GETTERS/SETTERS
 +(void)setIsDaytime :(bool)isOn { isDaytime = isOn; }
 +(bool)getIsDaytime { return isDaytime; }
@@ -89,6 +90,10 @@ static float fogIntensity;
 
 +(void)setFogIntensity :(float)value { fogIntensity = value; }
 +(void)toggleFogMode { fogMode = (fogMode >= 3) ? 0 : fogMode + 1; }
+
+-(void)setCameraXRotation:(int)camXRot{camXRotation = camXRot;}
+-(void)setCameraYRotation:(int)camYRot{camYRotation = camYRot;}
+-(void)setCameraPosition:(GLKVector3)cameraPos{camPos = cameraPos;}
 
 // PROPERTIES
 @synthesize xRot = _xRot;
@@ -140,10 +145,6 @@ static float fogIntensity;
     self.rotating = false;
     self.fov = 60.0f;
     self.position = GLKVector3Make(0, 0, 0);
-    
-    camPos = GLKVector3Make(0,0,-5);
-    camXRot = 0;
-    camYRot = 0;
     
     glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
     glEnable(GL_DEPTH_TEST);
@@ -311,9 +312,16 @@ static float fogIntensity;
     // 1. Calculate matrices
     // View
     // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
-    GLKMatrix4 v = GLKMatrix4MakeLookAt(3, 1, -3,   // cam pos
-                         0, 0, 0,                   // target pos
-                         0, 1, 0);                  // up dir
+//    GLKMatrix4 v = GLKMatrix4MakeLookAt(camPos.x, camPos.y, camPos.z,   // cam pos
+//                         0, 0, 0,                   // target pos
+//                         0, 1, 0);                  // up dir
+    
+    GLKMatrix4 v = GLKMatrix4Identity;
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camXRotation), 1.0, 0.0, 0.0 );
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
+    v = GLKMatrix4Translate(v, -camPos.x, -camPos.y, -camPos.z);
+    
+    
     
     GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
     GLKVector3 flashlightDir = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
@@ -358,6 +366,25 @@ static float fogIntensity;
 
     // 5. Unbind
     glBindVertexArray(0);
+}
+
+-(void)rotateCam :(id)sender {
+    UIPanGestureRecognizer * info = (UIPanGestureRecognizer *)sender;
+    const float m = 0.05f;
+    CGPoint translation = [info translationInView:info.view];
+    camXRotation += (translation.y * (m/5));
+    camYRotation += (translation.x * (m/5));
+    while (camXRotation >=360.0f) {
+        camXRotation -= 360.0f;
+    }
+    while (camYRotation >= 360.f) {
+        camYRotation -= 360.0f;
+    }
+}
+
+-(void)moveCam {
+    const float m = 0.1f;
+    camPos = GLKVector3Make(camPos.x, camPos.y, camPos.z - m);
 }
 
 
