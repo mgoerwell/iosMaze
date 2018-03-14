@@ -35,12 +35,15 @@ enum
     NUM_ATTRIBUTES
 };
 
+GLint textures[NUM_TEXTURES];
+
 @interface Renderer ()
 {
     GLKView *theView;
     GLESRenderer glesRenderer;
     GLuint programObject;
     GLuint crateTexture;
+    GLuint floorTexture;
     std::chrono::time_point<std::chrono::steady_clock> lastTime;
 
     GLKMatrix4 mvp;
@@ -140,10 +143,15 @@ static float camYRotation;
     glEnable(GL_DEPTH_TEST);
     lastTime = std::chrono::steady_clock::now();
     
-    // setup texture and buffers
+    // setup textures and buffers
     [self loadModels];
     [self setupBuffer];
-    crateTexture = [self setupTexture:@"crate.jpg"];
+    textures[TEX_FLOOR] = [self setupTexture:@"floor.jpg"];
+    textures[TEX_CRATE] = [self setupTexture:@"crate.jpg"];
+    textures[TEX_WALL_BOTH] = [self setupTexture:@"wallBothSides.jpg"];
+    textures[TEX_WALL_RIGHT] = [self setupTexture:@"wallRightSide.jpg"];
+    textures[TEX_WALL_LEFT] = [self setupTexture:@"wallLeftSide.jpg"];
+    textures[TEX_WALL_NO] = [self setupTexture:@"wallNoSides.jpg"];
 }
 
 // Called by [self setup] to compile shader and retrieve uniform locations
@@ -328,7 +336,8 @@ static float camYRotation;
     
     // textures
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, crateTexture);
+    //glBindTexture(GL_TEXTURE_2D, crateTexture);
+    glBindTexture(GL_TEXTURE_2D, textures[_texture]);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     // 3. Bind VAO

@@ -26,6 +26,7 @@
 bool isRotating = false; 
 float rotationSpeed = 5.0f;
 float movementSpeed = 5.0f;
+const int MAZE_SIZE = 10;
 ObjectiveCCounter *counter;
 MazeWrapper *maze;
 
@@ -40,11 +41,12 @@ MazeWrapper *maze;
     [glesRenderer setup:glkView];
     [self resetCamera];
     glesRenderer.rotating = true;
+    glesRenderer.texture = TEX_CRATE;
     // [glesRenderer loadModels];
     // ### >>>
     
     // Maze creation
-    maze = [[MazeWrapper alloc] initWithSize :10 :10];
+    maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
     [self printMazeData];
 
@@ -63,9 +65,9 @@ MazeWrapper *maze;
 -(void)printMazeData
 {
     NSLog(@"===== Maze Data ======");
-    for (int x = 0; x < 10; x++)
+    for (int x = 0; x < MAZE_SIZE; x++)
     {
-        for (int y = 0; y < 10; y++)
+        for (int y = 0; y < MAZE_SIZE; y++)
         {
             struct MazeCellObjC cell = [maze getCell:x :y];
             NSLog(@"Cell x:%d y:%d N:%d E:%d S:%d W:%d", x, y, cell.northWallPresent, cell.eastWallPresent, cell.southWallPresent, cell.westWallPresent);
@@ -76,47 +78,182 @@ MazeWrapper *maze;
 
 -(void)generateMazeWall
 {
-    for (int x = 0; x < 10; x++)
+    
+    for (int x = 0; x < MAZE_SIZE; x++)
     {
-        for (int y = 0; y < 10; y++)
+        for (int y = 0; y < MAZE_SIZE; y++)
         {
             struct MazeCellObjC cell = [maze getCell:x :y];
             
             if (cell.northWallPresent)
             {
+                int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
                 // r.position = GLKVector3Make(x, 0, y + 0.4);
+                rightTexture = [self wallCheckNorth:y column:x];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
             if (cell.eastWallPresent)
             {
+                int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
                 r.position = GLKVector3Make(x + 0.4, 0, y);
                 r.yRot = 90;
+                rightTexture = [self wallCheckEast:y column:x];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
             if (cell.southWallPresent)
             {
+                int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
                 r.position = GLKVector3Make(x, 0, y - 0.4);
+                rightTexture = [self wallCheckSouth:y column:x];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
             if (cell.westWallPresent)
             {
+                int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
                 r.position = GLKVector3Make(x - 0.4, 0, y);
                 r.yRot = 90;
+                rightTexture = [self wallCheckWest:y column:x];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
+            
+            Renderer *r = [[Renderer alloc] init];
+            [r setup:(GLKView * )self.view];
+            r.position = GLKVector3Make(x, -0.6, y);
+            r.xRot = 90;
+            r.texture = TEX_FLOOR;
+            [models addObject:r];
         }
     }
+}
+
+- (int)wallCheckNorth:(int)row
+                column:(int)column {
+    //bools for determining adjacency
+    bool wallLeft = false;
+    bool wallRight = false;
+    
+    //boundary check
+    if (column - 1 < 0) {}
+    else if ([maze getCell:column - 1 :row].northWallPresent) {//check cell to our left
+        wallLeft = true;
+    }
+    
+    if (column + 1 >= MAZE_SIZE) {}
+    else if ([maze getCell:column + 1 :row].northWallPresent) {//check cell to our right
+        wallRight = true;
+    }
+    
+    if (wallLeft && wallRight){return 0;} // both walls
+    if (wallLeft) {return 1;} //left wall only
+    if (wallRight) {return 2;} // right wall only
+    return 3; //no walls adjacent
+}
+
+- (int)wallCheckWest:(int)row
+               column:(int)column {
+    //bools for determining adjacency
+    bool wallLeft = false;
+    bool wallRight = false;
+    
+    //boundary check
+    if (row - 1 < 0) {}
+    else if ([maze getCell:column :row - 1].westWallPresent) {//check cell to our right
+        wallRight = true;
+    }
+    
+    if (row + 1 >= MAZE_SIZE) {}
+    else if ([maze getCell:column :row + 1].westWallPresent) {//check cell to our left
+        wallLeft = true;
+    }
+    
+    if (wallLeft && wallRight){return 0;} // both walls
+    if (wallLeft) {return 1;} //left wall only
+    if (wallRight) {return 2;} // right wall only
+    return 3; //no walls adjacent
+}
+
+- (int)wallCheckEast:(int)row
+               column:(int)column {
+    //bools for determining adjacency
+    bool wallLeft = false;
+    bool wallRight = false;
+    
+    //boundary check
+    if (row - 1 < 0) {}
+    else if ([maze getCell:column :row - 1].eastWallPresent) {//check cell to our left (up)
+        wallLeft = true;
+    }
+    
+    if (row + 1 >= MAZE_SIZE) {}
+    else if ([maze getCell:column :row + 1].eastWallPresent) {//check cell to our right
+        wallRight = true;
+    }
+    
+    if (wallLeft && wallRight){return 0;} // both walls
+    if (wallLeft) {return 1;} //left wall only
+    if (wallRight) {return 2;} // right wall only
+    return 3; //no walls adjacent
+}
+
+- (int)wallCheckSouth:(int)row
+               column:(int)column {
+    //bools for determining adjacency
+    bool wallLeft = false;
+    bool wallRight = false;
+    
+    //boundary check
+    if (column - 1 < 0) {}
+    else if ([maze getCell:column - 1 :row].southWallPresent) {//check cell to our left
+        wallRight = true;
+    }
+    
+    if (column + 1 >= MAZE_SIZE) {}
+    else if ([maze getCell:column + 1 :row].southWallPresent) {//check cell to our right
+        wallLeft = true;
+    }
+    
+    if (wallLeft && wallRight){return 0;} // both walls
+    if (wallLeft) {return 1;} //left wall only
+    if (wallRight) {return 2;} // right wall only
+    return 3; //no walls adjacent
+}
+
+//convert selected texture to actual image for texture
+- (void)selectTexture:(Renderer *)r
+              selection:(int)selection {
+    switch (selection) {
+        case 0:
+            r.texture = TEX_WALL_BOTH;
+            break;
+        case 1:
+            r.texture = TEX_WALL_LEFT;
+            break;
+        case 2:
+            r.texture = TEX_WALL_RIGHT;
+            break;
+        default:
+            r.texture = TEX_WALL_NO;
+            break;
+    }
+//    if (selection == 0) {return [r setupTexture:@"wallBothSides.jpg"];}
+//    if (selection == 1) {return [r setupTexture:@"wallLeftSide.jpg"];}
+//    if (selection == 2) {return [r setupTexture:@"wallRightSide.jpg"];}
+//    return [r setupTexture:@"wallNoSides.jpg"];
 }
 
 // endregion
