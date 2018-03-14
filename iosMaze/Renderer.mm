@@ -349,8 +349,6 @@ static float camYRotation;
     glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
     glUniform1i(uniforms[UNIFORM_FOG_MODE], fogMode);
     glUniform1f(uniforms[UNIFORM_FOG_INTENSITY], fogIntensity);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
     
     // textures
     glActiveTexture(GL_TEXTURE0);
@@ -385,7 +383,7 @@ static float camYRotation;
 -(void)moveCam {
     const float speed = 0.1f;
     GLKVector3 normalForward = GLKVector3Normalize(forward);
-    normalForward = GLKVector3Multiply(normalForward,GLKVector3Make(speed, -speed, -speed));
+    normalForward = GLKVector3Multiply(normalForward,GLKVector3Make(speed, speed, -speed));
     
     camPos = GLKVector3Add(camPos, normalForward);
     //NSLog(@"Position = %f,%f,%f",camPos.x,camPos.y,camPos.z);
