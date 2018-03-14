@@ -48,6 +48,10 @@ GLint textures[NUM_TEXTURES];
 
     GLKMatrix4 mvp;
     GLKMatrix3 normalMatrix;
+    GLKMatrix4 m;
+    GLKMatrix4 v;
+    GLKMatrix4 p;
+    GLKVector3 forward;
 
     GLuint vertArr; // VAO that 'contains' the VBO's
     GLuint vbo;     // VBO that contains pos, color, normal, uv.
@@ -291,6 +295,27 @@ static float camYRotation;
     {
         self.yRot += 0.01f * deltaTime;
     }
+    
+    v = GLKMatrix4Identity;
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camXRotation), 1.0, 0.0, 0.0 );
+    v = GLKMatrix4Translate(v, -camPos.x, -camPos.y, -camPos.z);
+    
+    
+    
+    GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
+    forward = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
+    
+    // Model
+    m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
+    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.yRot), 0.0, 1.0, 0.0 );
+    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.xRot), 1.0, 0.0, 0.0 );
+    
+    
+    
+    // Projection
+    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
+    p = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
 }
 
 // Draw this object
@@ -299,35 +324,9 @@ static float camYRotation;
     glUseProgram ( programObject );
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+    
 
-    // 1. Calculate matrices
-    // View
-    // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
-//    GLKMatrix4 v = GLKMatrix4MakeLookAt(camPos.x, camPos.y, camPos.z,   // cam pos
-//                         0, 0, 0,                   // target pos
-//                         0, 1, 0);                  // up dir
-    
-    GLKMatrix4 v = GLKMatrix4Identity;
-    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
-    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camXRotation), 1.0, 0.0, 0.0 );
-    v = GLKMatrix4Translate(v, -camPos.x, -camPos.y, -camPos.z);
-    
-    
-    
-    GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
-    GLKVector3 flashlightDir = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
-    
-    // Model
-    GLKMatrix4 m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
-    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.yRot), 0.0, 1.0, 0.0 );
-    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.xRot), 1.0, 0.0, 0.0 );
-    
     GLKMatrix4 mv = GLKMatrix4Multiply(v, m);
-    
-    // Projection
-    float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
-    GLKMatrix4 p = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
-    
     // 2.Load uniforms
     // uniforms
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
@@ -338,8 +337,6 @@ static float camYRotation;
     glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
     glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
     glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
-    glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
     
     // textures
     glActiveTexture(GL_TEXTURE0);
@@ -359,7 +356,7 @@ static float camYRotation;
 
 -(void)rotateCam :(id)sender {
     UIPanGestureRecognizer * info = (UIPanGestureRecognizer *)sender;
-    const float m = 0.05f;
+    const float m = 0.5f;
     CGPoint translation = [info translationInView:info.view];
     camXRotation += (translation.y * (m/5));
     camYRotation += (translation.x * (m/5));
@@ -372,8 +369,12 @@ static float camYRotation;
 }
 
 -(void)moveCam {
-    const float m = 0.1f;
-    camPos = GLKVector3Make(camPos.x, camPos.y, camPos.z - m);
+    const float speed = 0.1f;
+    GLKVector3 normalForward = GLKVector3Normalize(forward);
+    normalForward = GLKVector3MultiplyScalar(normalForward, -speed);
+    
+    camPos = GLKVector3Add(camPos, normalForward);
+    NSLog(@"Position = %f,%f,%f",camPos.x,camPos.y,camPos.z);
 }
 
 
