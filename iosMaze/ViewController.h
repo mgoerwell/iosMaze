@@ -11,6 +11,7 @@
 
 //@interface ViewController : UIViewController
 @interface ViewController : GLKViewController // ###
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *doubleTapRcognizer;
 
 @end
 
