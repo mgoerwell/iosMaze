@@ -297,14 +297,15 @@ static float camYRotation;
     }
     
     v = GLKMatrix4Identity;
-    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
     v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camXRotation), 1.0, 0.0, 0.0 );
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
     v = GLKMatrix4Translate(v, -camPos.x, -camPos.y, -camPos.z);
     
     
     
     GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
-    forward = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
+    forward = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction
+    
     
     // Model
     m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
@@ -371,10 +372,10 @@ static float camYRotation;
 -(void)moveCam {
     const float speed = 0.1f;
     GLKVector3 normalForward = GLKVector3Normalize(forward);
-    normalForward = GLKVector3MultiplyScalar(normalForward, -speed);
+    normalForward = GLKVector3Multiply(normalForward,GLKVector3Make(speed, -speed, -speed));
     
     camPos = GLKVector3Add(camPos, normalForward);
-    NSLog(@"Position = %f,%f,%f",camPos.x,camPos.y,camPos.z);
+    //NSLog(@"Position = %f,%f,%f",camPos.x,camPos.y,camPos.z);
 }
 
 
