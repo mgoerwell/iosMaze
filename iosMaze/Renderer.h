@@ -6,6 +6,17 @@
 #define Renderer_h
 #import <GLKit/GLKit.h>
 
+typedef enum
+{
+    TEX_FLOOR,
+    TEX_WALL_BOTH,
+    TEX_WALL_RIGHT,
+    TEX_WALL_LEFT,
+    TEX_WALL_NO,
+    TEX_CRATE,
+    NUM_TEXTURES
+} TextureType;
+
 @interface Renderer : NSObject
 
 + (void)setIsDaytime :(bool)isOn;
