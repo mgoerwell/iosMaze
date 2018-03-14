@@ -316,35 +316,12 @@ float yInitialRotation;
     }
 }
 
-
-
-
-GLKVector3 initialPosition;
-float moveSpeed = 0.01f;
-
-- (IBAction)OnTwoTouchDragGesture:(UIPanGestureRecognizer *)sender {
-
-    if (glesRenderer.rotating) return;
-
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        // save initial position and rotations
-        dragInitialPosition = [sender translationInView:sender.view];
-        initialPosition = GLKVector3Make(glesRenderer.position.x, glesRenderer.position.y, glesRenderer.position.z);
-    }
-    else
-    {
-        // calculate final displacements
-        CGPoint currentPos = [sender translationInView:sender.view];
-        float xDisplacement = currentPos.x - dragInitialPosition.x;
-        float yDisplacement = currentPos.y - dragInitialPosition.y;
-        // move
-        glesRenderer.position = GLKVector3Make(
-            initialPosition.x + xDisplacement * moveSpeed,
-            initialPosition.y - yDisplacement * moveSpeed,
-            initialPosition.z);
-    }
+- (IBAction)Pinch:(id)sender {
+    [glesRenderer moveCam];
 }
+
+
+
 
 // endregion
 

@@ -372,7 +372,7 @@ static float camYRotation;
 }
 
 -(void)moveCam {
-    const float m = 0.05;
+    const float m = 0.1f;
     camPos = GLKVector3Make(camPos.x, camPos.y, camPos.z - m);
 }
 

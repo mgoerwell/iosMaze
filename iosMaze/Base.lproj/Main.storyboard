@@ -63,6 +63,7 @@
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="rbT-lv-mjX" appends="YES" id="Ahg-Fn-Oda"/>
                                     <outletCollection property="gestureRecognizers" destination="dFf-54-iqT" appends="YES" id="4Ae-1k-TVy"/>
+                                    <outletCollection property="gestureRecognizers" destination="9Mt-Xp-6pQ" appends="YES" id="3lu-ea-gar"/>
                                 </connections>
                             </glkView>
                         </subviews>
@@ -93,6 +94,11 @@
                         <action selector="OnDragGesture:" destination="zjr-sC-J6G" id="08F-1E-AZx"/>
                     </connections>
                 </panGestureRecognizer>
+                <pinchGestureRecognizer id="9Mt-Xp-6pQ">
+                    <connections>
+                        <action selector="Pinch:" destination="zjr-sC-J6G" id="L9v-6s-PlO"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="792.79999999999995" y="106.59670164917542"/>
         </scene>
