@@ -26,7 +26,7 @@
 bool isRotating = false; 
 float rotationSpeed = 5.0f;
 float movementSpeed = 5.0f;
-const int MAZE_SIZE = 10;
+const int MAZE_SIZE = 5;
 ObjectiveCCounter *counter;
 MazeWrapper *maze;
 
@@ -51,6 +51,9 @@ MazeWrapper *maze;
 
     [self generateMazeWall];
     [models addObject:glesRenderer];
+    
+    // Misc setup
+    [Renderer setFogIntensity:5.0];
 }
 
 - (void)didReceiveMemoryWarning {

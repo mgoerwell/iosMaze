@@ -20,10 +20,11 @@ uniform float u_fogIntensity;   // max distance or density depending on mode
 uniform vec3 u_flashlightPos;
 uniform vec3 u_flashlightDir;
 
-vec4 k_dayAmbientColor = vec4(0.7, 0.7, 0, 1);
-vec4 k_nightAmbientColor = vec4(0, 0.4, 0.4, 1);
+vec4 k_dayAmbientColor = vec4(0.5, 0.5, 0, 1);
+vec4 k_nightAmbientColor = vec4(0.07, 0.09, 0.38, 1);
 vec4 k_fogColor = vec4(0.2, 0.2, 0.2, 1);
 float k_flashlightAngle = 0.98480775301;  // precomputed value cos(10deg)
+vec4 k_flashlightColor = vec4(0.5,0.5,0.5,1.0);
 
 // returns lerped color where 0 = colA and 1.0 = colB.
 vec4 lerp(vec4 colA, vec4 colB, float ratio)
@@ -47,7 +48,7 @@ void main()
         float angleToFragment = dot(normalize(v_position), vec3(0.0,0.0,-1.0));
         if (angleToFragment > k_flashlightAngle)
         {
-            ambient += vec4(0.5,0.5,0.5,1.0);
+            ambient += k_flashlightColor;
         }
     }
 
@@ -66,6 +67,8 @@ void main()
     else if (u_fogMode == 2)
     {
         float fogFactor = (1.0 / exp(length(v_position) * u_fogIntensity * 0.02));
+        fogFactor = 1.0 - fogFactor;
+        
         o_fragColor = lerp(ambient + texture(texSampler, v_texcoord), k_fogColor, fogFactor);
     }
     // no fog

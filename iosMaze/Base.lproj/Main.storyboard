@@ -21,11 +21,11 @@
                             <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28F-fN-RK3">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
                                         <rect key="frame" x="0.0" y="567" width="375" height="100"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hrl-Ou-MKe">
-                                                <rect key="frame" x="0.0" y="35" width="82" height="30"/>
+                                                <rect key="frame" x="0.0" y="70" width="114.5" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Day/Night"/>
                                                 <connections>
@@ -33,27 +33,32 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L4O-i4-mte">
-                                                <rect key="frame" x="98" y="35" width="81.5" height="30"/>
+                                                <rect key="frame" x="130.5" y="70" width="114" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Flashlight"/>
                                                 <connections>
                                                     <action selector="onFlashlightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="V0E-03-01S"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
-                                                <rect key="frame" x="195.5" y="35" width="82" height="30"/>
-                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="Fog"/>
-                                                <connections>
-                                                    <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
-                                                </connections>
-                                            </button>
-                                            <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="3" maximumValue="11" stepValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="gls-9O-zKw">
-                                                <rect key="frame" x="293.5" y="35.5" width="94" height="29"/>
-                                                <connections>
-                                                    <action selector="onFogIntensityChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="mRF-at-P7t"/>
-                                                </connections>
-                                            </stepper>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="a3T-X7-Wjk">
+                                                <rect key="frame" x="260.5" y="37" width="114.5" height="63"/>
+                                                <subviews>
+                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="3" maximumValue="11" stepValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="gls-9O-zKw">
+                                                        <rect key="frame" x="0.0" y="0.0" width="94" height="29"/>
+                                                        <connections>
+                                                            <action selector="onFogIntensityChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="mRF-at-P7t"/>
+                                                        </connections>
+                                                    </stepper>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
+                                                        <rect key="frame" x="0.0" y="33" width="114.5" height="30"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <state key="normal" title="Fog"/>
+                                                        <connections>
+                                                            <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="3X5-hX-KkC"/>
