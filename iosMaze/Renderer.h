@@ -25,8 +25,10 @@ typedef enum
 + (bool)getIsDaytime;
 + (bool)getIsFlashlightOn;
 + (bool)getIsFogOn;
-- (GLuint)setupTexture:(NSString *)fileName;
++ (void)toggleFogMode;
++ (void)setFogIntensity :(float)value;
 
+- (GLuint)setupTexture:(NSString *)fileName;
 - (void)setup:(GLKView *)view;
 - (void)loadModels;
 - (void)update;

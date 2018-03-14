@@ -371,7 +371,12 @@ float moveSpeed = 0.01f;
 }
 
 - (IBAction)onFogPress:(id)sender {
-    [Renderer setIsFogOn: ![Renderer getIsFogOn]];
+    [Renderer toggleFogMode];
+}
+
+- (IBAction)onFogIntensityChange:(UIStepper*)sender {
+    NSLog([NSString stringWithFormat:@"Fog Intensity: %f", sender.value]);
+    [Renderer setFogIntensity: sender.value];
 }
 
 // endregion

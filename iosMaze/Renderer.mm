@@ -21,6 +21,8 @@ enum
     UNIFORM_IS_DAYTIME,
     UNIFORM_IS_FLASHLIGHT_ON,
     UNIFORM_IS_FOG_ON,
+    UNIFORM_FOG_MODE,
+    UNIFORM_FOG_INTENSITY,
     UNIFORM_FLASHLIGHT_DIR,
     UNIFORM_FLASHLIGHT_POS,
     NUM_UNIFORMS
@@ -72,6 +74,8 @@ GLint textures[NUM_TEXTURES];
 static bool isDaytime;
 static bool isFlashlightOn;
 static bool isFogOn;
+static int fogMode;
+static float fogIntensity;
 
 // STATIC GETTERS/SETTERS
 +(void)setIsDaytime :(bool)isOn { isDaytime = isOn; }
@@ -82,6 +86,9 @@ static bool isFogOn;
 
 +(void)setIsFogOn :(bool)isOn { isFogOn = isOn; }
 +(bool)getIsFogOn { return isFogOn; }
+
++(void)setFogIntensity :(float)value { fogIntensity = value; }
++(void)toggleFogMode { fogMode = (fogMode >= 3) ? 0 : fogMode + 1; }
 
 // PROPERTIES
 @synthesize xRot = _xRot;
@@ -173,6 +180,8 @@ static bool isFogOn;
     uniforms[UNIFORM_IS_DAYTIME] = glGetUniformLocation(programObject, "u_isDaytime");
     uniforms[UNIFORM_IS_FLASHLIGHT_ON] = glGetUniformLocation(programObject, "u_isFlashlightOn");
     uniforms[UNIFORM_IS_FOG_ON] = glGetUniformLocation(programObject, "u_isFogOn");
+    uniforms[UNIFORM_FOG_MODE] = glGetUniformLocation(programObject, "u_fogMode");
+    uniforms[UNIFORM_FOG_INTENSITY] = glGetUniformLocation(programObject, "u_fogIntensity");
     uniforms[UNIFORM_FLASHLIGHT_DIR] = glGetUniformLocation(programObject, "u_flashlightDir");
     uniforms[UNIFORM_FLASHLIGHT_POS] = glGetUniformLocation(programObject, "u_flashlightPos");
     
@@ -330,6 +339,8 @@ static bool isFogOn;
     glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
     glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
     glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
+    glUniform1i(uniforms[UNIFORM_FOG_MODE], fogMode);
+    glUniform1f(uniforms[UNIFORM_FOG_INTENSITY], fogIntensity);
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_DIR], 1, flashlightDir.v);
     glUniform3fv(uniforms[UNIFORM_FLASHLIGHT_POS], 1, flashlightPos.v);
     
