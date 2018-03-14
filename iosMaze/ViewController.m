@@ -40,6 +40,8 @@ MazeWrapper *maze;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
     [self resetCamera];
+    [glesRenderer setPosition:GLKVector3Make(5, 0, 1)];
+    
     glesRenderer.rotating = true;
     glesRenderer.texture = TEX_CRATE;
     // [glesRenderer loadModels];
