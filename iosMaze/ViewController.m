@@ -48,7 +48,7 @@ MazeWrapper *maze;
     // Maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
-    [self printMazeData];
+    //[self printMazeData];
 
     [self generateMazeWall];
     [models addObject:glesRenderer];
@@ -284,7 +284,7 @@ MazeWrapper *maze;
 }
 
 -(void)resetCamera {
-    [glesRenderer setCameraPosition:GLKVector3Make(0, 1, -5)];
+    [glesRenderer setCameraPosition:GLKVector3Make(5, 0, 3)];
     [glesRenderer setCameraYRotation:0];
     [glesRenderer setCameraXRotation:0];
 }
@@ -301,7 +301,9 @@ float yInitialRotation;
 
 - (IBAction)OnDragGesture:(UIPanGestureRecognizer *)sender {   
     //if (glesRenderer.rotating) return;
-    [glesRenderer moveCam:sender];
+    
+    [glesRenderer rotateCam:sender];
+    
 
 }
 
@@ -309,25 +311,13 @@ float yInitialRotation;
     UITapGestureRecognizer * info = (UITapGestureRecognizer *) sender;
     if (info.numberOfTouches == 1) {
         [self resetCamera];
+    } else if (info.numberOfTouches == 2) {
+        
     }
 }
 
-float initialFov;
 
-- (IBAction)OnPinchGesture:(UIPinchGestureRecognizer *)sender {
-    
-    if (glesRenderer.rotating) return;
-    
-    if (sender.state == UIGestureRecognizerStateBegan)
-    {
-        initialFov = glesRenderer.fov;
-    }
-    else
-    {
-        glesRenderer.fov = initialFov / sender.scale;
-    }
-    
-}
+
 
 GLKVector3 initialPosition;
 float moveSpeed = 0.01f;

@@ -35,7 +35,8 @@ typedef enum
 - (void)loadModels;
 - (void)update;
 - (void)draw:(CGRect)drawRect;
-- (void)moveCam :(id)sender;
+- (void)rotateCam :(id)sender;
+- (void)moveCam;
 
 @property bool rotating;
 @property float yRot;

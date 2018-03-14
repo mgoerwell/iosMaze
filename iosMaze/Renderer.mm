@@ -303,9 +303,16 @@ static float camYRotation;
     // 1. Calculate matrices
     // View
     // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
-    GLKMatrix4 v = GLKMatrix4MakeLookAt(camPos.x, camPos.y, camPos.z,   // cam pos
-                         0, 0, 0,                   // target pos
-                         0, 1, 0);                  // up dir
+//    GLKMatrix4 v = GLKMatrix4MakeLookAt(camPos.x, camPos.y, camPos.z,   // cam pos
+//                         0, 0, 0,                   // target pos
+//                         0, 1, 0);                  // up dir
+    
+    GLKMatrix4 v = GLKMatrix4Identity;
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
+    v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camXRotation), 1.0, 0.0, 0.0 );
+    v = GLKMatrix4Translate(v, -camPos.x, -camPos.y, -camPos.z);
+    
+    
     
     GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
     GLKVector3 flashlightDir = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction)
@@ -350,19 +357,23 @@ static float camYRotation;
     glBindVertexArray(0);
 }
 
--(void)moveCam :(id)sender {
+-(void)rotateCam :(id)sender {
     UIPanGestureRecognizer * info = (UIPanGestureRecognizer *)sender;
-    const float m = 0.001f;
-    camPos = GLKVector3Make(camPos.x, camPos.y, camPos.z + m);
+    const float m = 0.05f;
     CGPoint translation = [info translationInView:info.view];
-    camXRotation += (translation.y * m);
-    camYRotation += (translation.x * m);
+    camXRotation += (translation.y * (m/5));
+    camYRotation += (translation.x * (m/5));
     while (camXRotation >=360.0f) {
         camXRotation -= 360.0f;
     }
     while (camYRotation >= 360.f) {
         camYRotation -= 360.0f;
     }
+}
+
+-(void)moveCam {
+    const float m = 0.05;
+    camPos = GLKVector3Make(camPos.x, camPos.y, camPos.z - m);
 }
 
 
