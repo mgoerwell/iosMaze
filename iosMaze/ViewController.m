@@ -40,6 +40,7 @@ MazeWrapper *maze;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
     glesRenderer.rotating = true;
+    glesRenderer.texture = TEX_WALL_NO;
     // [glesRenderer loadModels];
     // ### >>>
     
@@ -133,7 +134,7 @@ MazeWrapper *maze;
             [r setup:(GLKView * )self.view];
             r.position = GLKVector3Make(x, -0.4, y);
             r.xRot = 90;
-            r.texture = [r setupTexture:@"floor.jpg"];
+            r.texture = TEX_FLOOR;
             [models addObject:r];
         }
     }
