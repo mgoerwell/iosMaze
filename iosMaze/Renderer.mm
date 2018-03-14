@@ -57,8 +57,7 @@ enum
     int *indices, numIndices;
     
     // debug variables
-    GLKVector3 camPos;
-    float camXRot, camYRot;
+
 }
 @end
 
@@ -69,7 +68,9 @@ enum
 static bool isDaytime;
 static bool isFlashlightOn;
 static bool isFogOn;
-
+static GLKVector3 camPos;
+static float camXRotation;
+static float camYRotation;
 // STATIC GETTERS/SETTERS
 +(void)setIsDaytime :(bool)isOn { isDaytime = isOn; }
 +(bool)getIsDaytime { return isDaytime; }
@@ -79,6 +80,10 @@ static bool isFogOn;
 
 +(void)setIsFogOn :(bool)isOn { isFogOn = isOn; }
 +(bool)getIsFogOn { return isFogOn; }
+
+-(void)setCameraXRotation:(int)camXRot{camXRotation = camXRot;}
+-(void)setCameraYRotation:(int)camYRot{camYRotation = camYRot;}
+-(void)setCameraPosition:(GLKVector3)cameraPos{camPos = cameraPos;}
 
 // PROPERTIES
 @synthesize xRot = _xRot;
@@ -130,10 +135,6 @@ static bool isFogOn;
     self.rotating = false;
     self.fov = 60.0f;
     self.position = GLKVector3Make(0, 0, 0);
-    
-    camPos = GLKVector3Make(0,0,-5);
-    camXRot = 0;
-    camYRot = 0;
     
     glClearColor ( 0.0f, 0.0f, 0.0f, 0.0f );
     glEnable(GL_DEPTH_TEST);
@@ -294,7 +295,7 @@ static bool isFogOn;
     // 1. Calculate matrices
     // View
     // Note; Might want to use translate and rotation for camera. Using this function to test flashlight/fog.
-    GLKMatrix4 v = GLKMatrix4MakeLookAt(3, 1, -3,   // cam pos
+    GLKMatrix4 v = GLKMatrix4MakeLookAt(camPos.x, camPos.y, camPos.z,   // cam pos
                          0, 0, 0,                   // target pos
                          0, 1, 0);                  // up dir
     
@@ -338,6 +339,21 @@ static bool isFogOn;
 
     // 5. Unbind
     glBindVertexArray(0);
+}
+
+-(void)moveCam :(id)sender {
+    UIPanGestureRecognizer * info = (UIPanGestureRecognizer *)sender;
+    const float m = 0.001f;
+    camPos = GLKVector3Make(camPos.x, camPos.y, camPos.z + m);
+    CGPoint translation = [info translationInView:info.view];
+    camXRotation += (translation.y * m);
+    camYRotation += (translation.x * m);
+    while (camXRotation >=360.0f) {
+        camXRotation -= 360.0f;
+    }
+    while (camYRotation >= 360.f) {
+        camYRotation -= 360.0f;
+    }
 }
 
 

@@ -14,17 +14,22 @@
 + (bool)getIsDaytime;
 + (bool)getIsFlashlightOn;
 + (bool)getIsFogOn;
+- (void)setCameraPosition :(GLKVector3) cameraPos;
+- (void)setCameraXRotation :(int)camXRot;
+- (void)setCameraYRotation :(int)camYRot;
 
 - (void)setup:(GLKView *)view;
 - (void)loadModels;
 - (void)update;
 - (void)draw:(CGRect)drawRect;
+- (void)moveCam :(id)sender;
 
 @property bool rotating;
 @property float yRot;
 @property float xRot;
 @property float fov;
 @property GLKVector3 position;
+
 
 @end
 
