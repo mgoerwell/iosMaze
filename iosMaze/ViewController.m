@@ -40,7 +40,7 @@ MazeWrapper *maze;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
     glesRenderer.rotating = true;
-    glesRenderer.texture = TEX_WALL_NO;
+    glesRenderer.texture = TEX_CRATE;
     // [glesRenderer loadModels];
     // ### >>>
     
@@ -91,7 +91,7 @@ MazeWrapper *maze;
                 [r setup:(GLKView * )self.view];
                 // r.position = GLKVector3Make(x, 0, y + 0.4);
                 rightTexture = [self wallCheckNorth:y column:x];
-                r.texture = [self selectTexture:r selection:rightTexture];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
@@ -103,7 +103,7 @@ MazeWrapper *maze;
                 r.position = GLKVector3Make(x + 0.4, 0, y);
                 r.yRot = 90;
                 rightTexture = [self wallCheckEast:y column:x];
-                r.texture = [self selectTexture:r selection:rightTexture];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
@@ -114,7 +114,7 @@ MazeWrapper *maze;
                 [r setup:(GLKView * )self.view];
                 r.position = GLKVector3Make(x, 0, y - 0.4);
                 rightTexture = [self wallCheckSouth:y column:x];
-                r.texture = [self selectTexture:r selection:rightTexture];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
@@ -126,13 +126,13 @@ MazeWrapper *maze;
                 r.position = GLKVector3Make(x - 0.4, 0, y);
                 r.yRot = 90;
                 rightTexture = [self wallCheckWest:y column:x];
-                r.texture = [self selectTexture:r selection:rightTexture];
+                [self selectTexture:r selection:rightTexture];
                 [models addObject:r];
             }
             
             Renderer *r = [[Renderer alloc] init];
             [r setup:(GLKView * )self.view];
-            r.position = GLKVector3Make(x, -0.4, y);
+            r.position = GLKVector3Make(x, -0.6, y);
             r.xRot = 90;
             r.texture = TEX_FLOOR;
             [models addObject:r];
@@ -233,12 +233,26 @@ MazeWrapper *maze;
 }
 
 //convert selected texture to actual image for texture
-- (GLuint)selectTexture:(Renderer *)r
+- (void)selectTexture:(Renderer *)r
               selection:(int)selection {
-    if (selection == 0) {return [r setupTexture:@"wallBothSides.jpg"];}
-    if (selection == 1) {return [r setupTexture:@"wallLeftSide.jpg"];}
-    if (selection == 2) {return [r setupTexture:@"wallRightSide.jpg"];}
-    return [r setupTexture:@"wallNoSides.jpg"];
+    switch (selection) {
+        case 0:
+            r.texture = TEX_WALL_BOTH;
+            break;
+        case 1:
+            r.texture = TEX_WALL_LEFT;
+            break;
+        case 2:
+            r.texture = TEX_WALL_RIGHT;
+            break;
+        default:
+            r.texture = TEX_WALL_NO;
+            break;
+    }
+//    if (selection == 0) {return [r setupTexture:@"wallBothSides.jpg"];}
+//    if (selection == 1) {return [r setupTexture:@"wallLeftSide.jpg"];}
+//    if (selection == 2) {return [r setupTexture:@"wallRightSide.jpg"];}
+//    return [r setupTexture:@"wallNoSides.jpg"];
 }
 
 // endregion
