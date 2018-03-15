@@ -406,3 +406,4 @@ int GLESRenderer::GenWall(float scale, float **vertices, float **normals,
     
     return numIndices;
 }
+

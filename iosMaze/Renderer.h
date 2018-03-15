@@ -14,8 +14,16 @@ typedef enum
     TEX_WALL_LEFT,
     TEX_WALL_NO,
     TEX_CRATE,
+    TEX_BLACK,
     NUM_TEXTURES
 } TextureType;
+
+typedef enum
+{
+    MODEL_CUBE,
+    MODEL_WALL,
+    MODEL_OVERLAY
+} ModelType;
 
 @interface Renderer : NSObject
 
@@ -33,9 +41,10 @@ typedef enum
 - (GLuint)setupTexture:(NSString *)fileName;
 
 - (void)setup:(GLKView *)view;
-- (void)loadModels;
+- (void)loadModels :(int)type;
 - (void)update;
 - (void)draw:(CGRect)drawRect;
+- (void)drawMinimap;
 - (void)rotateCam :(id)sender;
 - (void)moveCam;
 
@@ -45,6 +54,7 @@ typedef enum
 @property float fov;
 @property GLKVector3 position;
 @property GLuint texture;
+@property bool isOverlay;
 
 
 @end

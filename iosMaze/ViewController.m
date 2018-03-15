@@ -14,6 +14,7 @@
 @interface ViewController() {
     Renderer *glesRenderer; // ###
     NSMutableArray *models;
+    NSMutableArray *overlay;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
     GLKView *glkView;
@@ -34,11 +35,13 @@ MazeWrapper *maze;
     [super viewDidLoad];
     
     models = [NSMutableArray array];
+    overlay = [NSMutableArray array];
     
     // ### <<< (Debug object)
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
+    [glesRenderer loadModels:MODEL_CUBE];
     [self resetCamera];
     [glesRenderer setPosition:GLKVector3Make(5, 0, 1)];
     
@@ -46,6 +49,9 @@ MazeWrapper *maze;
     glesRenderer.texture = TEX_CRATE;
     // [glesRenderer loadModels];
     // ### >>>
+    
+    // This will be used as a background overlay 
+    // [self genOverlay];
     
     // Maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
@@ -95,6 +101,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 // r.position = GLKVector3Make(x, 0, y + 0.4);
                 rightTexture = [self wallCheckNorth:y column:x];
                 [self selectTexture:r selection:rightTexture];
@@ -106,6 +113,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 r.position = GLKVector3Make(x + 0.4, 0, y);
                 r.yRot = 90;
                 rightTexture = [self wallCheckEast:y column:x];
@@ -118,6 +126,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 r.position = GLKVector3Make(x, 0, y - 0.4);
                 rightTexture = [self wallCheckSouth:y column:x];
                 [self selectTexture:r selection:rightTexture];
@@ -129,6 +138,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 r.position = GLKVector3Make(x - 0.4, 0, y);
                 r.yRot = 90;
                 rightTexture = [self wallCheckWest:y column:x];
@@ -138,6 +148,7 @@ MazeWrapper *maze;
             
             Renderer *r = [[Renderer alloc] init];
             [r setup:(GLKView * )self.view];
+            [r loadModels:MODEL_WALL];
             r.position = GLKVector3Make(x, -0.6, y);
             r.xRot = 90;
             r.texture = TEX_FLOOR;
@@ -264,6 +275,29 @@ MazeWrapper *maze;
 // endregion
 
 
+// REGION: Minimap lol
+
+
+
+- (void)genOverlay
+{
+    for (int x = -10; x < MAZE_SIZE + 10; x++)
+    {
+        for (int y = -10; y < MAZE_SIZE + 10; y++)
+        {
+            Renderer *r = [[Renderer alloc] init];
+            [r setup:(GLKView * )self.view];
+            [r loadModels:MODEL_WALL];
+            r.position = GLKVector3Make(x, -2.0, y);
+            r.xRot = 90;
+            r.texture = TEX_FLOOR;
+            [models addObject:r];
+        }
+    }
+}
+
+// endregion
+
 
 // REGION: GLKIT
 
@@ -286,6 +320,36 @@ MazeWrapper *maze;
     {
         [((Renderer *)models[i]) draw:rect];
     }
+//    for (int i = 0; i < models.count; i++)
+//    {
+//        [((Renderer *)overlay[i]) draw:rect];
+//    }
+    glViewport(0, 0, 400, 400);
+
+    // clear depth for section
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(0, 0, (int)(self->glkView.drawableWidth / 2), (int)(self->glkView.drawableHeight) / 2);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_SCISSOR_TEST);
+
+    // porti time
+    glEnable(GL_BLEND);
+    // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glBlendFunc(GL_ONE, GL_SRC_ALPHA);
+    // MINIMAP | GAME
+    
+    // draw minimap
+//    for (int i = 0; i < overlay.count; i++)
+//    {
+//        [((Renderer *)overlay[i]) drawMinimap];
+//    }
+    for (int i = 0; i < models.count; i++)
+    {
+        [((Renderer *)models[i]) drawMinimap];
+    }
+    
+    glDisable(GL_BLEND);
+    
 }
 
 -(void)resetCamera {

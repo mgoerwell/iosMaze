@@ -19,6 +19,7 @@ uniform int u_fogMode;
 uniform float u_fogIntensity;   // max distance or density depending on mode
 uniform vec3 u_flashlightPos;
 uniform vec3 u_flashlightDir;
+uniform bool u_minimap;
 
 vec4 k_dayAmbientColor = vec4(0.5, 0.5, 0, 1);
 vec4 k_nightAmbientColor = vec4(0.07, 0.09, 0.38, 1);
@@ -40,7 +41,7 @@ void main()
 //    vec4 diffuseColor = vec4(0.0, 1.0, 0.0, 1.0);
 //    float nDotVP = max(0.0, dot(eyeNormal, normalize(lightPosition)));
 
-    vec4 ambient = (u_isDaytime) ? k_dayAmbientColor : k_nightAmbientColor;
+    vec4 finalColor = (u_isDaytime) ? k_dayAmbientColor : k_nightAmbientColor;
 
     // flashlight
     if (u_isFlashlightOn)
@@ -48,7 +49,7 @@ void main()
         float angleToFragment = dot(normalize(v_position), vec3(0.0,0.0,-1.0));
         if (angleToFragment > k_flashlightAngle)
         {
-            ambient += k_flashlightColor;
+            finalColor += k_flashlightColor;
         }
     }
 
@@ -61,7 +62,7 @@ void main()
 
         fogFactor = 1.0 - fogFactor; // 1 = full fog, 0 = no fog
 
-        o_fragColor = lerp(ambient + texture(texSampler, v_texcoord), k_fogColor, fogFactor);
+        finalColor = lerp(finalColor + texture(texSampler, v_texcoord), k_fogColor, fogFactor);
     }
     // exponential fog
     else if (u_fogMode == 2)
@@ -69,12 +70,21 @@ void main()
         float fogFactor = (1.0 / exp(length(v_position) * u_fogIntensity * 0.02));
         fogFactor = 1.0 - fogFactor;
         
-        o_fragColor = lerp(ambient + texture(texSampler, v_texcoord), k_fogColor, fogFactor);
+        finalColor = lerp(finalColor + texture(texSampler, v_texcoord), k_fogColor, fogFactor);
     }
     // no fog
     else
     {
-        o_fragColor = ambient + texture(texSampler, v_texcoord);
+        finalColor = finalColor + texture(texSampler, v_texcoord);
     }
     
+    if (u_minimap)
+    {
+        finalColor.w = 0.5;
+        o_fragColor = finalColor;
+    }
+    else
+    {
+        o_fragColor = finalColor;
+    }
 }
