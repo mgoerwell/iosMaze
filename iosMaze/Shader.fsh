@@ -20,6 +20,7 @@ uniform float u_fogIntensity;   // max distance or density depending on mode
 uniform vec3 u_flashlightPos;
 uniform vec3 u_flashlightDir;
 uniform bool u_minimap;
+uniform bool u_overlay;
 
 vec4 k_dayAmbientColor = vec4(0.5, 0.5, 0, 1);
 vec4 k_nightAmbientColor = vec4(0.07, 0.09, 0.38, 1);
@@ -41,6 +42,13 @@ void main()
 //    vec4 diffuseColor = vec4(0.0, 1.0, 0.0, 1.0);
 //    float nDotVP = max(0.0, dot(eyeNormal, normalize(lightPosition)));
 
+    // special overlay object
+    if (u_overlay)
+    {
+        o_fragColor = vec4(0.0, 0.0, 0.0, 0.5);
+        return;
+    }
+    
     vec4 finalColor = (u_isDaytime) ? k_dayAmbientColor : k_nightAmbientColor;
 
     // flashlight

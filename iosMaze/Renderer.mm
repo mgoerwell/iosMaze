@@ -26,6 +26,7 @@ enum
     UNIFORM_FLASHLIGHT_DIR,
     UNIFORM_FLASHLIGHT_POS,
     UNIFORM_IS_MINIMAP,
+    UNIFORM_IS_OVERLAY,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -98,9 +99,11 @@ static float camYRotation;
 +(void)setFogIntensity :(float)value { fogIntensity = value; }
 +(void)toggleFogMode { fogMode = (fogMode >= 3) ? 0 : fogMode + 1; }
 
--(void)setCameraXRotation:(int)camXRot{camXRotation = camXRot;}
--(void)setCameraYRotation:(int)camYRot{camYRotation = camYRot;}
--(void)setCameraPosition:(GLKVector3)cameraPos{camPos = cameraPos;}
++(void)setCameraXRotation:(int)camXRot{camXRotation = camXRot;}
++(void)setCameraYRotation:(int)camYRot{camYRotation = camYRot;}
++(void)setCameraPosition:(GLKVector3)cameraPos{camPos = cameraPos;}
++(GLKVector3)getCameraPosition{return camPos;}
++(float)getCameraYRotation{return camYRotation;}
 
 // PROPERTIES
 @synthesize xRot = _xRot;
@@ -194,6 +197,7 @@ static float camYRotation;
     uniforms[UNIFORM_FLASHLIGHT_DIR] = glGetUniformLocation(programObject, "u_flashlightDir");
     uniforms[UNIFORM_FLASHLIGHT_POS] = glGetUniformLocation(programObject, "u_flashlightPos");
     uniforms[UNIFORM_IS_MINIMAP] = glGetUniformLocation(programObject, "u_minimap");
+    uniforms[UNIFORM_IS_OVERLAY] = glGetUniformLocation(programObject, "u_overlay");
     
     return true;
 }
@@ -343,7 +347,7 @@ static float camYRotation;
     vMap = GLKMatrix4MakeLookAt(
                                 camPos.x, camPos.y + 10.0, camPos.z,
                                 camPos.x, camPos.y, camPos.z,
-                                0.0, 0.0, 1.0);
+                                forward.x, -forward.y, -forward.z);
     
     pMap = GLKMatrix4MakeOrtho(-3, 3, -3, 3, 0, 100);
 }
@@ -401,6 +405,7 @@ static float camYRotation;
     glUniform1i(uniforms[UNIFORM_FOG_MODE], fogMode);
     glUniform1f(uniforms[UNIFORM_FOG_INTENSITY], fogIntensity);
     glUniform1f(uniforms[UNIFORM_IS_MINIMAP], true);
+    glUniform1i(uniforms[UNIFORM_IS_OVERLAY], _isOverlay);
     
     // textures
     glActiveTexture(GL_TEXTURE0);
@@ -416,6 +421,7 @@ static float camYRotation;
     // 5. Unbind
     glBindVertexArray(0);
     glUniform1f(uniforms[UNIFORM_IS_MINIMAP], false);
+    glUniform1i(uniforms[UNIFORM_IS_OVERLAY], false);
 
 }
 

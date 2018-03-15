@@ -35,11 +35,13 @@ typedef enum
 + (bool)getIsFogOn;
 + (void)toggleFogMode;
 + (void)setFogIntensity :(float)value;
-- (void)setCameraPosition :(GLKVector3) cameraPos;
-- (void)setCameraXRotation :(int)camXRot;
-- (void)setCameraYRotation :(int)camYRot;
-- (GLuint)setupTexture:(NSString *)fileName;
++ (void)setCameraPosition :(GLKVector3) cameraPos;
++ (void)setCameraXRotation :(int)camXRot;
++ (void)setCameraYRotation :(int)camYRot;
++ (GLKVector3)getCameraPosition;
++ (float)getCameraYRotation;
 
+- (GLuint)setupTexture:(NSString *)fileName;
 - (void)setup:(GLKView *)view;
 - (void)loadModels :(int)type;
 - (void)update;

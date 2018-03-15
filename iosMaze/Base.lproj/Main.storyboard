@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zjr-sC-J6G">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zjr-sC-J6G">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -88,6 +88,7 @@
                         <viewLayoutGuide key="safeArea" id="i19-2q-nLa"/>
                         <connections>
                             <outlet property="delegate" destination="zjr-sC-J6G" id="iWS-xZ-3g5"/>
+                            <outletCollection property="gestureRecognizers" destination="duG-zJ-z3S" appends="YES" id="4cK-5K-PEQ"/>
                         </connections>
                     </glkView>
                     <connections>
@@ -110,6 +111,11 @@
                         <action selector="Pinch:" destination="zjr-sC-J6G" id="L9v-6s-PlO"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" numberOfTouchesRequired="2" id="duG-zJ-z3S" userLabel="2x Double Tap Rcognizer">
+                    <connections>
+                        <action selector="DoubleDoubleTap:" destination="zjr-sC-J6G" id="KGX-rF-g38"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="792.79999999999995" y="106.59670164917542"/>
         </scene>

@@ -13,11 +13,14 @@
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
+    Renderer *playerOverlay;
     NSMutableArray *models;
     NSMutableArray *overlay;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
     GLKView *glkView;
+    int minimapSize;
+    bool minimapOn;
 }
 @end
 
@@ -37,31 +40,37 @@ MazeWrapper *maze;
     models = [NSMutableArray array];
     overlay = [NSMutableArray array];
     
-    // ### <<< (Debug object)
+    // ### <<< (Crate)
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
     [glesRenderer loadModels:MODEL_CUBE];
-    [self resetCamera];
     [glesRenderer setPosition:GLKVector3Make(5, 0, 1)];
-    
     glesRenderer.rotating = true;
     glesRenderer.texture = TEX_CRATE;
-    // [glesRenderer loadModels];
+    [models addObject:glesRenderer];
     // ### >>>
     
-    // This will be used as a background overlay 
-    // [self genOverlay];
+    // Minimap
+    minimapOn = true;
+    // red player indicator
+    playerOverlay = (GLKView *)self.view;
+    playerOverlay = [[Renderer alloc] init];
+    [playerOverlay setup:(GLKView * )self.view];
+    [playerOverlay loadModels:MODEL_WALL];
+    playerOverlay.xRot = 90;
+    playerOverlay.texture = TEX_BLACK;
+    [overlay addObject:playerOverlay];
+    // black box for minimap
+    [self genOverlay];
     
     // Maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
-    //[self printMazeData];
-
     [self generateMazeWall];
-    [models addObject:glesRenderer];
     
     // Misc setup
+    [self resetCamera];
     [Renderer setFogIntensity:5.0];
 }
 
@@ -266,32 +275,26 @@ MazeWrapper *maze;
             r.texture = TEX_WALL_NO;
             break;
     }
-//    if (selection == 0) {return [r setupTexture:@"wallBothSides.jpg"];}
-//    if (selection == 1) {return [r setupTexture:@"wallLeftSide.jpg"];}
-//    if (selection == 2) {return [r setupTexture:@"wallRightSide.jpg"];}
-//    return [r setupTexture:@"wallNoSides.jpg"];
 }
 
 // endregion
 
 
-// REGION: Minimap lol
-
-
+// REGION: Minimap
 
 - (void)genOverlay
 {
-    for (int x = -10; x < MAZE_SIZE + 10; x++)
+    for (int x = -5; x < MAZE_SIZE + 5; x++)
     {
-        for (int y = -10; y < MAZE_SIZE + 10; y++)
+        for (int y = -5; y < MAZE_SIZE + 5; y++)
         {
             Renderer *r = [[Renderer alloc] init];
             [r setup:(GLKView * )self.view];
             [r loadModels:MODEL_WALL];
             r.position = GLKVector3Make(x, -2.0, y);
             r.xRot = 90;
-            r.texture = TEX_FLOOR;
-            [models addObject:r];
+            r.isOverlay = true;
+            [overlay addObject:r];
         }
     }
 }
@@ -307,6 +310,18 @@ MazeWrapper *maze;
     {
         [((Renderer *)models[i]) update];
     }
+    
+    // minimap
+    if (!minimapOn) return;
+    
+    for (int i = 0; i < overlay.count; i++)
+    {
+        [((Renderer *)overlay[i]) update];
+    }
+    GLKVector3 camPos = [Renderer getCameraPosition];
+    camPos.y = 2.0f;  // always on top of map
+    playerOverlay.position = camPos;
+    playerOverlay.yRot = -[Renderer getCameraYRotation];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -320,42 +335,47 @@ MazeWrapper *maze;
     {
         [((Renderer *)models[i]) draw:rect];
     }
-//    for (int i = 0; i < models.count; i++)
-//    {
-//        [((Renderer *)overlay[i]) draw:rect];
-//    }
-    glViewport(0, 0, 400, 400);
+    
+    // MINIMAP
+    if (!minimapOn) return;
+    
+    int w = (int)(self->glkView.drawableWidth / 2);
+    int h = (int)(self->glkView.drawableHeight / 2);
+    minimapSize = (w < h) ? w : h;
+    
+    glViewport(((int)(self->glkView.drawableWidth)) - minimapSize,
+               ((int)(self->glkView.drawableHeight)) - minimapSize,
+               minimapSize, minimapSize);
 
     // clear depth for section
     glEnable(GL_SCISSOR_TEST);
-    glScissor(0, 0, (int)(self->glkView.drawableWidth / 2), (int)(self->glkView.drawableHeight) / 2);
+    glScissor(((int)(self->glkView.drawableWidth)) - minimapSize,
+               ((int)(self->glkView.drawableHeight)) - minimapSize,
+               minimapSize, minimapSize);
     glClear(GL_DEPTH_BUFFER_BIT);
     glDisable(GL_SCISSOR_TEST);
 
-    // porti time
+    // make transparent
     glEnable(GL_BLEND);
-    // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glBlendFunc(GL_ONE, GL_SRC_ALPHA);
-    // MINIMAP | GAME
     
     // draw minimap
-//    for (int i = 0; i < overlay.count; i++)
-//    {
-//        [((Renderer *)overlay[i]) drawMinimap];
-//    }
     for (int i = 0; i < models.count; i++)
     {
         [((Renderer *)models[i]) drawMinimap];
     }
-    
+    for (int i = 0; i < overlay.count; i++)
+    {
+        [((Renderer *)overlay[i]) drawMinimap];
+    }
     glDisable(GL_BLEND);
     
 }
 
 -(void)resetCamera {
-    [glesRenderer setCameraPosition:GLKVector3Make(5, 0, 3)];
-    [glesRenderer setCameraYRotation:0];
-    [glesRenderer setCameraXRotation:0];
+    [Renderer setCameraPosition:GLKVector3Make(5, 0, 3)];
+    [Renderer setCameraYRotation:0];
+    [Renderer setCameraXRotation:0];
 }
 
 // endregion
@@ -380,9 +400,11 @@ float yInitialRotation;
     UITapGestureRecognizer * info = (UITapGestureRecognizer *) sender;
     if (info.numberOfTouches == 1) {
         [self resetCamera];
-    } else if (info.numberOfTouches == 2) {
-        
     }
+}
+
+- (IBAction)DoubleDoubleTap:(id)sender {
+    minimapOn = !minimapOn;
 }
 
 - (IBAction)Pinch:(id)sender {
