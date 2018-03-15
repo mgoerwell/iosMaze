@@ -45,7 +45,7 @@ MazeWrapper *maze;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
     [glesRenderer loadModels:MODEL_CUBE];
-    [glesRenderer setPosition:GLKVector3Make(5, 0, 1)];
+    [glesRenderer setPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -1)];
     glesRenderer.rotating = true;
     glesRenderer.texture = TEX_CRATE;
     [models addObject:glesRenderer];
@@ -373,8 +373,8 @@ MazeWrapper *maze;
 }
 
 -(void)resetCamera {
-    [Renderer setCameraPosition:GLKVector3Make(5, 0, 3)];
-    [Renderer setCameraYRotation:0];
+    [Renderer setCameraPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -3)];
+    [Renderer setCameraYRotation:180];
     [Renderer setCameraXRotation:0];
 }
 
