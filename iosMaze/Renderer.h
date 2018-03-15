@@ -14,8 +14,16 @@ typedef enum
     TEX_WALL_LEFT,
     TEX_WALL_NO,
     TEX_CRATE,
+    TEX_BLACK,
     NUM_TEXTURES
 } TextureType;
+
+typedef enum
+{
+    MODEL_CUBE,
+    MODEL_WALL,
+    MODEL_OVERLAY
+} ModelType;
 
 @interface Renderer : NSObject
 
@@ -25,16 +33,20 @@ typedef enum
 + (bool)getIsDaytime;
 + (bool)getIsFlashlightOn;
 + (bool)getIsFogOn;
-- (void)setCameraPosition :(GLKVector3) cameraPos;
-- (void)setCameraXRotation :(int)camXRot;
-- (void)setCameraYRotation :(int)camYRot;
++ (void)toggleFogMode;
++ (void)setFogIntensity :(float)value;
++ (void)setCameraPosition :(GLKVector3) cameraPos;
++ (void)setCameraXRotation :(int)camXRot;
++ (void)setCameraYRotation :(int)camYRot;
++ (GLKVector3)getCameraPosition;
++ (float)getCameraYRotation;
+
 - (GLuint)setupTexture:(NSString *)fileName;
-
-
 - (void)setup:(GLKView *)view;
-- (void)loadModels;
+- (void)loadModels :(int)type;
 - (void)update;
 - (void)draw:(CGRect)drawRect;
+- (void)drawMinimap;
 - (void)rotateCam :(id)sender;
 - (void)moveCam;
 
@@ -44,6 +56,7 @@ typedef enum
 @property float fov;
 @property GLKVector3 position;
 @property GLuint texture;
+@property bool isOverlay;
 
 
 @end

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zjr-sC-J6G">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zjr-sC-J6G">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,11 +21,11 @@
                             <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28F-fN-RK3">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
                                         <rect key="frame" x="0.0" y="567" width="375" height="100"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hrl-Ou-MKe">
-                                                <rect key="frame" x="0.0" y="35" width="114.5" height="30"/>
+                                                <rect key="frame" x="0.0" y="70" width="114.5" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Day/Night"/>
                                                 <connections>
@@ -33,21 +33,32 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L4O-i4-mte">
-                                                <rect key="frame" x="130.5" y="35" width="114" height="30"/>
+                                                <rect key="frame" x="130.5" y="70" width="114" height="30"/>
                                                 <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Flashlight"/>
                                                 <connections>
                                                     <action selector="onFlashlightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="V0E-03-01S"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
-                                                <rect key="frame" x="260.5" y="35" width="114.5" height="30"/>
-                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="Fog"/>
-                                                <connections>
-                                                    <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
-                                                </connections>
-                                            </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="a3T-X7-Wjk">
+                                                <rect key="frame" x="260.5" y="37" width="114.5" height="63"/>
+                                                <subviews>
+                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="3" maximumValue="11" stepValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="gls-9O-zKw">
+                                                        <rect key="frame" x="0.0" y="0.0" width="94" height="29"/>
+                                                        <connections>
+                                                            <action selector="onFogIntensityChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="mRF-at-P7t"/>
+                                                        </connections>
+                                                    </stepper>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
+                                                        <rect key="frame" x="0.0" y="33" width="114.5" height="30"/>
+                                                        <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <state key="normal" title="Fog"/>
+                                                        <connections>
+                                                            <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="3X5-hX-KkC"/>
@@ -77,6 +88,7 @@
                         <viewLayoutGuide key="safeArea" id="i19-2q-nLa"/>
                         <connections>
                             <outlet property="delegate" destination="zjr-sC-J6G" id="iWS-xZ-3g5"/>
+                            <outletCollection property="gestureRecognizers" destination="duG-zJ-z3S" appends="YES" id="4cK-5K-PEQ"/>
                         </connections>
                     </glkView>
                     <connections>
@@ -99,6 +111,11 @@
                         <action selector="Pinch:" destination="zjr-sC-J6G" id="L9v-6s-PlO"/>
                     </connections>
                 </pinchGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" numberOfTouchesRequired="2" id="duG-zJ-z3S" userLabel="2x Double Tap Rcognizer">
+                    <connections>
+                        <action selector="DoubleDoubleTap:" destination="zjr-sC-J6G" id="KGX-rF-g38"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="792.79999999999995" y="106.59670164917542"/>
         </scene>

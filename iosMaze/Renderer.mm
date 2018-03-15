@@ -21,8 +21,12 @@ enum
     UNIFORM_IS_DAYTIME,
     UNIFORM_IS_FLASHLIGHT_ON,
     UNIFORM_IS_FOG_ON,
+    UNIFORM_FOG_MODE,
+    UNIFORM_FOG_INTENSITY,
     UNIFORM_FLASHLIGHT_DIR,
     UNIFORM_FLASHLIGHT_POS,
+    UNIFORM_IS_MINIMAP,
+    UNIFORM_IS_OVERLAY,
     NUM_UNIFORMS
 };
 GLint uniforms[NUM_UNIFORMS];
@@ -51,6 +55,8 @@ GLint textures[NUM_TEXTURES];
     GLKMatrix4 m;
     GLKMatrix4 v;
     GLKMatrix4 p;
+    GLKMatrix4 vMap;
+    GLKMatrix4 pMap;
     GLKVector3 forward;
 
     GLuint vertArr; // VAO that 'contains' the VBO's
@@ -75,6 +81,8 @@ GLint textures[NUM_TEXTURES];
 static bool isDaytime;
 static bool isFlashlightOn;
 static bool isFogOn;
+static int fogMode;
+static float fogIntensity;
 static GLKVector3 camPos;
 static float camXRotation;
 static float camYRotation;
@@ -88,9 +96,14 @@ static float camYRotation;
 +(void)setIsFogOn :(bool)isOn { isFogOn = isOn; }
 +(bool)getIsFogOn { return isFogOn; }
 
--(void)setCameraXRotation:(int)camXRot{camXRotation = camXRot;}
--(void)setCameraYRotation:(int)camYRot{camYRotation = camYRot;}
--(void)setCameraPosition:(GLKVector3)cameraPos{camPos = cameraPos;}
++(void)setFogIntensity :(float)value { fogIntensity = value; }
++(void)toggleFogMode { fogMode = (fogMode >= 3) ? 0 : fogMode + 1; }
+
++(void)setCameraXRotation:(int)camXRot{camXRotation = camXRot;}
++(void)setCameraYRotation:(int)camYRot{camYRotation = camYRot;}
++(void)setCameraPosition:(GLKVector3)cameraPos{camPos = cameraPos;}
++(GLKVector3)getCameraPosition{return camPos;}
++(float)getCameraYRotation{return camYRotation;}
 
 // PROPERTIES
 @synthesize xRot = _xRot;
@@ -147,15 +160,16 @@ static float camYRotation;
     glEnable(GL_DEPTH_TEST);
     lastTime = std::chrono::steady_clock::now();
     
-    // setup textures and buffers
-    [self loadModels];
-    [self setupBuffer];
+    // setup textures
     textures[TEX_FLOOR] = [self setupTexture:@"floor.jpg"];
     textures[TEX_CRATE] = [self setupTexture:@"crate.jpg"];
     textures[TEX_WALL_BOTH] = [self setupTexture:@"wallBothSides.jpg"];
     textures[TEX_WALL_RIGHT] = [self setupTexture:@"wallRightSide.jpg"];
     textures[TEX_WALL_LEFT] = [self setupTexture:@"wallLeftSide.jpg"];
     textures[TEX_WALL_NO] = [self setupTexture:@"wallNoSides.jpg"];
+    textures[TEX_BLACK] = [self setupTexture:@"black.jpg"];
+
+    // remember to call loadmodels after this!
 }
 
 // Called by [self setup] to compile shader and retrieve uniform locations
@@ -178,16 +192,31 @@ static float camYRotation;
     uniforms[UNIFORM_IS_DAYTIME] = glGetUniformLocation(programObject, "u_isDaytime");
     uniforms[UNIFORM_IS_FLASHLIGHT_ON] = glGetUniformLocation(programObject, "u_isFlashlightOn");
     uniforms[UNIFORM_IS_FOG_ON] = glGetUniformLocation(programObject, "u_isFogOn");
+    uniforms[UNIFORM_FOG_MODE] = glGetUniformLocation(programObject, "u_fogMode");
+    uniforms[UNIFORM_FOG_INTENSITY] = glGetUniformLocation(programObject, "u_fogIntensity");
     uniforms[UNIFORM_FLASHLIGHT_DIR] = glGetUniformLocation(programObject, "u_flashlightDir");
     uniforms[UNIFORM_FLASHLIGHT_POS] = glGetUniformLocation(programObject, "u_flashlightPos");
+    uniforms[UNIFORM_IS_MINIMAP] = glGetUniformLocation(programObject, "u_minimap");
+    uniforms[UNIFORM_IS_OVERLAY] = glGetUniformLocation(programObject, "u_overlay");
     
     return true;
 }
 
 // TODO: Used to load vertex data (only handles rectangular model right now)
-- (void)loadModels
+- (void)loadModels :(int)type
 {
-    numIndices = glesRenderer.GenWall(1.0f, &vertices, &normals, &texCoords, &indices);
+    if (type == MODEL_CUBE)
+    {
+        numIndices = glesRenderer.GenCube(1.0f, &vertices, &normals, &texCoords, &indices);
+    }
+    else if (type == MODEL_WALL)
+    {
+        numIndices = glesRenderer.GenWall(1.0f, &vertices, &normals, &texCoords, &indices);
+    }
+    else if (type == MODEL_OVERLAY)
+    {
+        numIndices = glesRenderer.GenWall(20.0f, &vertices, &normals, &texCoords, &indices);
+    }
     [self setupBuffer];
 }
 
@@ -296,27 +325,31 @@ static float camYRotation;
         self.yRot += 0.01f * deltaTime;
     }
     
+    // View
     v = GLKMatrix4Identity;
     v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camXRotation), 1.0, 0.0, 0.0 );
     v = GLKMatrix4Rotate(v, GLKMathDegreesToRadians(camYRotation), 0.0, 1.0, 0.0 );
     v = GLKMatrix4Translate(v, -camPos.x, -camPos.y, -camPos.z);
     
-    
-    
-    GLKVector3 flashlightPos = GLKVector3Make(v.m30, v.m31, v.m32); // cam position (this is also the flightlight position);
-    forward = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward (this is also the flashlight direction
-    
+    // retrieve forward direction
+    forward = GLKVector3Make(v.m20, v.m21, v.m22); // cam forward
     
     // Model
     m = GLKMatrix4Translate(GLKMatrix4Identity, self.position.x, self.position.y, self.position.z);
     m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.yRot), 0.0, 1.0, 0.0 );
     m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(self.xRot), 1.0, 0.0, 0.0 );
     
-    
-    
     // Projection
     float aspect = (float)theView.drawableWidth / (float)theView.drawableHeight;
     p = GLKMatrix4MakePerspective(self.fov * M_PI / 180.0f, aspect, 1.0f, 20.0f);
+
+    // Minimap
+    vMap = GLKMatrix4MakeLookAt(
+                                camPos.x, camPos.y + 10.0, camPos.z,
+                                camPos.x, camPos.y, camPos.z,
+                                forward.x, -forward.y, -forward.z);
+    
+    pMap = GLKMatrix4MakeOrtho(-3, 3, -3, 3, 0, 100);
 }
 
 // Draw this object
@@ -338,10 +371,11 @@ static float camYRotation;
     glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
     glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
     glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
+    glUniform1i(uniforms[UNIFORM_FOG_MODE], fogMode);
+    glUniform1f(uniforms[UNIFORM_FOG_INTENSITY], fogIntensity);
     
     // textures
     glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, crateTexture);
     glBindTexture(GL_TEXTURE_2D, textures[_texture]);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
@@ -353,6 +387,42 @@ static float camYRotation;
 
     // 5. Unbind
     glBindVertexArray(0);
+}
+
+- (void)drawMinimap
+{
+    GLKMatrix4 mv = GLKMatrix4Multiply(vMap, m);
+
+    // uniforms
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, FALSE, (const float *)pMap.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normalMatrix.m);
+    glUniform1i(uniforms[UNIFORM_PASSTHROUGH], false);
+    glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
+    glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
+    glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
+    glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
+    glUniform1i(uniforms[UNIFORM_FOG_MODE], fogMode);
+    glUniform1f(uniforms[UNIFORM_FOG_INTENSITY], fogIntensity);
+    glUniform1f(uniforms[UNIFORM_IS_MINIMAP], true);
+    glUniform1i(uniforms[UNIFORM_IS_OVERLAY], _isOverlay);
+    
+    // textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textures[_texture]);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+    
+    // 3. Bind VAO
+    glBindVertexArray(vertArr);
+    
+    // 4. Draw
+    glDrawElements ( GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, (void *)0 );
+    
+    // 5. Unbind
+    glBindVertexArray(0);
+    glUniform1f(uniforms[UNIFORM_IS_MINIMAP], false);
+    glUniform1i(uniforms[UNIFORM_IS_OVERLAY], false);
+
 }
 
 -(void)rotateCam :(id)sender {
@@ -372,7 +442,7 @@ static float camYRotation;
 -(void)moveCam {
     const float speed = 0.1f;
     GLKVector3 normalForward = GLKVector3Normalize(forward);
-    normalForward = GLKVector3Multiply(normalForward,GLKVector3Make(speed, -speed, -speed));
+    normalForward = GLKVector3Multiply(normalForward,GLKVector3Make(speed, speed, -speed));
     
     camPos = GLKVector3Add(camPos, normalForward);
     //NSLog(@"Position = %f,%f,%f",camPos.x,camPos.y,camPos.z);

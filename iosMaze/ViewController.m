@@ -13,10 +13,14 @@
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
+    Renderer *playerOverlay;
     NSMutableArray *models;
+    NSMutableArray *overlay;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
     GLKView *glkView;
+    int minimapSize;
+    bool minimapOn;
 }
 @end
 
@@ -26,7 +30,7 @@
 bool isRotating = false; 
 float rotationSpeed = 5.0f;
 float movementSpeed = 5.0f;
-const int MAZE_SIZE = 10;
+const int MAZE_SIZE = 5;
 ObjectiveCCounter *counter;
 MazeWrapper *maze;
 
@@ -34,26 +38,40 @@ MazeWrapper *maze;
     [super viewDidLoad];
     
     models = [NSMutableArray array];
+    overlay = [NSMutableArray array];
     
-    // ### <<< (Debug object)
+    // ### <<< (Crate)
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
-    [self resetCamera];
+    [glesRenderer loadModels:MODEL_CUBE];
     [glesRenderer setPosition:GLKVector3Make(5, 0, 1)];
-    
     glesRenderer.rotating = true;
     glesRenderer.texture = TEX_CRATE;
-    // [glesRenderer loadModels];
+    [models addObject:glesRenderer];
     // ### >>>
+    
+    // Minimap
+    minimapOn = true;
+    // red player indicator
+    playerOverlay = (GLKView *)self.view;
+    playerOverlay = [[Renderer alloc] init];
+    [playerOverlay setup:(GLKView * )self.view];
+    [playerOverlay loadModels:MODEL_WALL];
+    playerOverlay.xRot = 90;
+    playerOverlay.texture = TEX_BLACK;
+    [overlay addObject:playerOverlay];
+    // black box for minimap
+    [self genOverlay];
     
     // Maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
-    //[self printMazeData];
-
     [self generateMazeWall];
-    [models addObject:glesRenderer];
+    
+    // Misc setup
+    [self resetCamera];
+    [Renderer setFogIntensity:5.0];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,6 +110,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 // r.position = GLKVector3Make(x, 0, y + 0.4);
                 rightTexture = [self wallCheckNorth:y column:x];
                 [self selectTexture:r selection:rightTexture];
@@ -103,6 +122,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 r.position = GLKVector3Make(x + 0.4, 0, y);
                 r.yRot = 90;
                 rightTexture = [self wallCheckEast:y column:x];
@@ -115,6 +135,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 r.position = GLKVector3Make(x, 0, y - 0.4);
                 rightTexture = [self wallCheckSouth:y column:x];
                 [self selectTexture:r selection:rightTexture];
@@ -126,6 +147,7 @@ MazeWrapper *maze;
                 int rightTexture = 0;
                 Renderer *r = [[Renderer alloc] init];
                 [r setup:(GLKView * )self.view];
+                [r loadModels:MODEL_WALL];
                 r.position = GLKVector3Make(x - 0.4, 0, y);
                 r.yRot = 90;
                 rightTexture = [self wallCheckWest:y column:x];
@@ -135,6 +157,7 @@ MazeWrapper *maze;
             
             Renderer *r = [[Renderer alloc] init];
             [r setup:(GLKView * )self.view];
+            [r loadModels:MODEL_WALL];
             r.position = GLKVector3Make(x, -0.6, y);
             r.xRot = 90;
             r.texture = TEX_FLOOR;
@@ -252,14 +275,31 @@ MazeWrapper *maze;
             r.texture = TEX_WALL_NO;
             break;
     }
-//    if (selection == 0) {return [r setupTexture:@"wallBothSides.jpg"];}
-//    if (selection == 1) {return [r setupTexture:@"wallLeftSide.jpg"];}
-//    if (selection == 2) {return [r setupTexture:@"wallRightSide.jpg"];}
-//    return [r setupTexture:@"wallNoSides.jpg"];
 }
 
 // endregion
 
+
+// REGION: Minimap
+
+- (void)genOverlay
+{
+    for (int x = -5; x < MAZE_SIZE + 5; x++)
+    {
+        for (int y = -5; y < MAZE_SIZE + 5; y++)
+        {
+            Renderer *r = [[Renderer alloc] init];
+            [r setup:(GLKView * )self.view];
+            [r loadModels:MODEL_WALL];
+            r.position = GLKVector3Make(x, -2.0, y);
+            r.xRot = 90;
+            r.isOverlay = true;
+            [overlay addObject:r];
+        }
+    }
+}
+
+// endregion
 
 
 // REGION: GLKIT
@@ -270,6 +310,18 @@ MazeWrapper *maze;
     {
         [((Renderer *)models[i]) update];
     }
+    
+    // minimap
+    if (!minimapOn) return;
+    
+    for (int i = 0; i < overlay.count; i++)
+    {
+        [((Renderer *)overlay[i]) update];
+    }
+    GLKVector3 camPos = [Renderer getCameraPosition];
+    camPos.y = 2.0f;  // always on top of map
+    playerOverlay.position = camPos;
+    playerOverlay.yRot = -[Renderer getCameraYRotation];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -283,12 +335,47 @@ MazeWrapper *maze;
     {
         [((Renderer *)models[i]) draw:rect];
     }
+    
+    // MINIMAP
+    if (!minimapOn) return;
+    
+    int w = (int)(self->glkView.drawableWidth / 2);
+    int h = (int)(self->glkView.drawableHeight / 2);
+    minimapSize = (w < h) ? w : h;
+    
+    glViewport(((int)(self->glkView.drawableWidth)) - minimapSize,
+               ((int)(self->glkView.drawableHeight)) - minimapSize,
+               minimapSize, minimapSize);
+
+    // clear depth for section
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(((int)(self->glkView.drawableWidth)) - minimapSize,
+               ((int)(self->glkView.drawableHeight)) - minimapSize,
+               minimapSize, minimapSize);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_SCISSOR_TEST);
+
+    // make transparent
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_SRC_ALPHA);
+    
+    // draw minimap
+    for (int i = 0; i < models.count; i++)
+    {
+        [((Renderer *)models[i]) drawMinimap];
+    }
+    for (int i = 0; i < overlay.count; i++)
+    {
+        [((Renderer *)overlay[i]) drawMinimap];
+    }
+    glDisable(GL_BLEND);
+    
 }
 
 -(void)resetCamera {
-    [glesRenderer setCameraPosition:GLKVector3Make(5, 0, 3)];
-    [glesRenderer setCameraYRotation:0];
-    [glesRenderer setCameraXRotation:0];
+    [Renderer setCameraPosition:GLKVector3Make(5, 0, 3)];
+    [Renderer setCameraYRotation:0];
+    [Renderer setCameraXRotation:0];
 }
 
 // endregion
@@ -313,9 +400,11 @@ float yInitialRotation;
     UITapGestureRecognizer * info = (UITapGestureRecognizer *) sender;
     if (info.numberOfTouches == 1) {
         [self resetCamera];
-    } else if (info.numberOfTouches == 2) {
-        
     }
+}
+
+- (IBAction)DoubleDoubleTap:(id)sender {
+    minimapOn = !minimapOn;
 }
 
 - (IBAction)Pinch:(id)sender {
@@ -337,7 +426,12 @@ float yInitialRotation;
 }
 
 - (IBAction)onFogPress:(id)sender {
-    [Renderer setIsFogOn: ![Renderer getIsFogOn]];
+    [Renderer toggleFogMode];
+}
+
+- (IBAction)onFogIntensityChange:(UIStepper*)sender {
+    NSLog([NSString stringWithFormat:@"Fog Intensity: %f", sender.value]);
+    [Renderer setFogIntensity: sender.value];
 }
 
 // endregion
