@@ -49,6 +49,7 @@ Material* wallNoneMat;
 Material* floorMat;
 Material* crateMat;
 Material* playerMat;
+GameObject* player;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -140,6 +141,11 @@ Material* playerMat;
     [gameObjects addObject:go];
     [gameObjects addObject:go2];
     [gameObjects addObject:go3];
+    
+    // player
+    player = [[GameObject alloc] init];
+    player.model = cubeModel;
+    player.material = playerMat;
 }
 
 - (void)setupMaterial
@@ -150,6 +156,7 @@ Material* playerMat;
     wallRightMat = [[Material alloc] init];
     floorMat = [[Material alloc] init];
     crateMat = [[Material alloc] init];
+    playerMat = [[Material alloc] init];
     
     [wallBothMat LoadTexture:@"wallBothSides.jpg"];
     [wallNoneMat LoadTexture:@"wallNoSides.jpg"];
@@ -420,6 +427,9 @@ Material* playerMat;
     camPos.y = 2.0f;  // always on top of map
     playerOverlay.position = camPos;
     playerOverlay.yRot = -[Renderer getCameraYRotation];
+    
+    player.transform.position = camPos;
+    player.transform.rotation = GLKVector3Make(0, -[Renderer getCameraYRotation], 0);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -461,6 +471,8 @@ Material* playerMat;
     {
         [glesRenderer drawGameObjectMinimap:((GameObject*)gameObjects[i])];
     }
+    [glesRenderer drawGameObjectMinimap:player];
+
     
 //    for (int i = 0; i < overlay.count; i++)
 //    {
