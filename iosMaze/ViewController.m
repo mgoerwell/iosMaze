@@ -22,6 +22,7 @@
     GameObject *go;
     NSMutableArray *models;
     NSMutableArray *overlay;
+    NSMutableArray *gameObjects;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
     GLKView *glkView;
@@ -45,6 +46,7 @@ MazeWrapper *maze;
     
     models = [NSMutableArray array];
     overlay = [NSMutableArray array];
+    gameObjects = [NSMutableArray array];
     
     // ### <<< (Crate)
     glkView = (GLKView *)self.view;
@@ -52,7 +54,7 @@ MazeWrapper *maze;
     [glesRenderer setup:glkView];
     [glesRenderer loadModels:MODEL_CUBE];
     [glesRenderer setPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -1)];
-    glesRenderer.rotating = true;
+ //   glesRenderer.rotating = true;
     // glesRenderer.texture = TEX_CRATE;
     [models addObject:glesRenderer];
     // ### >>>
@@ -81,8 +83,9 @@ MazeWrapper *maze;
     
     
     // SOMETHING NEW
+    
+    // Standalone GameObject
     go = [[GameObject alloc] init];
-    [go CreateEmpty];
     go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
     [go.model LoadData:Model.GetCubeVertices
                       :Model.GetCubeNormals
@@ -90,7 +93,41 @@ MazeWrapper *maze;
                       :Model.GetCubeIndices
                       :24
                       :36];
-    [go.model SetupBuffers];
+    [go.material LoadTexture:@"wallBothSides.jpg"];
+    
+    Model* cubeModel = [[Model alloc] init];
+    Model* wallModel = [[Model alloc] init];
+    Material* sharedMat = [[Material alloc] init];
+    
+    [cubeModel LoadData:Model.GetCubeVertices
+                       :Model.GetCubeNormals
+                       :Model.GetCubeUvs
+                       :Model.GetCubeIndices
+                       :24 :36];
+    
+    [wallModel LoadData:Model.GetWallVertices
+                       :Model.GetCubeNormals
+                       :Model.GetCubeUvs
+                       :Model.GetCubeIndices
+                       :24 :36];
+    
+    [sharedMat LoadTexture:@"wallNoSides.jpg"];
+    
+    GameObject* go2 = [[GameObject alloc] init];
+    go2.transform = [[Transform alloc] init];
+    go2.transform.position = GLKVector3Make(MAZE_SIZE/2 - 1, 0.5, -1);
+    go2.model = cubeModel;
+    go2.material = sharedMat;
+    
+    GameObject* go3 = [[GameObject alloc] init];
+    go3.transform = [[Transform alloc] init];
+    go3.transform.position = GLKVector3Make(MAZE_SIZE/2 + 1, 0.5, -1);
+    go3.model = wallModel;
+    go3.material = sharedMat;
+    
+    [gameObjects addObject:go];
+    [gameObjects addObject:go2];
+    [gameObjects addObject:go3];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -350,8 +387,10 @@ MazeWrapper *maze;
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     // [glesRenderer draw:rect];
-    [glesRenderer drawGameObject:go];
-    
+    for (int i = 0; i < gameObjects.count; i++)
+    {
+        [glesRenderer drawGameObject:((GameObject*)gameObjects[i])];
+    }
     return;
     
     // draw

@@ -11,11 +11,16 @@
 
 @implementation GameObject : NSObject
 
--(void)CreateEmpty
+-(id) init
 {
-    _transform = [[Transform alloc] init];
-    _model     = [[Model alloc] init];
-    _material  = [[Material alloc] init];
+    self = [super init];
+    if (self)
+    {
+        _transform = [[Transform alloc] init];
+        _model     = [[Model alloc] init];
+        _material  = [[Material alloc] init];
+    }
+    return self;
 }
 
 @end 

@@ -17,8 +17,5 @@
 @property Model* model;
 @property Material* material;
 
-// creates blank Transform, Model, and Material objects for editing
--(void)CreateEmpty;
-
 @end
 

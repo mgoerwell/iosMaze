@@ -29,8 +29,9 @@ struct VertexData {
 // convenience function to load data arrays
 -(void)LoadData :(float*)vertices :(float*)normals :(float*)texCoords :(uint*)indices :(uint)vCount :(uint)iCount;
 
-// call this function after data arrays are set to generate VAO
+// manually generate VAO's (if data is set directly w/o LoadData)
 -(void)SetupBuffers;
+
 
 // getters for prebuilt data
 +(float*)GetCubeVertices;

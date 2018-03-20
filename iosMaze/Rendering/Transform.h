@@ -15,4 +15,7 @@
 @property GLKVector3 rotation;
 @property GLKVector3 scale;
 
+// calculate and return a model matrix
+-(GLKMatrix4)GetModelMatrix;
+
 @end

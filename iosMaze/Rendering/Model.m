@@ -27,6 +27,7 @@ uint vertexCount;
     _indices = indices;
     vertexCount = vCount;
     _numIndices = iCount;
+    [self SetupBuffers];
 }
 
 -(void)SetupBuffers

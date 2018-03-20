@@ -358,7 +358,7 @@ static float camYRotation;
     
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
     
-    GLKMatrix4 mv = GLKMatrix4Multiply(v, m);
+    GLKMatrix4 mv = GLKMatrix4Multiply(v, [gameObject.transform GetModelMatrix]);//[gameObject.transform GetModelMatrix]);
     // 2.Load uniforms
     // uniforms
     glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
@@ -374,7 +374,7 @@ static float camYRotation;
     
     // textures
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, textures[_texture]);
+    glBindTexture(GL_TEXTURE_2D, gameObject.material.texture);
     glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
     
     // 3. Bind VAO
