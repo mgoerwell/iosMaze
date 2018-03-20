@@ -388,6 +388,41 @@ static float camYRotation;
 
 }
 
+- (void)drawGameObjectMinimap:(GameObject *)gameObject
+{
+    GLKMatrix4 mv = GLKMatrix4Multiply(vMap, gameObject.transform.GetModelMatrix);
+    
+    // uniforms
+    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEW_MATRIX], 1, FALSE, (const float *)mv.m);
+    glUniformMatrix4fv(uniforms[UNIFORM_PROJECTION_MATRIX], 1, FALSE, (const float *)pMap.m);
+    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, normalMatrix.m);
+    glUniform1i(uniforms[UNIFORM_PASSTHROUGH], false);
+    glUniform1i(uniforms[UNIFORM_SHADEINFRAG], true);
+    glUniform1i(uniforms[UNIFORM_IS_DAYTIME], isDaytime);
+    glUniform1i(uniforms[UNIFORM_IS_FLASHLIGHT_ON], isFlashlightOn);
+    glUniform1i(uniforms[UNIFORM_IS_FOG_ON], isFogOn);
+    glUniform1i(uniforms[UNIFORM_FOG_MODE], fogMode);
+    glUniform1f(uniforms[UNIFORM_FOG_INTENSITY], fogIntensity);
+    glUniform1f(uniforms[UNIFORM_IS_MINIMAP], true);
+    glUniform1i(uniforms[UNIFORM_IS_OVERLAY], _isOverlay);
+    
+    // textures
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, gameObject.material.texture);
+    glUniform1i(uniforms[UNIFORM_TEXTURE], 0);
+    
+    // 3. Bind VAO
+    glBindVertexArray(gameObject.model.VAO);
+    
+    // 4. Draw
+    glDrawElements ( GL_TRIANGLES, gameObject.model.numIndices, GL_UNSIGNED_INT, (void *)0 );
+    
+    // 5. Unbind
+    glBindVertexArray(0);
+    glUniform1f(uniforms[UNIFORM_IS_MINIMAP], false);
+    glUniform1i(uniforms[UNIFORM_IS_OVERLAY], false);
+}
+
 // Draw this object
 - (void)draw:(CGRect)drawRect;
 {

@@ -68,9 +68,9 @@ Material* playerMat;
     [models addObject:glesRenderer];
     // ### >>>
 //
-//    // Minimap
-//    minimapOn = true;
-//    // red player indicator
+    // Minimap
+    minimapOn = true;
+    // red player indicator
 //    playerOverlay = (GLKView *)self.view;
 //    playerOverlay = [[Renderer alloc] init];
 //    [playerOverlay setup:(GLKView * )self.view];
@@ -78,8 +78,8 @@ Material* playerMat;
 //    playerOverlay.xRot = 90;
 //    playerOverlay.texture = TEX_BLACK;
 //    [overlay addObject:playerOverlay];
-//    // black box for minimap
-//    [self genOverlay];
+    // black box for minimap
+//     [self genOverlay];
 //
 
     [self setupMaterial];
@@ -218,6 +218,8 @@ Material* playerMat;
 
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x + 0.4, 0, y);
+                go.transform.rotation = GLKVector3Make(0, 90, 0);
+
                 go.model = wallModel;
                 [self selectTexture:go selection:rightTexture];
                 
@@ -244,6 +246,7 @@ Material* playerMat;
 
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x - 0.4, 0, y);
+                go.transform.rotation = GLKVector3Make(0, 90, 0);
                 go.model = wallModel;
                 [self selectTexture:go selection:rightTexture];
                 
@@ -425,18 +428,9 @@ Material* playerMat;
     glViewport(0, 0, (int)self->glkView.drawableWidth, (int)self->glkView.drawableHeight);
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
-    // [glesRenderer draw:rect];
     for (int i = 0; i < gameObjects.count; i++)
     {
         [glesRenderer drawGameObject:((GameObject*)gameObjects[i])];
-    }
-    
-    return;
-    
-    // draw
-    for (int i = 0; i < models.count; i++)
-    {
-        [((Renderer *)models[i]) draw:rect];
     }
     
     // MINIMAP
@@ -463,14 +457,15 @@ Material* playerMat;
     glBlendFunc(GL_ONE, GL_SRC_ALPHA);
     
     // draw minimap
-    for (int i = 0; i < models.count; i++)
+    for (int i = 0; i < gameObjects.count; i++)
     {
-        [((Renderer *)models[i]) drawMinimap];
+        [glesRenderer drawGameObjectMinimap:((GameObject*)gameObjects[i])];
     }
-    for (int i = 0; i < overlay.count; i++)
-    {
-        [((Renderer *)overlay[i]) drawMinimap];
-    }
+    
+//    for (int i = 0; i < overlay.count; i++)
+//    {
+//        [((Renderer *)overlay[i]) drawMinimap];
+//    }
     glDisable(GL_BLEND);
     
 }

@@ -48,6 +48,7 @@ typedef enum
 - (void)update;
 - (void)draw:(CGRect)drawRect;
 - (void)drawGameObject:(GameObject*)gameObject;
+- (void)drawGameObjectMinimap:(GameObject*)gameObject;
 - (void)drawMinimap;
 - (void)rotateCam :(id)sender;
 - (void)moveCam;
