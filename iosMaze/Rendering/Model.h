@@ -23,12 +23,20 @@ struct VertexData {
 @property float* color;
 @property float* normal;
 @property float* uv;
-@property int* indices;
+@property uint* indices;
+@property int numIndices;
 
 // convenience function to load data arrays
--(void)LoadData :(float*)vertices :(float*)normals :(float*)texCoords :(int*)indices;
+-(void)LoadData :(float*)vertices :(float*)normals :(float*)texCoords :(uint*)indices :(uint)vCount :(uint)iCount;
 
 // call this function after data arrays are set to generate VAO
 -(void)SetupBuffers;
+
+// getters for prebuilt data
++(float*)GetCubeVertices;
++(float*)GetCubeNormals;
++(float*)GetCubeUvs;
++(GLuint*)GetCubeIndices;
++(float*)GetWallVertices;
 
 @end

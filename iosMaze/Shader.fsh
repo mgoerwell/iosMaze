@@ -95,4 +95,6 @@ void main()
     {
         o_fragColor = finalColor;
     }
+    
+    o_fragColor = vec4(1.0, 0.0, 0.0, 1.0);
 }
