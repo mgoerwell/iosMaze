@@ -167,7 +167,7 @@ static float camYRotation;
     textures[TEX_WALL_RIGHT] = [self setupTexture:@"wallRightSide.jpg"];
     textures[TEX_WALL_LEFT] = [self setupTexture:@"wallLeftSide.jpg"];
     textures[TEX_WALL_NO] = [self setupTexture:@"wallNoSides.jpg"];
-    textures[TEX_BLACK] = [self setupTexture:@"black.jpg"];
+    textures[TEX_BLACK] = [self setupTexture:@"red.jpg"];
 
     // remember to call loadmodels after this!
 }

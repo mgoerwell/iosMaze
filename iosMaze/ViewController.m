@@ -41,6 +41,15 @@ const int MAZE_SIZE = 5;
 ObjectiveCCounter *counter;
 MazeWrapper *maze;
 
+// Shared materials
+Material* wallBothMat;
+Material* wallLefthMat;
+Material* wallRightMat;
+Material* wallNoneMat;
+Material* floorMat;
+Material* crateMat;
+Material* playerMat;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -72,12 +81,15 @@ MazeWrapper *maze;
 //    // black box for minimap
 //    [self genOverlay];
 //
-//    // Maze creation
-//    maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
-//    [maze create];
-//    [self generateMazeWall];
-//
-//    // Misc setup
+
+    [self setupMaterial];
+    
+    // Maze creation
+    maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
+    [maze create];
+    [self generateMazeWall];
+
+    // Misc setup
     [self resetCamera];
     [Renderer setFogIntensity:5.0];
     
@@ -130,6 +142,24 @@ MazeWrapper *maze;
     [gameObjects addObject:go3];
 }
 
+- (void)setupMaterial
+{
+    wallBothMat = [[Material alloc] init];
+    wallNoneMat = [[Material alloc] init];
+    wallLefthMat = [[Material alloc] init];
+    wallRightMat = [[Material alloc] init];
+    floorMat = [[Material alloc] init];
+    crateMat = [[Material alloc] init];
+    
+    [wallBothMat LoadTexture:@"wallBothSides.jpg"];
+    [wallNoneMat LoadTexture:@"wallNoSides.jpg"];
+    [wallLefthMat LoadTexture:@"wallLeftSide.jpg"];
+    [wallRightMat LoadTexture:@"wallRightSide.jpg"];
+    [floorMat LoadTexture:@"floor.jpg"];
+    [crateMat LoadTexture:@"crate.jpg"];
+    [playerMat LoadTexture:@"red.jpg"];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -154,6 +184,13 @@ MazeWrapper *maze;
 
 -(void)generateMazeWall
 {
+    // create a shared model for all wall objects
+    Model* wallModel = [[Model alloc] init];
+    [wallModel LoadData:Model.GetWallVertices
+                       :Model.GetCubeNormals
+                       :Model.GetCubeUvs
+                       :Model.GetCubeIndices
+                       :24 :36];
     
     for (int x = 0; x < MAZE_SIZE; x++)
     {
@@ -164,60 +201,61 @@ MazeWrapper *maze;
             if (cell.northWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                // r.position = GLKVector3Make(x, 0, y + 0.4);
                 rightTexture = [self wallCheckNorth:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x, 0, y + 0.4);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+
+                [gameObjects addObject:go];
             }
             
             if (cell.eastWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                r.position = GLKVector3Make(x + 0.4, 0, y);
-                r.yRot = 90;
                 rightTexture = [self wallCheckEast:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x + 0.4, 0, y);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+                
+                [gameObjects addObject:go];
             }
             
             if (cell.southWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                r.position = GLKVector3Make(x, 0, y - 0.4);
                 rightTexture = [self wallCheckSouth:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x, 0, y - 0.4);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+                
+                [gameObjects addObject:go];
             }
             
             if (cell.westWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                r.position = GLKVector3Make(x - 0.4, 0, y);
-                r.yRot = 90;
                 rightTexture = [self wallCheckWest:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x - 0.4, 0, y);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+                
+                [gameObjects addObject:go];
             }
             
-            Renderer *r = [[Renderer alloc] init];
-            [r setup:(GLKView * )self.view];
-            [r loadModels:MODEL_WALL];
-            r.position = GLKVector3Make(x, -0.6, y);
-            r.xRot = 90;
-            r.texture = TEX_FLOOR;
-            [models addObject:r];
+            GameObject* go = [[GameObject alloc] init];
+            go.transform.position = GLKVector3Make(x, -0.6, y);
+            go.transform.rotation = GLKVector3Make(90, 0, 0);
+            go.model = wallModel;
+            go.material = floorMat;
+            [gameObjects addObject:go];
         }
     }
 }
@@ -315,20 +353,21 @@ MazeWrapper *maze;
 }
 
 //convert selected texture to actual image for texture
-- (void)selectTexture:(Renderer *)r
-              selection:(int)selection {
+- (void)selectTexture:(GameObject *)go
+              selection:(int)selection
+{
     switch (selection) {
         case 0:
-            r.texture = TEX_WALL_BOTH;
+            go.material = wallBothMat;
             break;
         case 1:
-            r.texture = TEX_WALL_LEFT;
+            go.material = wallLefthMat;
             break;
         case 2:
-            r.texture = TEX_WALL_RIGHT;
+            go.material = wallRightMat;
             break;
         default:
-            r.texture = TEX_WALL_NO;
+            go.material = wallNoneMat;
             break;
     }
 }
@@ -391,6 +430,7 @@ MazeWrapper *maze;
     {
         [glesRenderer drawGameObject:((GameObject*)gameObjects[i])];
     }
+    
     return;
     
     // draw

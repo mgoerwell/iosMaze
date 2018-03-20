@@ -31,7 +31,7 @@
 		DEC41C242060AE3600B7373E /* Transform.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C232060AE3600B7373E /* Transform.m */; };
 		DEC41C262060AE4100B7373E /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C252060AE4100B7373E /* Model.m */; };
 		DEC41C282060AE4B00B7373E /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C272060AE4B00B7373E /* Material.m */; };
-		DEDA3A2E205A18CD00CB9D2D /* black.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEDA3A2D205A18CD00CB9D2D /* black.jpg */; };
+		DEDA3A2E205A18CD00CB9D2D /* red.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEDA3A2D205A18CD00CB9D2D /* red.jpg */; };
 		DEFE2D4E204D0CAC00895244 /* MazeWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */; };
 /* End PBXBuildFile section */
 
@@ -75,7 +75,7 @@
 		DEC41C2A2060AE8700B7373E /* GameObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameObject.h; sourceTree = "<group>"; };
 		DEC41C2B2060AE8800B7373E /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		DEC41C2C2060AE8800B7373E /* Transform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
-		DEDA3A2D205A18CD00CB9D2D /* black.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = black.jpg; sourceTree = "<group>"; };
+		DEDA3A2D205A18CD00CB9D2D /* red.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = red.jpg; sourceTree = "<group>"; };
 		DEFE2D4C204D0C9F00895244 /* MazeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeWrapper.h; sourceTree = "<group>"; };
 		DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MazeWrapper.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,7 +94,7 @@
 		C954592620582ADD004A9342 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				DEDA3A2D205A18CD00CB9D2D /* black.jpg */,
+				DEDA3A2D205A18CD00CB9D2D /* red.jpg */,
 				C954592720582ADD004A9342 /* floor.jpg */,
 				C954592820582ADD004A9342 /* wallBothSides.jpg */,
 				C954592920582ADD004A9342 /* wallLeftSide.jpg */,
@@ -245,7 +245,7 @@
 				DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */,
 				DE6B8139204B5B3B0034A4F0 /* Shader.vsh in Resources */,
 				C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */,
-				DEDA3A2E205A18CD00CB9D2D /* black.jpg in Resources */,
+				DEDA3A2E205A18CD00CB9D2D /* red.jpg in Resources */,
 				C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */,
 				C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */,
 			);
