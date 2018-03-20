@@ -11,17 +11,10 @@
 #import "DisjointSetWrapper.h"
 #import "MazeWrapper.h"
 
-//#import "Material.h"
-//#import "GameObject.h"
-//#import "Model.h"
-//#import "Transform.h"
+
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
-    Renderer *playerOverlay;
-    GameObject *go;
-    NSMutableArray *models;
-    NSMutableArray *overlay;
     NSMutableArray *gameObjects;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
@@ -32,13 +25,13 @@
 @end
 
 
+
 @implementation ViewController
 
 bool isRotating = false; 
 float rotationSpeed = 5.0f;
 float movementSpeed = 5.0f;
 const int MAZE_SIZE = 5;
-ObjectiveCCounter *counter;
 MazeWrapper *maze;
 
 // Shared materials
@@ -54,51 +47,43 @@ GameObject* player;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    models = [NSMutableArray array];
-    overlay = [NSMutableArray array];
-    gameObjects = [NSMutableArray array];
-    
-    // ### <<< (Crate)
+    // initialize OpenGL context and rendering
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
-    [glesRenderer loadModels:MODEL_CUBE];
-    [glesRenderer setPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -1)];
- //   glesRenderer.rotating = true;
-    // glesRenderer.texture = TEX_CRATE;
-    [models addObject:glesRenderer];
-    // ### >>>
-//
-    // Minimap
-    minimapOn = true;
-    // red player indicator
-//    playerOverlay = (GLKView *)self.view;
-//    playerOverlay = [[Renderer alloc] init];
-//    [playerOverlay setup:(GLKView * )self.view];
-//    [playerOverlay loadModels:MODEL_WALL];
-//    playerOverlay.xRot = 90;
-//    playerOverlay.texture = TEX_BLACK;
-//    [overlay addObject:playerOverlay];
-    // black box for minimap
-//     [self genOverlay];
-//
-
+    
+    // setup shared resources
+    gameObjects = [NSMutableArray array];
+    
     [self setupMaterial];
     
-    // Maze creation
+    Model* cubeModel = [[Model alloc] init];
+    [cubeModel LoadData:Model.GetCubeVertices
+                       :Model.GetCubeNormals
+                       :Model.GetCubeUvs
+                       :Model.GetCubeIndices
+                       :24 :36];
+
+    // minimap
+    minimapOn = true;
+    player = [[GameObject alloc] init];
+    player.model = cubeModel;
+    player.material = playerMat;
+    
+    // maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
     [self generateMazeWall];
 
-    // Misc setup
+    // misc setup
     [self resetCamera];
     [Renderer setFogIntensity:5.0];
     
     
-    // SOMETHING NEW
+    // DEBUG CODE
     
     // Standalone GameObject
-    go = [[GameObject alloc] init];
+    GameObject* go = [[GameObject alloc] init];
     go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
     [go.model LoadData:Model.GetCubeVertices
                       :Model.GetCubeNormals
@@ -108,22 +93,15 @@ GameObject* player;
                       :36];
     [go.material LoadTexture:@"wallBothSides.jpg"];
     
-    Model* cubeModel = [[Model alloc] init];
+    // GameObjects with shared materials and models
     Model* wallModel = [[Model alloc] init];
-    Material* sharedMat = [[Material alloc] init];
-    
-    [cubeModel LoadData:Model.GetCubeVertices
-                       :Model.GetCubeNormals
-                       :Model.GetCubeUvs
-                       :Model.GetCubeIndices
-                       :24 :36];
-    
     [wallModel LoadData:Model.GetWallVertices
                        :Model.GetCubeNormals
                        :Model.GetCubeUvs
                        :Model.GetCubeIndices
                        :24 :36];
-    
+
+    Material* sharedMat = [[Material alloc] init];
     [sharedMat LoadTexture:@"wallNoSides.jpg"];
     
     GameObject* go2 = [[GameObject alloc] init];
@@ -141,11 +119,6 @@ GameObject* player;
     [gameObjects addObject:go];
     [gameObjects addObject:go2];
     [gameObjects addObject:go3];
-    
-    // player
-    player = [[GameObject alloc] init];
-    player.model = cubeModel;
-    player.material = playerMat;
 }
 
 - (void)setupMaterial
@@ -171,6 +144,7 @@ GameObject* player;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 
 // REGION: MAZE
@@ -385,49 +359,18 @@ GameObject* player;
 // endregion
 
 
-// REGION: Minimap
-
-- (void)genOverlay
-{
-    for (int x = -5; x < MAZE_SIZE + 5; x++)
-    {
-        for (int y = -5; y < MAZE_SIZE + 5; y++)
-        {
-            Renderer *r = [[Renderer alloc] init];
-            [r setup:(GLKView * )self.view];
-            [r loadModels:MODEL_WALL];
-            r.position = GLKVector3Make(x, -2.0, y);
-            r.xRot = 90;
-            r.isOverlay = true;
-            [overlay addObject:r];
-        }
-    }
-}
-
-// endregion
-
 
 // REGION: GLKIT
 
 - (void)update
 {
-    for (int i = 0; i < models.count; i++)
-    {
-        [((Renderer *)models[i]) update];
-    }
+    [glesRenderer update];
     
     // minimap
     if (!minimapOn) return;
     
-    for (int i = 0; i < overlay.count; i++)
-    {
-        [((Renderer *)overlay[i]) update];
-    }
     GLKVector3 camPos = [Renderer getCameraPosition];
     camPos.y = 2.0f;  // always on top of map
-    playerOverlay.position = camPos;
-    playerOverlay.yRot = -[Renderer getCameraYRotation];
-    
     player.transform.position = camPos;
     player.transform.rotation = GLKVector3Make(0, -[Renderer getCameraYRotation], 0);
 }
@@ -438,6 +381,7 @@ GameObject* player;
     glViewport(0, 0, (int)self->glkView.drawableWidth, (int)self->glkView.drawableHeight);
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
+    // draw
     for (int i = 0; i < gameObjects.count; i++)
     {
         [glesRenderer drawGameObject:((GameObject*)gameObjects[i])];
@@ -446,15 +390,17 @@ GameObject* player;
     // MINIMAP
     if (!minimapOn) return;
     
+    // calculate map size
     int w = (int)(self->glkView.drawableWidth / 2);
     int h = (int)(self->glkView.drawableHeight / 2);
     minimapSize = (w < h) ? w : h;
     
+    // restrict drawing to top-right
     glViewport(((int)(self->glkView.drawableWidth)) - minimapSize,
                ((int)(self->glkView.drawableHeight)) - minimapSize,
                minimapSize, minimapSize);
 
-    // clear depth for section
+    // clear depth for section (draw on top)
     glEnable(GL_SCISSOR_TEST);
     glScissor(((int)(self->glkView.drawableWidth)) - minimapSize,
                ((int)(self->glkView.drawableHeight)) - minimapSize,
@@ -473,18 +419,12 @@ GameObject* player;
     }
     [glesRenderer drawGameObjectMinimap:player];
 
-    
-//    for (int i = 0; i < overlay.count; i++)
-//    {
-//        [((Renderer *)overlay[i]) drawMinimap];
-//    }
     glDisable(GL_BLEND);
-    
 }
 
 -(void)resetCamera {
-    [Renderer setCameraPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -3)];
-    [Renderer setCameraYRotation:180];
+    [Renderer setCameraPosition:GLKVector3Make(MAZE_SIZE / 2, 0, 3)];
+    [Renderer setCameraYRotation:0];
     [Renderer setCameraXRotation:0];
 }
 
@@ -525,6 +465,8 @@ float yInitialRotation;
 
 
 // endregion
+
+
 
 // REGION: UI
 - (IBAction)onDayNightPress:(id)sender {
