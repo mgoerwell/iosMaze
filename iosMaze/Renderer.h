@@ -5,6 +5,7 @@
 #ifndef Renderer_h
 #define Renderer_h
 #import <GLKit/GLKit.h>
+#import "GameObject.h"
 
 typedef enum
 {
@@ -46,6 +47,7 @@ typedef enum
 - (void)loadModels :(int)type;
 - (void)update;
 - (void)draw:(CGRect)drawRect;
+- (void)drawGameObject:(GameObject*)gameObject;
 - (void)drawMinimap;
 - (void)rotateCam :(id)sender;
 - (void)moveCam;

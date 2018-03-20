@@ -72,6 +72,13 @@ MazeWrapper *maze;
     // Misc setup
     [self resetCamera];
     [Renderer setFogIntensity:5.0];
+    
+    
+    // SOMETHING NEW
+    GameObject* go = [[GameObject alloc] init];
+    [go CreateEmpty];
+    go.transform.position = GLKVector3Make(1.0, 1.0, 1.0);
+
 }
 
 - (void)didReceiveMemoryWarning {
