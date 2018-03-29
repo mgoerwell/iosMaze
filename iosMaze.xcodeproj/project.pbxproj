@@ -12,6 +12,7 @@
 		C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592920582ADD004A9342 /* wallLeftSide.jpg */; };
 		C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592A20582ADD004A9342 /* wallNoSides.jpg */; };
 		C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592B20582ADD004A9342 /* wallRightSide.jpg */; };
+		DE3E893C206C995100648A03 /* ObjReader.m in Sources */ = {isa = PBXBuildFile; fileRef = DE3E893B206C995100648A03 /* ObjReader.m */; };
 		DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C5204B5AB500FCC2D9 /* Main.storyboard */; };
 		DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */; };
 		DE5947CC204B5AB500FCC2D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947CA204B5AB500FCC2D9 /* LaunchScreen.storyboard */; };
@@ -41,6 +42,8 @@
 		C954592920582ADD004A9342 /* wallLeftSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallLeftSide.jpg; sourceTree = "<group>"; };
 		C954592A20582ADD004A9342 /* wallNoSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallNoSides.jpg; sourceTree = "<group>"; };
 		C954592B20582ADD004A9342 /* wallRightSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallRightSide.jpg; sourceTree = "<group>"; };
+		DE3E893B206C995100648A03 /* ObjReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjReader.m; sourceTree = "<group>"; };
+		DE3E893D206C9A4500648A03 /* ObjReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjReader.h; sourceTree = "<group>"; };
 		DE5947BC204B5AB500FCC2D9 /* iosMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5947C6204B5AB500FCC2D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -125,6 +128,8 @@
 			children = (
 				DEC41C182060AD8C00B7373E /* Rendering */,
 				DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */,
+				DE3E893D206C9A4500648A03 /* ObjReader.h */,
+				DE3E893B206C995100648A03 /* ObjReader.m */,
 				DE6B8150204B5EE40034A4F0 /* DisjointSet.h */,
 				DE6B8154204B603D0034A4F0 /* DisjointSetWrapper.h */,
 				DE6B8155204B61020034A4F0 /* DisjointSetWrapper.mm */,
@@ -262,6 +267,7 @@
 				DE6B814A204B5C030034A4F0 /* ObjectiveCCounter.mm in Sources */,
 				DE6B813B204B5B3B0034A4F0 /* GLESRenderer.cpp in Sources */,
 				DE6B8153204B5EE50034A4F0 /* DisjointSet.cpp in Sources */,
+				DE3E893C206C995100648A03 /* ObjReader.m in Sources */,
 				DEC41C222060AE2A00B7373E /* GameObject.m in Sources */,
 				DE6B8137204B5B3B0034A4F0 /* AppDelegate.m in Sources */,
 				DE6B8138204B5B3B0034A4F0 /* Renderer.mm in Sources */,

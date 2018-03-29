@@ -10,6 +10,7 @@
 #import "ObjectiveCCounter.h"
 #import "DisjointSetWrapper.h"
 #import "MazeWrapper.h"
+#import "ObjReader.h"
 
 
 

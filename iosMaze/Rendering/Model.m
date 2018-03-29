@@ -44,7 +44,7 @@ uint vertexCount;
         memcpy(vertBuf[v].normal, &_normal[v*3], sizeof(vertBuf[0].normal));
         memcpy(vertBuf[v].uv, &_uv[v*2], sizeof(vertBuf[0].uv));
     }
-        
+    
     // Create VAO
     glGenVertexArrays(1, &_VAO);
     glBindVertexArray(_VAO);
