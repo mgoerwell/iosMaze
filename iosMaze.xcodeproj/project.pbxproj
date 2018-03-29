@@ -37,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7BF0B7F5206D58E700C7E0EA /* sphere.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
 		C954592720582ADD004A9342 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
 		C954592820582ADD004A9342 /* wallBothSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallBothSides.jpg; sourceTree = "<group>"; };
 		C954592920582ADD004A9342 /* wallLeftSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallLeftSide.jpg; sourceTree = "<group>"; };
@@ -126,6 +127,7 @@
 		DE5947BE204B5AB500FCC2D9 /* iosMaze */ = {
 			isa = PBXGroup;
 			children = (
+				7BF0B7F5206D58E700C7E0EA /* sphere.obj */,
 				DEC41C182060AD8C00B7373E /* Rendering */,
 				DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */,
 				DE3E893D206C9A4500648A03 /* ObjReader.h */,

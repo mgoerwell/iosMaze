@@ -35,7 +35,7 @@ NSMutableArray *indexArray;
     return self;
 }
 
--(void)Read :(NSString *)fileName
+-(Model*)Read :(NSString *)fileName
 {
     // clear all arrays
     
@@ -78,11 +78,19 @@ NSMutableArray *indexArray;
     
     // compile data
     int vertexCount = [vertexDataArray count];
-    struct VertexData vertBuf[];
-
+    struct VertexData vertBuf[vertexDataArray.count];
+    for (int i = 0; i<vertexDataArray.count; i++)
+    {
+        NSValue *read = [vertexDataArray objectAtIndex:i];
+        [read getValue:&vertBuf[i]];
+    }
+    
+    int indexCount = [indexArray count];
+    
     // create model to return
     Model* model = [[Model alloc] init];
-
+    [model LoadVertexData:vertBuf :indexArray :vertexCount :indexCount];
+    return model;
 }
 
 -(void)ReadVertex :(NSString*)line
@@ -96,6 +104,15 @@ NSMutableArray *indexArray;
     [vertices addObject:[NSNumber numberWithFloat:x]];
     [vertices addObject:[NSNumber numberWithFloat:y]];
     [vertices addObject:[NSNumber numberWithFloat:z]];
+    
+    // assume object is smooth (not flat shading)
+    struct VertexData vertexData;
+    vertexData.position[0] = x;
+    vertexData.position[1] = y;
+    vertexData.position[2] = z;
+    NSValue *value = [NSValue valueWithBytes:&vertexData objCType:@encode(struct VertexData)];
+    [vertexDataArray addObject:value];
+
 }
 
 -(void)ReadUV :(NSString*)line
@@ -131,13 +148,15 @@ NSMutableArray *indexArray;
     {
         NSArray *components = [line componentsSeparatedByString:@"/"];
         
-        // create struct
-        struct VertexData vertexData;
-        
         // retrieve indices
         int posIndex = [components[0] intValue];
         int texIndex = [components[1] intValue];
         int nrmIndex = [components[2] intValue];
+        
+        // retrieve struct (assumes obj is smooth
+        struct VertexData vertexData;
+        NSValue *read = [vertexDataArray objectAtIndex:posIndex];
+        [read getValue:&vertexData];
         
         // construct vertex data
         vertexData.position[0] = [vertices[posIndex*3] floatValue];
@@ -148,33 +167,13 @@ NSMutableArray *indexArray;
         vertexData.normal[0]   = [normals[nrmIndex*3] floatValue];
         vertexData.normal[1]   = [normals[nrmIndex*3+1] floatValue];
         vertexData.normal[2]   = [normals[nrmIndex*3+2] floatValue];
-
+        
         // add to VertexDataArray and IndexArray (order matters)
         [indexArray addObject:[NSNumber numberWithInt:[vertexDataArray count]]];
-        
-        NSValue *value = [NSValue valueWithBytes:&vertexData objCType:@encode(struct VertexData)];
-        [vertexDataArray addObject:value];
+        // update VertexDataArray
+        NSValue *write = [NSValue valueWithBytes:&vertexData objCType:@encode(struct VertexData)];
+        [vertexDataArray replaceObjectAtIndex:posIndex withObject:write];
     }
-    
-//    // To add your struct value to a NSMutableArray
-//    NSValue *value = [NSValue valueWithBytes:&structValue objCType:@encode(MyStruct)];
-//    [array addObject:value];
-//
-//    // To retrieve the stored value
-//    MyStruct structValue;
-//    NSValue *value = [array objectAtIndex:0];
-//    [value getValue:&structValue];
-
 }
-
-//-(GLKMatrix4)GetModelMatrix
-//{
-//    GLKMatrix4 m = GLKMatrix4Translate(GLKMatrix4Identity, _position.x, _position.y, _position.z);
-//    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(_rotation.y), 0.0, 1.0, 0.0 );
-//    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(_rotation.x), 1.0, 0.0, 0.0 );
-//    m = GLKMatrix4Rotate(m, GLKMathDegreesToRadians(_rotation.z), 0.0, 0.0, 1.0 );
-//    m = GLKMatrix4Scale(m, _scale.x, _scale.y, _scale.z);
-//    return m;
-//}
 
 @end

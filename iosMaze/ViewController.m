@@ -58,6 +58,8 @@ GameObject* player;
     
     [self setupMaterial];
     
+
+    
     Model* cubeModel = [[Model alloc] init];
     [cubeModel LoadData:Model.GetCubeVertices
                        :Model.GetCubeNormals
