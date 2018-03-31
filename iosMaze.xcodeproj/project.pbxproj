@@ -12,6 +12,7 @@
 		C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592920582ADD004A9342 /* wallLeftSide.jpg */; };
 		C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592A20582ADD004A9342 /* wallNoSides.jpg */; };
 		C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592B20582ADD004A9342 /* wallRightSide.jpg */; };
+		DE0064B8206D8A00008CCDC4 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = 7BF0B7F5206D58E700C7E0EA /* sphere.obj */; };
 		DE3E893C206C995100648A03 /* ObjReader.m in Sources */ = {isa = PBXBuildFile; fileRef = DE3E893B206C995100648A03 /* ObjReader.m */; };
 		DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C5204B5AB500FCC2D9 /* Main.storyboard */; };
 		DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */; };
@@ -127,7 +128,6 @@
 		DE5947BE204B5AB500FCC2D9 /* iosMaze */ = {
 			isa = PBXGroup;
 			children = (
-				7BF0B7F5206D58E700C7E0EA /* sphere.obj */,
 				DEC41C182060AD8C00B7373E /* Rendering */,
 				DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */,
 				DE3E893D206C9A4500648A03 /* ObjReader.h */,
@@ -139,6 +139,7 @@
 				DE6B814E204B5EE40034A4F0 /* maze.h */,
 				DEFE2D4C204D0C9F00895244 /* MazeWrapper.h */,
 				DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */,
+				7BF0B7F5206D58E700C7E0EA /* sphere.obj */,
 				DE6B814C204B5C240034A4F0 /* MixedLanguage */,
 				DE6B812B204B5B3A0034A4F0 /* AppDelegate.h */,
 				DE6B812D204B5B3A0034A4F0 /* AppDelegate.m */,
@@ -244,6 +245,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE0064B8206D8A00008CCDC4 /* sphere.obj in Resources */,
 				C954592C20582ADD004A9342 /* floor.jpg in Resources */,
 				C954592D20582ADD004A9342 /* wallBothSides.jpg in Resources */,
 				DE6B8136204B5B3B0034A4F0 /* Shader.fsh in Resources */,

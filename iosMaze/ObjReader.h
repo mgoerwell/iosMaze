@@ -16,8 +16,11 @@
 //#endif /* ObjReader_h */
 
 #import <Foundation/Foundation.h>
+#import "Model.h"
 
 @interface ObjReader : NSObject
+
+-(Model*)Read :(NSString *)fileName;
 
 //@property GLKVector3 position;
 //@property GLKVector3 rotation;

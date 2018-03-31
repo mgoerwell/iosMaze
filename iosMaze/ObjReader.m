@@ -21,6 +21,12 @@ NSMutableArray *normals;
 NSMutableArray *vertexDataArray;
 NSMutableArray *indexArray;
 
+NSMutableDictionary *hashmap;
+// [dict setObject:[NSNumber numberWithInt:42] forKey:@"A cool number"];
+
+struct VertexData* vertbuf;
+int* indices;
+
 -(id)init
 {
     self = [super init];
@@ -31,6 +37,8 @@ NSMutableArray *indexArray;
         normals = [NSMutableArray array];
         vertexDataArray = [NSMutableArray array];
         indexArray = [NSMutableArray array];
+        
+        hashmap = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -76,21 +84,32 @@ NSMutableArray *indexArray;
     }
     // data reading complete
     
-    // compile data
-    int vertexCount = [vertexDataArray count];
-    struct VertexData vertBuf[vertexDataArray.count];
-    for (int i = 0; i<vertexDataArray.count; i++)
-    {
-        NSValue *read = [vertexDataArray objectAtIndex:i];
-        [read getValue:&vertBuf[i]];
-    }
-    
-    int indexCount = [indexArray count];
-    
-    // create model to return
-    Model* model = [[Model alloc] init];
-    [model LoadVertexData:vertBuf :indexArray :vertexCount :indexCount];
+    Model* model = [[Model alloc]init];
+    [model LoadVertexData:vertexDataArray :indexArray];
     return model;
+    
+//    // recompile data
+//    int vertexCount = [vertexDataArray count];
+//    // struct VertexData vertBuf[vertexDataArray.count];
+//    vertbuf = VertexData[vertexCount];
+//
+//    for (int i = 0; i<vertexDataArray.count; i++)
+//    {
+//        NSValue *read = [vertexDataArray objectAtIndex:i];
+//        [read getValue:&vertBuf[i]];
+//    }
+//
+//    int indexCount = [indexArray count];
+//    int indices[indexCount];
+//    for (int i = 0; i<indexCount; i++)
+//    {
+//        indices[i] = [[indexArray objectAtIndex:i] intValue];
+//    }
+//
+//    // create model to return
+//    Model* model = [[Model alloc] init];
+//    [model LoadVertexData:vertBuf :indices :vertexCount :indexCount];
+//    return model;
 }
 
 -(void)ReadVertex :(NSString*)line
@@ -104,15 +123,6 @@ NSMutableArray *indexArray;
     [vertices addObject:[NSNumber numberWithFloat:x]];
     [vertices addObject:[NSNumber numberWithFloat:y]];
     [vertices addObject:[NSNumber numberWithFloat:z]];
-    
-    // assume object is smooth (not flat shading)
-    struct VertexData vertexData;
-    vertexData.position[0] = x;
-    vertexData.position[1] = y;
-    vertexData.position[2] = z;
-    NSValue *value = [NSValue valueWithBytes:&vertexData objCType:@encode(struct VertexData)];
-    [vertexDataArray addObject:value];
-
 }
 
 -(void)ReadUV :(NSString*)line
@@ -146,19 +156,15 @@ NSMutableArray *indexArray;
     // skip first word - "f "
     for (int i = 1; i < [strings count]; i++)
     {
-        NSArray *components = [line componentsSeparatedByString:@"/"];
-        
+        NSArray *components = [strings[i] componentsSeparatedByString:@"/"];
+
         // retrieve indices
-        int posIndex = [components[0] intValue];
-        int texIndex = [components[1] intValue];
-        int nrmIndex = [components[2] intValue];
-        
-        // retrieve struct (assumes obj is smooth
-        struct VertexData vertexData;
-        NSValue *read = [vertexDataArray objectAtIndex:posIndex];
-        [read getValue:&vertexData];
+        int posIndex = [components[0] intValue] - 1;
+        int texIndex = [components[1] intValue] - 1;
+        int nrmIndex = [components[2] intValue] - 1;
         
         // construct vertex data
+        struct VertexData vertexData;
         vertexData.position[0] = [vertices[posIndex*3] floatValue];
         vertexData.position[1] = [vertices[posIndex*3+1] floatValue];
         vertexData.position[2] = [vertices[posIndex*3+2] floatValue];
@@ -167,12 +173,23 @@ NSMutableArray *indexArray;
         vertexData.normal[0]   = [normals[nrmIndex*3] floatValue];
         vertexData.normal[1]   = [normals[nrmIndex*3+1] floatValue];
         vertexData.normal[2]   = [normals[nrmIndex*3+2] floatValue];
-        
-        // add to VertexDataArray and IndexArray (order matters)
-        [indexArray addObject:[NSNumber numberWithInt:[vertexDataArray count]]];
-        // update VertexDataArray
+
+        // compile struct (so it can be added to arrays)
         NSValue *write = [NSValue valueWithBytes:&vertexData objCType:@encode(struct VertexData)];
-        [vertexDataArray replaceObjectAtIndex:posIndex withObject:write];
+
+        // vertex exists already
+        if ([hashmap objectForKey:write] != nil)
+        {
+            [indexArray addObject:[hashmap objectForKey:write]];
+        }
+        else // add new vertex
+        {
+            NSNumber* vIndex = [NSNumber numberWithInteger:vertexDataArray.count];  // count!
+            
+            [vertexDataArray addObject:write];
+            [indexArray addObject:vIndex];
+            [hashmap setObject:vIndex forKey:write];
+        }
     }
 }
 

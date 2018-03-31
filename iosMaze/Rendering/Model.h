@@ -27,8 +27,8 @@ struct VertexData {
 @property int numIndices;
 
 // load data directly
--(void)LoadVertexData :(struct VertexData [])vertexDataArray
-                      :(NSArray*)indexArray :(uint)vCount :(uint)iCount;
+-(void)LoadVertexData :(NSMutableArray*)vertexDataArray
+                      :(NSMutableArray*)indexArray;
 
 // convenience function to load data arrays
 -(void)LoadData :(float*)vertices :(float*)normals :(float*)texCoords :(uint*)indices :(uint)vCount :(uint)iCount;

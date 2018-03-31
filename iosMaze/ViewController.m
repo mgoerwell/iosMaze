@@ -57,16 +57,18 @@ GameObject* player;
     gameObjects = [NSMutableArray array];
     
     [self setupMaterial];
-    
 
-    
     Model* cubeModel = [[Model alloc] init];
-    [cubeModel LoadData:Model.GetCubeVertices
-                       :Model.GetCubeNormals
-                       :Model.GetCubeUvs
-                       :Model.GetCubeIndices
-                       :24 :36];
+//    [cubeModel LoadData:Model.GetCubeVertices
+//                       :Model.GetCubeNormals
+//                       :Model.GetCubeUvs
+//                       :Model.GetCubeIndices
+//                       :24 :36];
 
+    ObjReader* objReader = [[ObjReader alloc] init];
+    Model* sphereModel = [objReader Read :@"sphere"];
+
+    
     // minimap
     minimapOn = true;
     player = [[GameObject alloc] init];
@@ -88,35 +90,36 @@ GameObject* player;
     // Standalone GameObject
     GameObject* go = [[GameObject alloc] init];
     go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
-    [go.model LoadData:Model.GetCubeVertices
-                      :Model.GetCubeNormals
-                      :Model.GetCubeUvs
-                      :Model.GetCubeIndices
-                      :24
-                      :36];
+    go.model = sphereModel;
+//    [go.model LoadData:Model.GetCubeVertices
+//                  :Model.GetCubeNormals
+//                  :Model.GetCubeUvs
+//                  :Model.GetCubeIndices
+//                  :24
+//                  :36];
     [go.material LoadTexture:@"wallBothSides.jpg"];
     
     // GameObjects with shared materials and models
     Model* wallModel = [[Model alloc] init];
-    [wallModel LoadData:Model.GetWallVertices
-                       :Model.GetCubeNormals
-                       :Model.GetCubeUvs
-                       :Model.GetCubeIndices
-                       :24 :36];
-
+//    [wallModel LoadData:Model.GetWallVertices
+//                       :Model.GetCubeNormals
+//                       :Model.GetCubeUvs
+//                       :Model.GetCubeIndices
+//                       :24 :36];
+    
     Material* sharedMat = [[Material alloc] init];
     [sharedMat LoadTexture:@"wallNoSides.jpg"];
     
     GameObject* go2 = [[GameObject alloc] init];
     go2.transform = [[Transform alloc] init];
     go2.transform.position = GLKVector3Make(MAZE_SIZE/2 - 1, 0.5, -1);
-    go2.model = cubeModel;
+    go2.model = sphereModel;
     go2.material = sharedMat;
     
     GameObject* go3 = [[GameObject alloc] init];
     go3.transform = [[Transform alloc] init];
     go3.transform.position = GLKVector3Make(MAZE_SIZE/2 + 1, 0.5, -1);
-    go3.model = wallModel;
+    go3.model = sphereModel;
     go3.material = sharedMat;
     
     [gameObjects addObject:go];
