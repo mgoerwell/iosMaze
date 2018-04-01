@@ -17,6 +17,7 @@
 		DE2EDEEB2070D34000369DA5 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEEA2070D34000369DA5 /* sphere.obj */; };
 		DE2EDEEF2070D7C000369DA5 /* storm_trooper.obj in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEEE2070D7C000369DA5 /* storm_trooper.obj */; };
 		DE2EDEF22070DB2E00369DA5 /* storm_trooper.png in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEF12070DB2D00369DA5 /* storm_trooper.png */; };
+		DE2EDEF520718C1F00369DA5 /* CALayer+XibConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2EDEF420718C1F00369DA5 /* CALayer+XibConfiguration.m */; };
 		DE3E893C206C995100648A03 /* ObjReader.m in Sources */ = {isa = PBXBuildFile; fileRef = DE3E893B206C995100648A03 /* ObjReader.m */; };
 		DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C5204B5AB500FCC2D9 /* Main.storyboard */; };
 		DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */; };
@@ -53,6 +54,8 @@
 		DE2EDEEE2070D7C000369DA5 /* storm_trooper.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = storm_trooper.obj; sourceTree = "<group>"; };
 		DE2EDEF02070D7D500369DA5 /* storm_trooper.dds */ = {isa = PBXFileReference; lastKnownFileType = file; path = storm_trooper.dds; sourceTree = "<group>"; };
 		DE2EDEF12070DB2D00369DA5 /* storm_trooper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storm_trooper.png; sourceTree = "<group>"; };
+		DE2EDEF320718C0400369DA5 /* CALayer+XibConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CALayer+XibConfiguration.h"; sourceTree = "<group>"; };
+		DE2EDEF420718C1F00369DA5 /* CALayer+XibConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CALayer+XibConfiguration.m"; sourceTree = "<group>"; };
 		DE3E893B206C995100648A03 /* ObjReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjReader.m; sourceTree = "<group>"; };
 		DE3E893D206C9A4500648A03 /* ObjReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjReader.h; sourceTree = "<group>"; };
 		DE5947BC204B5AB500FCC2D9 /* iosMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -185,6 +188,8 @@
 				DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */,
 				DE5947CA204B5AB500FCC2D9 /* LaunchScreen.storyboard */,
 				DE5947CD204B5AB500FCC2D9 /* Info.plist */,
+				DE2EDEF320718C0400369DA5 /* CALayer+XibConfiguration.h */,
+				DE2EDEF420718C1F00369DA5 /* CALayer+XibConfiguration.m */,
 			);
 			path = iosMaze;
 			sourceTree = "<group>";
@@ -315,6 +320,7 @@
 				DE6B8156204B61020034A4F0 /* DisjointSetWrapper.mm in Sources */,
 				DE6B813A204B5B3B0034A4F0 /* ViewController.m in Sources */,
 				DEC41C262060AE4100B7373E /* Model.m in Sources */,
+				DE2EDEF520718C1F00369DA5 /* CALayer+XibConfiguration.m in Sources */,
 				DE6B8152204B5EE50034A4F0 /* maze.cpp in Sources */,
 				DE6B8135204B5B3B0034A4F0 /* main.m in Sources */,
 			);

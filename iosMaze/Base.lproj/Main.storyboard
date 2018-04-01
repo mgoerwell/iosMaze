@@ -18,105 +18,75 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <glkView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28F-fN-RK3">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="3Iq-7M-Uhp">
+                                <rect key="frame" x="0.0" y="417" width="50" height="250"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
-                                        <rect key="frame" x="0.0" y="567" width="375" height="100"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hrl-Ou-MKe">
-                                                <rect key="frame" x="0.0" y="70" width="114.5" height="30"/>
-                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="Day/Night"/>
-                                                <connections>
-                                                    <action selector="onDayNightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="wbe-cl-gbM"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L4O-i4-mte">
-                                                <rect key="frame" x="130.5" y="70" width="114" height="30"/>
-                                                <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <state key="normal" title="Flashlight"/>
-                                                <connections>
-                                                    <action selector="onFlashlightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="V0E-03-01S"/>
-                                                </connections>
-                                            </button>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="a3T-X7-Wjk">
-                                                <rect key="frame" x="260.5" y="37" width="114.5" height="63"/>
-                                                <subviews>
-                                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="3" maximumValue="11" stepValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="gls-9O-zKw">
-                                                        <rect key="frame" x="0.0" y="0.0" width="94" height="29"/>
-                                                        <connections>
-                                                            <action selector="onFogIntensityChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="mRF-at-P7t"/>
-                                                        </connections>
-                                                    </stepper>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
-                                                        <rect key="frame" x="0.0" y="33" width="114.5" height="30"/>
-                                                        <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <state key="normal" title="Fog"/>
-                                                        <connections>
-                                                            <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="100" id="3X5-hX-KkC"/>
-                                        </constraints>
-                                    </stackView>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dDM-d7-lJh">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="X" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iv8-KN-NF6">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="31.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Y" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="up2-ay-xuG">
+                                        <rect key="frame" x="0.0" y="31.5" width="50" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Z" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6qu-xm-bBP">
+                                        <rect key="frame" x="0.0" y="62.5" width="50" height="31.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scale" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6he-Nw-Lyl">
+                                        <rect key="frame" x="0.0" y="94" width="50" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="X-Rot" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4SE-mG-Zxm">
+                                        <rect key="frame" x="0.0" y="125" width="50" height="31.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Y-Rot" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XzT-KZ-LOg">
+                                        <rect key="frame" x="0.0" y="156.5" width="50" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Z-Rot" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kQt-Hd-IgB">
+                                        <rect key="frame" x="0.0" y="187.5" width="50" height="31.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NPC" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yR3-jH-li4">
+                                        <rect key="frame" x="0.0" y="219" width="50" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="2jr-NZ-hsf"/>
+                                    <constraint firstAttribute="width" constant="50" id="3VF-WP-e27"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="CWF-na-lEb">
+                                <rect key="frame" x="281" y="517" width="94" height="150"/>
+                                <subviews>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="3" maximumValue="11" stepValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="gls-9O-zKw">
                                         <rect key="frame" x="0.0" y="0.0" width="94" height="29"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <connections>
-                                            <action selector="OnXStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="eYy-QR-Hyk"/>
+                                            <action selector="onFogIntensityChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="mRF-at-P7t"/>
                                         </connections>
                                     </stepper>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="GXL-Sw-EFz">
-                                        <rect key="frame" x="0.0" y="37" width="94" height="29"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="OnYStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="Lwn-ia-gsl"/>
-                                        </connections>
-                                    </stepper>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="KI7-59-Y5Y">
-                                        <rect key="frame" x="0.0" y="74" width="94" height="29"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="OnZStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="hEW-hc-4db"/>
-                                        </connections>
-                                    </stepper>
-                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="pIf-jZ-dOT">
-                                        <rect key="frame" x="0.0" y="111" width="118" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="OnScaleChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="7dA-BC-kCg"/>
-                                        </connections>
-                                    </slider>
-                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Q3O-cu-ayx">
-                                        <rect key="frame" x="-2" y="148" width="118" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="OnXRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="abc-AB-ioU"/>
-                                        </connections>
-                                    </slider>
-                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="dlO-oL-uo2">
-                                        <rect key="frame" x="0.0" y="185" width="118" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="OnYRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="InC-XI-bxq"/>
-                                        </connections>
-                                    </slider>
-                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HeH-X7-fbT">
-                                        <rect key="frame" x="0.0" y="222" width="118" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <connections>
-                                            <action selector="OnZRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="LDo-Sg-Ail"/>
-                                        </connections>
-                                    </slider>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ReN-Fn-pnP">
-                                        <rect key="frame" x="8" y="259" width="147" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Toggle NPC Move"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9r-KJ-R0W">
+                                        <rect key="frame" x="0.0" y="38.5" width="94" height="34.5"/>
+                                        <state key="normal" title="Fog"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -125,7 +95,114 @@
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
                                                 <integer key="value" value="1"/>
                                             </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderIBColor">
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onFogPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="gGD-HN-PD7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hrl-Ou-MKe">
+                                        <rect key="frame" x="0.0" y="77" width="94" height="34.5"/>
+                                        <state key="normal" title="Day/Night"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBorder" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onDayNightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="wbe-cl-gbM"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L4O-i4-mte">
+                                        <rect key="frame" x="0.0" y="115.5" width="94" height="34.5"/>
+                                        <state key="normal" title="Flashlight"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBorder" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                                <color key="value" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="onFlashlightPress:" destination="zjr-sC-J6G" eventType="touchUpInside" id="V0E-03-01S"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="qYt-Ts-b4U"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="yj0-xJ-UtT">
+                                <rect key="frame" x="58" y="417" width="100" height="250"/>
+                                <subviews>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dDM-d7-lJh">
+                                        <rect key="frame" x="0.0" y="0.0" width="94" height="29"/>
+                                        <connections>
+                                            <action selector="OnXStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="eYy-QR-Hyk"/>
+                                        </connections>
+                                    </stepper>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="GXL-Sw-EFz">
+                                        <rect key="frame" x="0.0" y="31.5" width="94" height="29"/>
+                                        <connections>
+                                            <action selector="OnYStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="Lwn-ia-gsl"/>
+                                        </connections>
+                                    </stepper>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="KI7-59-Y5Y">
+                                        <rect key="frame" x="0.0" y="62.5" width="94" height="29"/>
+                                        <connections>
+                                            <action selector="OnZStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="hEW-hc-4db"/>
+                                        </connections>
+                                    </stepper>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="pIf-jZ-dOT">
+                                        <rect key="frame" x="-2" y="94" width="104" height="32"/>
+                                        <connections>
+                                            <action selector="OnScaleChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="7dA-BC-kCg"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Q3O-cu-ayx">
+                                        <rect key="frame" x="-2" y="125" width="104" height="32.5"/>
+                                        <connections>
+                                            <action selector="OnXRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="abc-AB-ioU"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="dlO-oL-uo2">
+                                        <rect key="frame" x="-2" y="156.5" width="104" height="32"/>
+                                        <connections>
+                                            <action selector="OnYRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="InC-XI-bxq"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HeH-X7-fbT">
+                                        <rect key="frame" x="-2" y="187.5" width="104" height="32.5"/>
+                                        <connections>
+                                            <action selector="OnZRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="LDo-Sg-Ail"/>
+                                        </connections>
+                                    </slider>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ReN-Fn-pnP">
+                                        <rect key="frame" x="0.0" y="219" width="100" height="31"/>
+                                        <state key="normal" title="Toggle Move"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBorder" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
+                                                <integer key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
                                                 <color key="value" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
@@ -134,30 +211,28 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="CWF-na-lEb" secondAttribute="trailing" id="08b-EI-ay3"/>
-                                    <constraint firstAttribute="bottom" secondItem="CWF-na-lEb" secondAttribute="bottom" id="qIx-yO-Xei"/>
-                                    <constraint firstItem="CWF-na-lEb" firstAttribute="leading" secondItem="28F-fN-RK3" secondAttribute="leading" id="xCv-EB-6kL"/>
+                                    <constraint firstAttribute="width" constant="100" id="cSQ-zH-62z"/>
                                 </constraints>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="rbT-lv-mjX" appends="YES" id="Ahg-Fn-Oda"/>
-                                    <outletCollection property="gestureRecognizers" destination="dFf-54-iqT" appends="YES" id="4Ae-1k-TVy"/>
-                                    <outletCollection property="gestureRecognizers" destination="9Mt-Xp-6pQ" appends="YES" id="3lu-ea-gar"/>
-                                </connections>
-                            </glkView>
+                            </stackView>
                         </subviews>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="28F-fN-RK3" firstAttribute="trailing" secondItem="i19-2q-nLa" secondAttribute="trailing" id="8i1-GH-w2a"/>
-                            <constraint firstItem="28F-fN-RK3" firstAttribute="leading" secondItem="i19-2q-nLa" secondAttribute="leading" id="B3U-OB-Fag"/>
-                            <constraint firstItem="28F-fN-RK3" firstAttribute="bottom" secondItem="i19-2q-nLa" secondAttribute="bottom" id="df6-5n-2B6"/>
-                            <constraint firstItem="28F-fN-RK3" firstAttribute="top" secondItem="cad-PF-Uap" secondAttribute="top" id="pCv-NM-pDv"/>
+                            <constraint firstItem="CWF-na-lEb" firstAttribute="bottom" secondItem="i19-2q-nLa" secondAttribute="bottom" id="9EY-TA-sTI"/>
+                            <constraint firstItem="CWF-na-lEb" firstAttribute="trailing" secondItem="i19-2q-nLa" secondAttribute="trailing" id="Ghw-NC-zkk"/>
+                            <constraint firstItem="yj0-xJ-UtT" firstAttribute="height" secondItem="3Iq-7M-Uhp" secondAttribute="height" id="Gvp-Qi-HLZ"/>
+                            <constraint firstItem="yj0-xJ-UtT" firstAttribute="bottom" secondItem="i19-2q-nLa" secondAttribute="bottom" id="Tzp-of-V4V"/>
+                            <constraint firstItem="3Iq-7M-Uhp" firstAttribute="bottom" secondItem="i19-2q-nLa" secondAttribute="bottom" id="bls-Ia-5dp"/>
+                            <constraint firstItem="yj0-xJ-UtT" firstAttribute="leading" secondItem="3Iq-7M-Uhp" secondAttribute="trailing" constant="8" id="k3U-eH-ark"/>
+                            <constraint firstItem="3Iq-7M-Uhp" firstAttribute="leading" secondItem="i19-2q-nLa" secondAttribute="leading" id="pwH-aw-NG2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="i19-2q-nLa"/>
                         <connections>
                             <outlet property="delegate" destination="zjr-sC-J6G" id="iWS-xZ-3g5"/>
                             <outletCollection property="gestureRecognizers" destination="duG-zJ-z3S" appends="YES" id="4cK-5K-PEQ"/>
+                            <outletCollection property="gestureRecognizers" destination="rbT-lv-mjX" appends="YES" id="Au5-xu-CHW"/>
+                            <outletCollection property="gestureRecognizers" destination="dFf-54-iqT" appends="YES" id="oQ9-5o-JMU"/>
+                            <outletCollection property="gestureRecognizers" destination="9Mt-Xp-6pQ" appends="YES" id="Zsh-pd-HHL"/>
                         </connections>
                     </glkView>
                     <connections>
