@@ -377,6 +377,11 @@ GameObject* npc;
 {
     [glesRenderer update];
     
+    if (!npcStationary)
+    {
+        npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y + 1, npc.transform.rotation.z);
+    }
+    
     // minimap
     if (!minimapOn) return;
     
@@ -478,6 +483,8 @@ float yInitialRotation;
 - (IBAction)OnXStepPress:(UIStepper*)sender {
     static double curVal = 0;
     
+    if (!npcStationary) { return; }
+    
     if (sender.value > curVal)
     {
         npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(npcStepSize, 0, 0));
@@ -493,6 +500,8 @@ float yInitialRotation;
 - (IBAction)OnYStepPress:(UIStepper*)sender {
     static double curVal = 0;
     
+    if (!npcStationary) { return; }
+
     if (sender.value > curVal)
     {
         npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, npcStepSize, 0));
@@ -507,7 +516,9 @@ float yInitialRotation;
 
 - (IBAction)OnZStepPress:(UIStepper*)sender {
     static double curVal = 0;
-    
+
+    if (!npcStationary) { return; }
+
     if (sender.value > curVal)
     {
         npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, npcStepSize));
@@ -521,19 +532,39 @@ float yInitialRotation;
 }
 
 - (IBAction)OnScaleChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
     npc.transform.scale = GLKVector3Make(sender.value, sender.value, sender.value);
 }
 
 - (IBAction)OnXRotChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
     npc.transform.rotation = GLKVector3Make(sender.value * 360.0, npc.transform.rotation.y, npc.transform.rotation.z);
 }
 - (IBAction)OnYRotChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
     npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, sender.value * 360.0, npc.transform.rotation.z);
 }
 - (IBAction)OnZRotChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
     npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y, sender.value * 360.0);
 }
 
+- (IBAction)OnTryToggleNpcMove:(id)sender {
+    GLKVector3 playerPos = player.transform.position;
+    GLKVector3 npcPos = npc.transform.position;
+    
+    playerPos.y = 0;
+    npcPos.y = 0;
+
+    if (GLKVector3Distance(playerPos, npcPos) < 2.0f)
+    {
+        npcStationary = !npcStationary;
+    }
+}
 
 
 // endregion
