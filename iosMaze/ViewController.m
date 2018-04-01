@@ -58,16 +58,9 @@ GameObject* player;
     
     [self setupMaterial];
 
-    Model* cubeModel = [[Model alloc] init];
-//    [cubeModel LoadData:Model.GetCubeVertices
-//                       :Model.GetCubeNormals
-//                       :Model.GetCubeUvs
-//                       :Model.GetCubeIndices
-//                       :24 :36];
-
     ObjReader* objReader = [[ObjReader alloc] init];
-    Model* sphereModel = [objReader Read :@"sphere"];
-
+    Model* cubeModel = [objReader Read :@"cube"];
+    Model* sphereModel = [objReader Read:@"sphere"];
     
     // minimap
     minimapOn = true;
@@ -90,14 +83,14 @@ GameObject* player;
     // Standalone GameObject
     GameObject* go = [[GameObject alloc] init];
     go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
-    go.model = sphereModel;
+    go.model = [objReader Read:@"storm_trooper"];
 //    [go.model LoadData:Model.GetCubeVertices
 //                  :Model.GetCubeNormals
 //                  :Model.GetCubeUvs
 //                  :Model.GetCubeIndices
 //                  :24
 //                  :36];
-    [go.material LoadTexture:@"wallBothSides.jpg"];
+    [go.material LoadTexture:@"storm_trooper.png"];
     
     // GameObjects with shared materials and models
     Model* wallModel = [[Model alloc] init];
@@ -113,13 +106,13 @@ GameObject* player;
     GameObject* go2 = [[GameObject alloc] init];
     go2.transform = [[Transform alloc] init];
     go2.transform.position = GLKVector3Make(MAZE_SIZE/2 - 1, 0.5, -1);
-    go2.model = sphereModel;
+    go2.model = cubeModel;
     go2.material = sharedMat;
     
     GameObject* go3 = [[GameObject alloc] init];
     go3.transform = [[Transform alloc] init];
     go3.transform.position = GLKVector3Make(MAZE_SIZE/2 + 1, 0.5, -1);
-    go3.model = sphereModel;
+    go3.model = cubeModel;
     go3.material = sharedMat;
     
     [gameObjects addObject:go];

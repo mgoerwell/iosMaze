@@ -22,6 +22,7 @@ uint vertexCount;
 -(void)LoadVertexData :(NSMutableArray*)vertexDataArray
                       :(NSMutableArray*)indexArray
 {
+    // recompile data into primitives
     struct VertexData vertBuf[vertexDataArray.count];
     for (int i = 0; i<vertexDataArray.count; i++)
     {
@@ -29,15 +30,14 @@ uint vertexCount;
         [read getValue:&vertBuf[i]];
     }
 
-    int indices[indexArray.count];
+    uint indices[indexArray.count];
     for (int i = 0; i<indexArray.count; i++)
     {
-        indices[i] = [[indexArray objectAtIndex:i] intValue];
+        indices[i] = (uint)[[indexArray objectAtIndex:i] intValue];
     }
     
-    int foo = vertexDataArray.count;
-    int bar = indexArray.count;
-    int foobar = sizeof(vertBuf);
+    // set number of indices for drawing
+    self.numIndices = indexArray.count;
     
     // Create VAO
     glGenVertexArrays(1, &_VAO);
@@ -72,7 +72,7 @@ uint vertexCount;
     // Create VBO (index data)
     glGenBuffers(1, &vboIndices);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIndices);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArray.count*sizeof(indices[0]), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, (uint)indexArray.count*sizeof(indices[0]), indices, GL_STATIC_DRAW);
 }
 
 // functions override

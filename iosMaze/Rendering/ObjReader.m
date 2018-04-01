@@ -12,20 +12,14 @@
 
 @implementation ObjReader
 
-// private
+// raw data
 NSMutableArray *vertices;
 NSMutableArray *uvs;
 NSMutableArray *normals;
-
-// public
+// formatted data
 NSMutableArray *vertexDataArray;
 NSMutableArray *indexArray;
-
 NSMutableDictionary *hashmap;
-// [dict setObject:[NSNumber numberWithInt:42] forKey:@"A cool number"];
-
-struct VertexData* vertbuf;
-int* indices;
 
 -(id)init
 {
@@ -46,7 +40,14 @@ int* indices;
 -(Model*)Read :(NSString *)fileName
 {
     // clear all arrays
-    
+    [vertices removeAllObjects];
+    [uvs removeAllObjects];
+    [normals removeAllObjects];
+    [vertexDataArray removeAllObjects];
+    [indexArray removeAllObjects];
+    [hashmap removeAllObjects];
+
+    // read file 
     NSString *path = [NSBundle.mainBundle pathForResource:fileName ofType:@"obj"];
     NSError *error;
 
@@ -114,8 +115,9 @@ int* indices;
 
 -(void)ReadVertex :(NSString*)line
 {
-    NSArray *strings = [line componentsSeparatedByString:@" "];
-    
+    NSArray *strings = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    strings = [strings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+
     float x = [strings[1] floatValue];
     float y = [strings[2] floatValue];
     float z = [strings[3] floatValue];
@@ -127,8 +129,9 @@ int* indices;
 
 -(void)ReadUV :(NSString*)line
 {
-    NSArray *strings = [line componentsSeparatedByString:@" "];
-    
+    NSArray *strings = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    strings = [strings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+
     float u = [strings[1] floatValue];
     float v = [strings[2] floatValue];
     
@@ -138,8 +141,9 @@ int* indices;
 
 -(void)ReadNormal :(NSString*)line
 {
-    NSArray *strings = [line componentsSeparatedByString:@" "];
-    
+    NSArray *strings = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    strings = [strings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
+
     float nx = [strings[1] floatValue];
     float ny = [strings[2] floatValue];
     float nz = [strings[3] floatValue];
@@ -151,7 +155,8 @@ int* indices;
 
 -(void)ReadFace :(NSString*)line
 {
-    NSArray *strings = [line componentsSeparatedByString:@" "];
+    NSArray *strings = [line componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    strings = [strings filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != ''"]];
 
     // skip first word - "f "
     for (int i = 1; i < [strings count]; i++)
@@ -168,6 +173,10 @@ int* indices;
         vertexData.position[0] = [vertices[posIndex*3] floatValue];
         vertexData.position[1] = [vertices[posIndex*3+1] floatValue];
         vertexData.position[2] = [vertices[posIndex*3+2] floatValue];
+        vertexData.color[0]    = 0;
+        vertexData.color[1]    = 0;
+        vertexData.color[2]    = 0;
+        vertexData.color[3]    = 0;
         vertexData.uv[0]       = [uvs[texIndex*2] floatValue];
         vertexData.uv[1]       = [uvs[texIndex*2+1] floatValue];
         vertexData.normal[0]   = [normals[nrmIndex*3] floatValue];
