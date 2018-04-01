@@ -11,7 +11,7 @@
 #import "DisjointSetWrapper.h"
 #import "MazeWrapper.h"
 #import "ObjReader.h"
-
+#import <GLKit/GLKit.h>
 
 
 @interface ViewController() {
@@ -35,6 +35,10 @@ float movementSpeed = 5.0f;
 const int MAZE_SIZE = 5;
 MazeWrapper *maze;
 
+// npc
+bool npcStationary = false; // toggle to true to control npc
+const float npcStepSize = 0.5f;
+
 // Shared materials
 Material* wallBothMat;
 Material* wallLefthMat;
@@ -44,6 +48,7 @@ Material* floorMat;
 Material* crateMat;
 Material* playerMat;
 GameObject* player;
+GameObject* npc;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,7 +66,15 @@ GameObject* player;
     ObjReader* objReader = [[ObjReader alloc] init];
     Model* cubeModel = [objReader Read :@"cube"];
     Model* sphereModel = [objReader Read:@"sphere"];
+    Model* npcModel = [objReader Read:@"storm_trooper"];
     
+    // npc
+    npc = [[GameObject alloc] init];
+    npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
+    npc.model = npcModel;
+    [npc.material LoadTexture:@"storm_trooper.png"];
+    [gameObjects addObject:npc];
+
     // minimap
     minimapOn = true;
     player = [[GameObject alloc] init];
@@ -81,16 +94,15 @@ GameObject* player;
     // DEBUG CODE
     
     // Standalone GameObject
-    GameObject* go = [[GameObject alloc] init];
-    go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
-    go.model = [objReader Read:@"storm_trooper"];
+//    GameObject* go = [[GameObject alloc] init];
+//    go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
 //    [go.model LoadData:Model.GetCubeVertices
 //                  :Model.GetCubeNormals
 //                  :Model.GetCubeUvs
 //                  :Model.GetCubeIndices
 //                  :24
 //                  :36];
-    [go.material LoadTexture:@"storm_trooper.png"];
+//    [go.material LoadTexture:@"wallBothSides.jpg"];
     
     // GameObjects with shared materials and models
     Model* wallModel = [[Model alloc] init];
@@ -115,7 +127,7 @@ GameObject* player;
     go3.model = cubeModel;
     go3.material = sharedMat;
     
-    [gameObjects addObject:go];
+    // [gameObjects addObject:go];
     [gameObjects addObject:go2];
     [gameObjects addObject:go3];
 }
@@ -460,6 +472,67 @@ float yInitialRotation;
     [glesRenderer moveCam];
 }
 
+
+// npc controls
+
+- (IBAction)OnXStepPress:(UIStepper*)sender {
+    static double curVal = 0;
+    
+    if (sender.value > curVal)
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(npcStepSize, 0, 0));
+    }
+    else
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(-npcStepSize, 0, 0));
+    }
+    
+    curVal = sender.value;
+}
+
+- (IBAction)OnYStepPress:(UIStepper*)sender {
+    static double curVal = 0;
+    
+    if (sender.value > curVal)
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, npcStepSize, 0));
+    }
+    else
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, -npcStepSize, 0));
+    }
+    
+    curVal = sender.value;
+}
+
+- (IBAction)OnZStepPress:(UIStepper*)sender {
+    static double curVal = 0;
+    
+    if (sender.value > curVal)
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, npcStepSize));
+    }
+    else
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, -npcStepSize));
+    }
+    
+    curVal = sender.value;
+}
+
+- (IBAction)OnScaleChange:(UISlider*)sender {
+    npc.transform.scale = GLKVector3Make(sender.value, sender.value, sender.value);
+}
+
+- (IBAction)OnXRotChange:(UISlider*)sender {
+    npc.transform.rotation = GLKVector3Make(sender.value * 360.0, npc.transform.rotation.y, npc.transform.rotation.z);
+}
+- (IBAction)OnYRotChange:(UISlider*)sender {
+    npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, sender.value * 360.0, npc.transform.rotation.z);
+}
+- (IBAction)OnZRotChange:(UISlider*)sender {
+    npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y, sender.value * 360.0);
+}
 
 
 

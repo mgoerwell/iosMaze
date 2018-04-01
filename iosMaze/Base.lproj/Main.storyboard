@@ -64,6 +64,55 @@
                                             <constraint firstAttribute="height" constant="100" id="3X5-hX-KkC"/>
                                         </constraints>
                                     </stackView>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dDM-d7-lJh">
+                                        <rect key="frame" x="0.0" y="0.0" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnXStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="eYy-QR-Hyk"/>
+                                        </connections>
+                                    </stepper>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="GXL-Sw-EFz">
+                                        <rect key="frame" x="0.0" y="37" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnYStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="Lwn-ia-gsl"/>
+                                        </connections>
+                                    </stepper>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumValue="-1000" maximumValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="KI7-59-Y5Y">
+                                        <rect key="frame" x="0.0" y="74" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnZStepPress:" destination="zjr-sC-J6G" eventType="valueChanged" id="hEW-hc-4db"/>
+                                        </connections>
+                                    </stepper>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.5" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="pIf-jZ-dOT">
+                                        <rect key="frame" x="0.0" y="111" width="118" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnScaleChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="7dA-BC-kCg"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="Q3O-cu-ayx">
+                                        <rect key="frame" x="-2" y="148" width="118" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnXRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="abc-AB-ioU"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="dlO-oL-uo2">
+                                        <rect key="frame" x="0.0" y="185" width="118" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnYRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="InC-XI-bxq"/>
+                                        </connections>
+                                    </slider>
+                                    <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="HeH-X7-fbT">
+                                        <rect key="frame" x="0.0" y="222" width="118" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <connections>
+                                            <action selector="OnZRotChange:" destination="zjr-sC-J6G" eventType="valueChanged" id="LDo-Sg-Ail"/>
+                                        </connections>
+                                    </slider>
                                 </subviews>
                                 <gestureRecognizers/>
                                 <constraints>
