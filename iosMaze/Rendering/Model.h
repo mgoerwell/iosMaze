@@ -25,6 +25,8 @@ struct VertexData {
 @property float* uv;
 @property uint* indices;
 @property int numIndices;
+@property struct VertexData* vertices;
+@property int numVertices;
 
 // load data directly
 -(void)LoadVertexData :(NSMutableArray*)vertexDataArray

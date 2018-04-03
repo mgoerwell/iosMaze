@@ -37,6 +37,8 @@ uint vertexCount;
     }
     
     // set number of indices for drawing
+    self.vertices = vertBuf;
+    self.numVertices = vertexDataArray.count;
     self.numIndices = indexArray.count;
     
     // Create VAO

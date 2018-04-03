@@ -31,5 +31,20 @@
     return m;
 }
 
+-(void)Translate :(float)x :(float)y :(float)z
+{
+    _position = GLKVector3Make(_position.x + x, _position.y + y, _position.z + z);
+}
+
+-(void)Rotate :(float)xDeg :(float)yDeg :(float)zDeg\
+{
+    _rotation = GLKVector3Make(_rotation.x + xDeg, _rotation.y + yDeg, _rotation.z + zDeg);
+}
+
+-(void)SetScale :(float)scale
+{
+    _scale = GLKVector3Make(scale, scale, scale);
+}
+
 
 @end
