@@ -10,12 +10,13 @@
 #import "ObjectiveCCounter.h"
 #import "DisjointSetWrapper.h"
 #import "MazeWrapper.h"
+#import "ObjReader.h"
+#import <GLKit/GLKit.h>
+
 
 @interface ViewController() {
     Renderer *glesRenderer; // ###
-    Renderer *playerOverlay;
-    NSMutableArray *models;
-    NSMutableArray *overlay;
+    NSMutableArray *gameObjects;
     IBOutlet UILabel *transformLabel;
     IBOutlet UILabel *counterLabel;
     GLKView *glkView;
@@ -25,59 +26,136 @@
 @end
 
 
+
 @implementation ViewController
 
 bool isRotating = false; 
 float rotationSpeed = 5.0f;
 float movementSpeed = 5.0f;
 const int MAZE_SIZE = 5;
-ObjectiveCCounter *counter;
 MazeWrapper *maze;
+
+// npc
+bool npcStationary = false; // toggle to true to control npc
+const float npcStepSize = 0.5f;
+
+// Shared materials
+Material* wallBothMat;
+Material* wallLefthMat;
+Material* wallRightMat;
+Material* wallNoneMat;
+Material* floorMat;
+Material* crateMat;
+Material* playerMat;
+GameObject* player;
+GameObject* npc;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    models = [NSMutableArray array];
-    overlay = [NSMutableArray array];
-    
-    // ### <<< (Crate)
+    // initialize OpenGL context and rendering
     glkView = (GLKView *)self.view;
     glesRenderer = [[Renderer alloc] init];
     [glesRenderer setup:glkView];
-    [glesRenderer loadModels:MODEL_CUBE];
-    [glesRenderer setPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -1)];
-    glesRenderer.rotating = true;
-    glesRenderer.texture = TEX_CRATE;
-    [models addObject:glesRenderer];
-    // ### >>>
     
-    // Minimap
+    // setup shared resources
+    gameObjects = [NSMutableArray array];
+    
+    [self setupMaterial];
+
+    ObjReader* objReader = [[ObjReader alloc] init];
+    Model* cubeModel = [objReader Read :@"cube"];
+    Model* sphereModel = [objReader Read:@"sphere"];
+    Model* npcModel = [objReader Read:@"storm_trooper"];
+    
+    // npc
+    npc = [[GameObject alloc] init];
+    npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
+    npc.model = npcModel;
+    [npc.material LoadTexture:@"storm_trooper.png"];
+    [gameObjects addObject:npc];
+
+    // minimap
     minimapOn = true;
-    // red player indicator
-    playerOverlay = (GLKView *)self.view;
-    playerOverlay = [[Renderer alloc] init];
-    [playerOverlay setup:(GLKView * )self.view];
-    [playerOverlay loadModels:MODEL_WALL];
-    playerOverlay.xRot = 90;
-    playerOverlay.texture = TEX_BLACK;
-    [overlay addObject:playerOverlay];
-    // black box for minimap
-    [self genOverlay];
+    player = [[GameObject alloc] init];
+    player.model = cubeModel;
+    player.material = playerMat;
     
-    // Maze creation
+    // maze creation
     maze = [[MazeWrapper alloc] initWithSize :MAZE_SIZE :MAZE_SIZE];
     [maze create];
     [self generateMazeWall];
-    
-    // Misc setup
+
+    // misc setup
     [self resetCamera];
     [Renderer setFogIntensity:5.0];
+    
+    
+    // DEBUG CODE
+    
+    // Standalone GameObject
+//    GameObject* go = [[GameObject alloc] init];
+//    go.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
+//    [go.model LoadData:Model.GetCubeVertices
+//                  :Model.GetCubeNormals
+//                  :Model.GetCubeUvs
+//                  :Model.GetCubeIndices
+//                  :24
+//                  :36];
+//    [go.material LoadTexture:@"wallBothSides.jpg"];
+    
+    // GameObjects with shared materials and models
+    Model* wallModel = [[Model alloc] init];
+//    [wallModel LoadData:Model.GetWallVertices
+//                       :Model.GetCubeNormals
+//                       :Model.GetCubeUvs
+//                       :Model.GetCubeIndices
+//                       :24 :36];
+    
+    Material* sharedMat = [[Material alloc] init];
+    [sharedMat LoadTexture:@"wallNoSides.jpg"];
+    
+    GameObject* go2 = [[GameObject alloc] init];
+    go2.transform = [[Transform alloc] init];
+    go2.transform.position = GLKVector3Make(MAZE_SIZE/2 - 1, 0.5, -1);
+    go2.model = cubeModel;
+    go2.material = sharedMat;
+    
+    GameObject* go3 = [[GameObject alloc] init];
+    go3.transform = [[Transform alloc] init];
+    go3.transform.position = GLKVector3Make(MAZE_SIZE/2 + 1, 0.5, -1);
+    go3.model = cubeModel;
+    go3.material = sharedMat;
+    
+    // [gameObjects addObject:go];
+    [gameObjects addObject:go2];
+    [gameObjects addObject:go3];
+}
+
+- (void)setupMaterial
+{
+    wallBothMat = [[Material alloc] init];
+    wallNoneMat = [[Material alloc] init];
+    wallLefthMat = [[Material alloc] init];
+    wallRightMat = [[Material alloc] init];
+    floorMat = [[Material alloc] init];
+    crateMat = [[Material alloc] init];
+    playerMat = [[Material alloc] init];
+    
+    [wallBothMat LoadTexture:@"wallBothSides.jpg"];
+    [wallNoneMat LoadTexture:@"wallNoSides.jpg"];
+    [wallLefthMat LoadTexture:@"wallLeftSide.jpg"];
+    [wallRightMat LoadTexture:@"wallRightSide.jpg"];
+    [floorMat LoadTexture:@"floor.jpg"];
+    [crateMat LoadTexture:@"crate.jpg"];
+    [playerMat LoadTexture:@"red.jpg"];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 
 // REGION: MAZE
@@ -98,6 +176,13 @@ MazeWrapper *maze;
 
 -(void)generateMazeWall
 {
+    // create a shared model for all wall objects
+    Model* wallModel = [[Model alloc] init];
+    [wallModel LoadData:Model.GetWallVertices
+                       :Model.GetCubeNormals
+                       :Model.GetCubeUvs
+                       :Model.GetCubeIndices
+                       :24 :36];
     
     for (int x = 0; x < MAZE_SIZE; x++)
     {
@@ -108,60 +193,64 @@ MazeWrapper *maze;
             if (cell.northWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                // r.position = GLKVector3Make(x, 0, y + 0.4);
                 rightTexture = [self wallCheckNorth:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x, 0, y + 0.4);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+
+                [gameObjects addObject:go];
             }
             
             if (cell.eastWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                r.position = GLKVector3Make(x + 0.4, 0, y);
-                r.yRot = 90;
                 rightTexture = [self wallCheckEast:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x + 0.4, 0, y);
+                go.transform.rotation = GLKVector3Make(0, 90, 0);
+
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+                
+                [gameObjects addObject:go];
             }
             
             if (cell.southWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                r.position = GLKVector3Make(x, 0, y - 0.4);
                 rightTexture = [self wallCheckSouth:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x, 0, y - 0.4);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+                
+                [gameObjects addObject:go];
             }
             
             if (cell.westWallPresent)
             {
                 int rightTexture = 0;
-                Renderer *r = [[Renderer alloc] init];
-                [r setup:(GLKView * )self.view];
-                [r loadModels:MODEL_WALL];
-                r.position = GLKVector3Make(x - 0.4, 0, y);
-                r.yRot = 90;
                 rightTexture = [self wallCheckWest:y column:x];
-                [self selectTexture:r selection:rightTexture];
-                [models addObject:r];
+
+                GameObject* go = [[GameObject alloc] init];
+                go.transform.position = GLKVector3Make(x - 0.4, 0, y);
+                go.transform.rotation = GLKVector3Make(0, 90, 0);
+                go.model = wallModel;
+                [self selectTexture:go selection:rightTexture];
+                
+                [gameObjects addObject:go];
             }
             
-            Renderer *r = [[Renderer alloc] init];
-            [r setup:(GLKView * )self.view];
-            [r loadModels:MODEL_WALL];
-            r.position = GLKVector3Make(x, -0.6, y);
-            r.xRot = 90;
-            r.texture = TEX_FLOOR;
-            [models addObject:r];
+            GameObject* go = [[GameObject alloc] init];
+            go.transform.position = GLKVector3Make(x, -0.6, y);
+            go.transform.rotation = GLKVector3Make(90, 0, 0);
+            go.model = wallModel;
+            go.material = floorMat;
+            [gameObjects addObject:go];
         }
     }
 }
@@ -259,69 +348,47 @@ MazeWrapper *maze;
 }
 
 //convert selected texture to actual image for texture
-- (void)selectTexture:(Renderer *)r
-              selection:(int)selection {
+- (void)selectTexture:(GameObject *)go
+              selection:(int)selection
+{
     switch (selection) {
         case 0:
-            r.texture = TEX_WALL_BOTH;
+            go.material = wallBothMat;
             break;
         case 1:
-            r.texture = TEX_WALL_LEFT;
+            go.material = wallLefthMat;
             break;
         case 2:
-            r.texture = TEX_WALL_RIGHT;
+            go.material = wallRightMat;
             break;
         default:
-            r.texture = TEX_WALL_NO;
+            go.material = wallNoneMat;
             break;
     }
 }
 
 // endregion
 
-
-// REGION: Minimap
-
-- (void)genOverlay
-{
-    for (int x = -5; x < MAZE_SIZE + 5; x++)
-    {
-        for (int y = -5; y < MAZE_SIZE + 5; y++)
-        {
-            Renderer *r = [[Renderer alloc] init];
-            [r setup:(GLKView * )self.view];
-            [r loadModels:MODEL_WALL];
-            r.position = GLKVector3Make(x, -2.0, y);
-            r.xRot = 90;
-            r.isOverlay = true;
-            [overlay addObject:r];
-        }
-    }
-}
-
-// endregion
 
 
 // REGION: GLKIT
 
 - (void)update
 {
-    for (int i = 0; i < models.count; i++)
+    [glesRenderer update];
+    
+    if (!npcStationary)
     {
-        [((Renderer *)models[i]) update];
+        npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y + 1, npc.transform.rotation.z);
     }
     
     // minimap
     if (!minimapOn) return;
     
-    for (int i = 0; i < overlay.count; i++)
-    {
-        [((Renderer *)overlay[i]) update];
-    }
     GLKVector3 camPos = [Renderer getCameraPosition];
     camPos.y = 2.0f;  // always on top of map
-    playerOverlay.position = camPos;
-    playerOverlay.yRot = -[Renderer getCameraYRotation];
+    player.transform.position = camPos;
+    player.transform.rotation = GLKVector3Make(0, -[Renderer getCameraYRotation], 0);
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -331,23 +398,25 @@ MazeWrapper *maze;
     glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     
     // draw
-    for (int i = 0; i < models.count; i++)
+    for (int i = 0; i < gameObjects.count; i++)
     {
-        [((Renderer *)models[i]) draw:rect];
+        [glesRenderer drawGameObject:((GameObject*)gameObjects[i])];
     }
     
     // MINIMAP
     if (!minimapOn) return;
     
+    // calculate map size
     int w = (int)(self->glkView.drawableWidth / 2);
     int h = (int)(self->glkView.drawableHeight / 2);
     minimapSize = (w < h) ? w : h;
     
+    // restrict drawing to top-right
     glViewport(((int)(self->glkView.drawableWidth)) - minimapSize,
                ((int)(self->glkView.drawableHeight)) - minimapSize,
                minimapSize, minimapSize);
 
-    // clear depth for section
+    // clear depth for section (draw on top)
     glEnable(GL_SCISSOR_TEST);
     glScissor(((int)(self->glkView.drawableWidth)) - minimapSize,
                ((int)(self->glkView.drawableHeight)) - minimapSize,
@@ -360,21 +429,18 @@ MazeWrapper *maze;
     glBlendFunc(GL_ONE, GL_SRC_ALPHA);
     
     // draw minimap
-    for (int i = 0; i < models.count; i++)
+    for (int i = 0; i < gameObjects.count; i++)
     {
-        [((Renderer *)models[i]) drawMinimap];
+        [glesRenderer drawGameObjectMinimap:((GameObject*)gameObjects[i])];
     }
-    for (int i = 0; i < overlay.count; i++)
-    {
-        [((Renderer *)overlay[i]) drawMinimap];
-    }
+    [glesRenderer drawGameObjectMinimap:player];
+
     glDisable(GL_BLEND);
-    
 }
 
 -(void)resetCamera {
-    [Renderer setCameraPosition:GLKVector3Make(MAZE_SIZE / 2, 0, -3)];
-    [Renderer setCameraYRotation:180];
+    [Renderer setCameraPosition:GLKVector3Make(MAZE_SIZE / 2, 0, 3)];
+    [Renderer setCameraYRotation:0];
     [Renderer setCameraXRotation:0];
 }
 
@@ -412,9 +478,98 @@ float yInitialRotation;
 }
 
 
+// npc controls
+
+- (IBAction)OnXStepPress:(UIStepper*)sender {
+    static double curVal = 0;
+    
+    if (!npcStationary) { return; }
+    
+    if (sender.value > curVal)
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(npcStepSize, 0, 0));
+    }
+    else
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(-npcStepSize, 0, 0));
+    }
+    
+    curVal = sender.value;
+}
+
+- (IBAction)OnYStepPress:(UIStepper*)sender {
+    static double curVal = 0;
+    
+    if (!npcStationary) { return; }
+
+    if (sender.value > curVal)
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, npcStepSize, 0));
+    }
+    else
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, -npcStepSize, 0));
+    }
+    
+    curVal = sender.value;
+}
+
+- (IBAction)OnZStepPress:(UIStepper*)sender {
+    static double curVal = 0;
+
+    if (!npcStationary) { return; }
+
+    if (sender.value > curVal)
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, npcStepSize));
+    }
+    else
+    {
+        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, -npcStepSize));
+    }
+    
+    curVal = sender.value;
+}
+
+- (IBAction)OnScaleChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
+    npc.transform.scale = GLKVector3Make(sender.value, sender.value, sender.value);
+}
+
+- (IBAction)OnXRotChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
+    npc.transform.rotation = GLKVector3Make(sender.value * 360.0, npc.transform.rotation.y, npc.transform.rotation.z);
+}
+- (IBAction)OnYRotChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
+    npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, sender.value * 360.0, npc.transform.rotation.z);
+}
+- (IBAction)OnZRotChange:(UISlider*)sender {
+    if (!npcStationary) { return; }
+
+    npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y, sender.value * 360.0);
+}
+
+- (IBAction)OnTryToggleNpcMove:(id)sender {
+    GLKVector3 playerPos = player.transform.position;
+    GLKVector3 npcPos = npc.transform.position;
+    
+    playerPos.y = 0;
+    npcPos.y = 0;
+
+    if (GLKVector3Distance(playerPos, npcPos) < 2.0f)
+    {
+        npcStationary = !npcStationary;
+    }
+}
 
 
 // endregion
+
+
 
 // REGION: UI
 - (IBAction)onDayNightPress:(id)sender {

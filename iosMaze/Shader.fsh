@@ -94,5 +94,5 @@ void main()
     else
     {
         o_fragColor = finalColor;
-    }
+    }    
 }

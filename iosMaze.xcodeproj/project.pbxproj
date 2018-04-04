@@ -12,6 +12,13 @@
 		C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592920582ADD004A9342 /* wallLeftSide.jpg */; };
 		C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592A20582ADD004A9342 /* wallNoSides.jpg */; };
 		C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592B20582ADD004A9342 /* wallRightSide.jpg */; };
+		DE0064B8206D8A00008CCDC4 /* raw_cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = 7BF0B7F5206D58E700C7E0EA /* raw_cube.obj */; };
+		DE2EDEE92070D30100369DA5 /* cube.obj in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEE82070D30100369DA5 /* cube.obj */; };
+		DE2EDEEB2070D34000369DA5 /* sphere.obj in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEEA2070D34000369DA5 /* sphere.obj */; };
+		DE2EDEEF2070D7C000369DA5 /* storm_trooper.obj in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEEE2070D7C000369DA5 /* storm_trooper.obj */; };
+		DE2EDEF22070DB2E00369DA5 /* storm_trooper.png in Resources */ = {isa = PBXBuildFile; fileRef = DE2EDEF12070DB2D00369DA5 /* storm_trooper.png */; };
+		DE2EDEF520718C1F00369DA5 /* CALayer+XibConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = DE2EDEF420718C1F00369DA5 /* CALayer+XibConfiguration.m */; };
+		DE3E893C206C995100648A03 /* ObjReader.m in Sources */ = {isa = PBXBuildFile; fileRef = DE3E893B206C995100648A03 /* ObjReader.m */; };
 		DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C5204B5AB500FCC2D9 /* Main.storyboard */; };
 		DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */; };
 		DE5947CC204B5AB500FCC2D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE5947CA204B5AB500FCC2D9 /* LaunchScreen.storyboard */; };
@@ -27,16 +34,30 @@
 		DE6B8152204B5EE50034A4F0 /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6B814F204B5EE40034A4F0 /* maze.cpp */; };
 		DE6B8153204B5EE50034A4F0 /* DisjointSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */; };
 		DE6B8156204B61020034A4F0 /* DisjointSetWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DE6B8155204B61020034A4F0 /* DisjointSetWrapper.mm */; };
-		DEDA3A2E205A18CD00CB9D2D /* black.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEDA3A2D205A18CD00CB9D2D /* black.jpg */; };
+		DEC41C222060AE2A00B7373E /* GameObject.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C212060AE2A00B7373E /* GameObject.m */; };
+		DEC41C242060AE3600B7373E /* Transform.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C232060AE3600B7373E /* Transform.m */; };
+		DEC41C262060AE4100B7373E /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C252060AE4100B7373E /* Model.m */; };
+		DEC41C282060AE4B00B7373E /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = DEC41C272060AE4B00B7373E /* Material.m */; };
+		DEDA3A2E205A18CD00CB9D2D /* red.jpg in Resources */ = {isa = PBXBuildFile; fileRef = DEDA3A2D205A18CD00CB9D2D /* red.jpg */; };
 		DEFE2D4E204D0CAC00895244 /* MazeWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7BF0B7F5206D58E700C7E0EA /* raw_cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = raw_cube.obj; sourceTree = "<group>"; };
 		C954592720582ADD004A9342 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
 		C954592820582ADD004A9342 /* wallBothSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallBothSides.jpg; sourceTree = "<group>"; };
 		C954592920582ADD004A9342 /* wallLeftSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallLeftSide.jpg; sourceTree = "<group>"; };
 		C954592A20582ADD004A9342 /* wallNoSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallNoSides.jpg; sourceTree = "<group>"; };
 		C954592B20582ADD004A9342 /* wallRightSide.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallRightSide.jpg; sourceTree = "<group>"; };
+		DE2EDEE82070D30100369DA5 /* cube.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cube.obj; sourceTree = "<group>"; };
+		DE2EDEEA2070D34000369DA5 /* sphere.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sphere.obj; sourceTree = "<group>"; };
+		DE2EDEEE2070D7C000369DA5 /* storm_trooper.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = storm_trooper.obj; sourceTree = "<group>"; };
+		DE2EDEF02070D7D500369DA5 /* storm_trooper.dds */ = {isa = PBXFileReference; lastKnownFileType = file; path = storm_trooper.dds; sourceTree = "<group>"; };
+		DE2EDEF12070DB2D00369DA5 /* storm_trooper.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = storm_trooper.png; sourceTree = "<group>"; };
+		DE2EDEF320718C0400369DA5 /* CALayer+XibConfiguration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CALayer+XibConfiguration.h"; sourceTree = "<group>"; };
+		DE2EDEF420718C1F00369DA5 /* CALayer+XibConfiguration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CALayer+XibConfiguration.m"; sourceTree = "<group>"; };
+		DE3E893B206C995100648A03 /* ObjReader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ObjReader.m; sourceTree = "<group>"; };
+		DE3E893D206C9A4500648A03 /* ObjReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjReader.h; sourceTree = "<group>"; };
 		DE5947BC204B5AB500FCC2D9 /* iosMaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosMaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE5947C6204B5AB500FCC2D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,7 +84,15 @@
 		DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DisjointSet.cpp; sourceTree = "<group>"; };
 		DE6B8154204B603D0034A4F0 /* DisjointSetWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DisjointSetWrapper.h; sourceTree = "<group>"; };
 		DE6B8155204B61020034A4F0 /* DisjointSetWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DisjointSetWrapper.mm; sourceTree = "<group>"; };
-		DEDA3A2D205A18CD00CB9D2D /* black.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = black.jpg; sourceTree = "<group>"; };
+		DEC41C212060AE2A00B7373E /* GameObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameObject.m; sourceTree = "<group>"; };
+		DEC41C232060AE3600B7373E /* Transform.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Transform.m; sourceTree = "<group>"; };
+		DEC41C252060AE4100B7373E /* Model.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Model.m; sourceTree = "<group>"; };
+		DEC41C272060AE4B00B7373E /* Material.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Material.m; sourceTree = "<group>"; };
+		DEC41C292060AE8700B7373E /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
+		DEC41C2A2060AE8700B7373E /* GameObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameObject.h; sourceTree = "<group>"; };
+		DEC41C2B2060AE8800B7373E /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
+		DEC41C2C2060AE8800B7373E /* Transform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
+		DEDA3A2D205A18CD00CB9D2D /* red.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = red.jpg; sourceTree = "<group>"; };
 		DEFE2D4C204D0C9F00895244 /* MazeWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeWrapper.h; sourceTree = "<group>"; };
 		DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MazeWrapper.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -82,7 +111,9 @@
 		C954592620582ADD004A9342 /* Textures */ = {
 			isa = PBXGroup;
 			children = (
-				DEDA3A2D205A18CD00CB9D2D /* black.jpg */,
+				DE2EDEF12070DB2D00369DA5 /* storm_trooper.png */,
+				DE2EDEF02070D7D500369DA5 /* storm_trooper.dds */,
+				DEDA3A2D205A18CD00CB9D2D /* red.jpg */,
 				C954592720582ADD004A9342 /* floor.jpg */,
 				C954592820582ADD004A9342 /* wallBothSides.jpg */,
 				C954592920582ADD004A9342 /* wallLeftSide.jpg */,
@@ -90,6 +121,32 @@
 				C954592B20582ADD004A9342 /* wallRightSide.jpg */,
 			);
 			path = Textures;
+			sourceTree = "<group>";
+		};
+		DE2EDEEC2070D61D00369DA5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DE2EDEEE2070D7C000369DA5 /* storm_trooper.obj */,
+				DE2EDEE82070D30100369DA5 /* cube.obj */,
+				7BF0B7F5206D58E700C7E0EA /* raw_cube.obj */,
+				DE2EDEEA2070D34000369DA5 /* sphere.obj */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		DE2EDEED2070D66000369DA5 /* Maze */ = {
+			isa = PBXGroup;
+			children = (
+				DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */,
+				DE6B8150204B5EE40034A4F0 /* DisjointSet.h */,
+				DE6B8154204B603D0034A4F0 /* DisjointSetWrapper.h */,
+				DE6B8155204B61020034A4F0 /* DisjointSetWrapper.mm */,
+				DE6B814F204B5EE40034A4F0 /* maze.cpp */,
+				DE6B814E204B5EE40034A4F0 /* maze.h */,
+				DEFE2D4C204D0C9F00895244 /* MazeWrapper.h */,
+				DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */,
+			);
+			path = Maze;
 			sourceTree = "<group>";
 		};
 		DE5947B3204B5AB500FCC2D9 = {
@@ -111,31 +168,28 @@
 		DE5947BE204B5AB500FCC2D9 /* iosMaze */ = {
 			isa = PBXGroup;
 			children = (
-				DE6B8151204B5EE50034A4F0 /* DisjointSet.cpp */,
-				DE6B8150204B5EE40034A4F0 /* DisjointSet.h */,
-				DE6B8154204B603D0034A4F0 /* DisjointSetWrapper.h */,
-				DE6B8155204B61020034A4F0 /* DisjointSetWrapper.mm */,
-				DE6B814F204B5EE40034A4F0 /* maze.cpp */,
-				DE6B814E204B5EE40034A4F0 /* maze.h */,
-				DEFE2D4C204D0C9F00895244 /* MazeWrapper.h */,
-				DEFE2D4D204D0CAC00895244 /* MazeWrapper.mm */,
+				DE2EDEED2070D66000369DA5 /* Maze */,
+				DE2EDEEC2070D61D00369DA5 /* Models */,
+				DEC41C182060AD8C00B7373E /* Rendering */,
 				DE6B814C204B5C240034A4F0 /* MixedLanguage */,
-				DE6B812B204B5B3A0034A4F0 /* AppDelegate.h */,
-				DE6B812D204B5B3A0034A4F0 /* AppDelegate.m */,
+				C954592620582ADD004A9342 /* Textures */,
 				DE6B8133204B5B3B0034A4F0 /* GLESRenderer.cpp */,
 				DE6B812E204B5B3A0034A4F0 /* GLESRenderer.hpp */,
-				DE6B812A204B5B390034A4F0 /* main.m */,
 				DE6B8134204B5B3B0034A4F0 /* Renderer.h */,
 				DE6B812F204B5B3A0034A4F0 /* Renderer.mm */,
 				DE6B812C204B5B3A0034A4F0 /* Shader.fsh */,
 				DE6B8130204B5B3A0034A4F0 /* Shader.vsh */,
+				DE6B812B204B5B3A0034A4F0 /* AppDelegate.h */,
+				DE6B812D204B5B3A0034A4F0 /* AppDelegate.m */,
+				DE6B812A204B5B390034A4F0 /* main.m */,
 				DE6B8131204B5B3A0034A4F0 /* ViewController.h */,
 				DE6B8132204B5B3B0034A4F0 /* ViewController.m */,
 				DE5947C5204B5AB500FCC2D9 /* Main.storyboard */,
 				DE5947C8204B5AB500FCC2D9 /* Assets.xcassets */,
 				DE5947CA204B5AB500FCC2D9 /* LaunchScreen.storyboard */,
 				DE5947CD204B5AB500FCC2D9 /* Info.plist */,
-				C954592620582ADD004A9342 /* Textures */,
+				DE2EDEF320718C0400369DA5 /* CALayer+XibConfiguration.h */,
+				DE2EDEF420718C1F00369DA5 /* CALayer+XibConfiguration.m */,
 			);
 			path = iosMaze;
 			sourceTree = "<group>";
@@ -149,6 +203,23 @@
 				DE6B8147204B5C030034A4F0 /* ObjectiveCCounter.mm */,
 			);
 			path = MixedLanguage;
+			sourceTree = "<group>";
+		};
+		DEC41C182060AD8C00B7373E /* Rendering */ = {
+			isa = PBXGroup;
+			children = (
+				DE3E893D206C9A4500648A03 /* ObjReader.h */,
+				DE3E893B206C995100648A03 /* ObjReader.m */,
+				DEC41C2A2060AE8700B7373E /* GameObject.h */,
+				DEC41C212060AE2A00B7373E /* GameObject.m */,
+				DEC41C292060AE8700B7373E /* Model.h */,
+				DEC41C252060AE4100B7373E /* Model.m */,
+				DEC41C2B2060AE8800B7373E /* Material.h */,
+				DEC41C272060AE4B00B7373E /* Material.m */,
+				DEC41C2C2060AE8800B7373E /* Transform.h */,
+				DEC41C232060AE3600B7373E /* Transform.m */,
+			);
+			path = Rendering;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,15 +280,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE2EDEEB2070D34000369DA5 /* sphere.obj in Resources */,
+				DE2EDEEF2070D7C000369DA5 /* storm_trooper.obj in Resources */,
+				DE0064B8206D8A00008CCDC4 /* raw_cube.obj in Resources */,
+				DE2EDEF22070DB2E00369DA5 /* storm_trooper.png in Resources */,
 				C954592C20582ADD004A9342 /* floor.jpg in Resources */,
 				C954592D20582ADD004A9342 /* wallBothSides.jpg in Resources */,
+				DE2EDEE92070D30100369DA5 /* cube.obj in Resources */,
 				DE6B8136204B5B3B0034A4F0 /* Shader.fsh in Resources */,
 				DE5947CC204B5AB500FCC2D9 /* LaunchScreen.storyboard in Resources */,
 				DE5947C9204B5AB500FCC2D9 /* Assets.xcassets in Resources */,
 				DE5947C7204B5AB500FCC2D9 /* Main.storyboard in Resources */,
 				DE6B8139204B5B3B0034A4F0 /* Shader.vsh in Resources */,
 				C954593020582ADD004A9342 /* wallRightSide.jpg in Resources */,
-				DEDA3A2E205A18CD00CB9D2D /* black.jpg in Resources */,
+				DEDA3A2E205A18CD00CB9D2D /* red.jpg in Resources */,
 				C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */,
 				C954592F20582ADD004A9342 /* wallNoSides.jpg in Resources */,
 			);
@@ -234,11 +310,17 @@
 				DE6B814A204B5C030034A4F0 /* ObjectiveCCounter.mm in Sources */,
 				DE6B813B204B5B3B0034A4F0 /* GLESRenderer.cpp in Sources */,
 				DE6B8153204B5EE50034A4F0 /* DisjointSet.cpp in Sources */,
+				DE3E893C206C995100648A03 /* ObjReader.m in Sources */,
+				DEC41C222060AE2A00B7373E /* GameObject.m in Sources */,
 				DE6B8137204B5B3B0034A4F0 /* AppDelegate.m in Sources */,
 				DE6B8138204B5B3B0034A4F0 /* Renderer.mm in Sources */,
 				DEFE2D4E204D0CAC00895244 /* MazeWrapper.mm in Sources */,
+				DEC41C242060AE3600B7373E /* Transform.m in Sources */,
+				DEC41C282060AE4B00B7373E /* Material.m in Sources */,
 				DE6B8156204B61020034A4F0 /* DisjointSetWrapper.mm in Sources */,
 				DE6B813A204B5B3B0034A4F0 /* ViewController.m in Sources */,
+				DEC41C262060AE4100B7373E /* Model.m in Sources */,
+				DE2EDEF520718C1F00369DA5 /* CALayer+XibConfiguration.m in Sources */,
 				DE6B8152204B5EE50034A4F0 /* maze.cpp in Sources */,
 				DE6B8135204B5B3B0034A4F0 /* main.m in Sources */,
 			);
