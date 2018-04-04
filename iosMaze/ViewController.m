@@ -70,7 +70,7 @@ GameObject* npc;
     
     // npc
     npc = [[GameObject alloc] init];
-    npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, -1);
+    npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, 1);
     npc.model = npcModel;
     [npc.material LoadTexture:@"storm_trooper.png"];
     [gameObjects addObject:npc];

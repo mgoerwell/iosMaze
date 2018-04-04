@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5F49739B20756DDF0052918F /* Collider.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F49739A20756DDF0052918F /* Collider.m */; };
 		C954592C20582ADD004A9342 /* floor.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592720582ADD004A9342 /* floor.jpg */; };
 		C954592D20582ADD004A9342 /* wallBothSides.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592820582ADD004A9342 /* wallBothSides.jpg */; };
 		C954592E20582ADD004A9342 /* wallLeftSide.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C954592920582ADD004A9342 /* wallLeftSide.jpg */; };
@@ -43,6 +44,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5F49739A20756DDF0052918F /* Collider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Collider.m; sourceTree = "<group>"; };
 		7BF0B7F5206D58E700C7E0EA /* raw_cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = raw_cube.obj; sourceTree = "<group>"; };
 		C954592720582ADD004A9342 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
 		C954592820582ADD004A9342 /* wallBothSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallBothSides.jpg; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				DEC41C272060AE4B00B7373E /* Material.m */,
 				DEC41C2C2060AE8800B7373E /* Transform.h */,
 				DEC41C232060AE3600B7373E /* Transform.m */,
+				5F49739A20756DDF0052918F /* Collider.m */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				DEC41C282060AE4B00B7373E /* Material.m in Sources */,
 				DE6B8156204B61020034A4F0 /* DisjointSetWrapper.mm in Sources */,
 				DE6B813A204B5B3B0034A4F0 /* ViewController.m in Sources */,
+				5F49739B20756DDF0052918F /* Collider.m in Sources */,
 				DEC41C262060AE4100B7373E /* Model.m in Sources */,
 				DE2EDEF520718C1F00369DA5 /* CALayer+XibConfiguration.m in Sources */,
 				DE6B8152204B5EE50034A4F0 /* maze.cpp in Sources */,
