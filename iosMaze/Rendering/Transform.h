@@ -17,5 +17,8 @@
 
 // calculate and return a model matrix
 -(GLKMatrix4)GetModelMatrix;
+-(void)Translate :(float)x :(float)y :(float)z;
+-(void)Rotate :(float)xDeg :(float)yDeg :(float)zDeg;
+-(void)SetScale :(float)scale;
 
 @end

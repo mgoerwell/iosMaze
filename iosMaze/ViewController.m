@@ -488,11 +488,11 @@ float yInitialRotation;
     
     if (sender.value > curVal)
     {
-        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(npcStepSize, 0, 0));
+        [npc.transform Translate :npcStepSize :0 :0];
     }
     else
     {
-        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(-npcStepSize, 0, 0));
+        [npc.transform Translate :-npcStepSize :0 :0];
     }
     
     curVal = sender.value;
@@ -505,11 +505,11 @@ float yInitialRotation;
 
     if (sender.value > curVal)
     {
-        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, npcStepSize, 0));
+        [npc.transform Translate :0 :npcStepSize :0];
     }
     else
     {
-        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, -npcStepSize, 0));
+        [npc.transform Translate :0 :-npcStepSize :0];
     }
     
     curVal = sender.value;
@@ -522,11 +522,11 @@ float yInitialRotation;
 
     if (sender.value > curVal)
     {
-        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, npcStepSize));
+        [npc.transform Translate :0 :0 :npcStepSize];
     }
     else
     {
-        npc.transform.position = GLKVector3Add(npc.transform.position, GLKVector3Make(0, 0, -npcStepSize));
+        [npc.transform Translate :0 :0 :-npcStepSize];
     }
     
     curVal = sender.value;
@@ -535,7 +535,7 @@ float yInitialRotation;
 - (IBAction)OnScaleChange:(UISlider*)sender {
     if (!npcStationary) { return; }
 
-    npc.transform.scale = GLKVector3Make(sender.value, sender.value, sender.value);
+    [npc.transform SetScale:sender.value];
 }
 
 - (IBAction)OnXRotChange:(UISlider*)sender {
