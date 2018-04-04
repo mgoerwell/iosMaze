@@ -37,7 +37,8 @@ MazeWrapper *maze;
 
 // npc
 bool npcStationary = false; // toggle to true to control npc
-const float npcStepSize = 0.5f;
+const float npcStepSize = 0.05f;
+int direction = 0;
 
 // Shared materials
 Material* wallBothMat;
@@ -49,6 +50,7 @@ Material* crateMat;
 Material* playerMat;
 GameObject* player;
 GameObject* npc;
+Model* wallModel;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -71,8 +73,15 @@ GameObject* npc;
     // npc
     npc = [[GameObject alloc] init];
     npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, 1);
+    npc.collider.x_pos = npc.transform.position.x;
+    npc.collider.z_pos = npc.transform.position.z;
+    
     npc.model = npcModel;
     [npc.material LoadTexture:@"storm_trooper.png"];
+    [npc.collider SetRadius:[self checkModelBounds:npc]];
+    [npc.collider setScale:npc.transform.scale];
+    npc.collider.position = npc.transform.position;
+    
     [gameObjects addObject:npc];
 
     // minimap
@@ -105,7 +114,7 @@ GameObject* npc;
 //    [go.material LoadTexture:@"wallBothSides.jpg"];
     
     // GameObjects with shared materials and models
-    Model* wallModel = [[Model alloc] init];
+//    Model* wallModel = [[Model alloc] init];
 //    [wallModel LoadData:Model.GetWallVertices
 //                       :Model.GetCubeNormals
 //                       :Model.GetCubeUvs
@@ -177,7 +186,7 @@ GameObject* npc;
 -(void)generateMazeWall
 {
     // create a shared model for all wall objects
-    Model* wallModel = [[Model alloc] init];
+     wallModel = [[Model alloc] init];
     [wallModel LoadData:Model.GetWallVertices
                        :Model.GetCubeNormals
                        :Model.GetCubeUvs
@@ -198,6 +207,9 @@ GameObject* npc;
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x, 0, y + 0.4);
                 go.model = wallModel;
+                [go.collider setRadius:[self checkModelBounds:go]];
+                [go.collider setScale: go.transform.scale];
+                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
 
                 [gameObjects addObject:go];
@@ -213,6 +225,9 @@ GameObject* npc;
                 go.transform.rotation = GLKVector3Make(0, 90, 0);
 
                 go.model = wallModel;
+                [go.collider SetRadius:[self checkModelBounds:go]];
+                [go.collider setScale: go.transform.scale];
+                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
                 
                 [gameObjects addObject:go];
@@ -226,6 +241,9 @@ GameObject* npc;
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x, 0, y - 0.4);
                 go.model = wallModel;
+                [go.collider SetRadius:[self checkModelBounds:go]];
+                [go.collider setScale: go.transform.scale];
+                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
                 
                 [gameObjects addObject:go];
@@ -240,6 +258,9 @@ GameObject* npc;
                 go.transform.position = GLKVector3Make(x - 0.4, 0, y);
                 go.transform.rotation = GLKVector3Make(0, 90, 0);
                 go.model = wallModel;
+                [go.collider SetRadius:[self checkModelBounds:go]];
+                [go.collider setScale: go.transform.scale];
+                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
                 
                 [gameObjects addObject:go];
@@ -369,8 +390,131 @@ GameObject* npc;
 
 // endregion
 
+//Collider Setup
+-(float) checkModelBounds : (GameObject*) Go {
+    float length;
+    float min_x = 0;
+    float max_x = 0;
+    float min_z = 0;
+    float max_z = 0;
+    for (int i = 0; i < Go.model.numVertices; i++) {
+        if (Go.model.vertices[i].position[0] < min_x) {
+            min_x = Go.model.vertices[i].position[0];
+        }
+        if (Go.model.vertices[i].position[0] < max_x) {
+            max_x = Go.model.vertices[i].position[0];
+        }
+        if (Go.model.vertices[i].position[2] < min_z) {
+            min_z = Go.model.vertices[i].position[2];
+        }
+        if (Go.model.vertices[i].position[2] < max_z) {
+            max_z = Go.model.vertices[i].position[2];
+        }
+    }
+//    if (Go.model == wallModel) {
+//        length = max_z - min_z;
+//    } else {
+        if (max_x - min_x > max_z - min_z) {
+            length = max_x - min_x;
+        } else {
+            length = max_z - min_z;
+        }
+    
+    return length;
+}
 
+//move npc
+-(void)moveNPC {
+    if (!npc.collider.moving) {
+        direction = arc4random() % 4;
+        switch (direction) {
+            case 0:
+                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos -1];
+                break;
+            case 1:
+                [npc.collider SetDest:npc.collider.x_pos -1 :npc.collider.z_pos];
+                break;
+            case 2:
+                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos +1];
+                break;
+            case 3:
+                [npc.collider SetDest:npc.collider.x_pos +1 :npc.collider.z_pos];
+                break;
+            default:
+                break;
+        }
+    }
+    switch (direction) {
+        case 0:
+            [npc.collider Move: 0 : -1 * npcStepSize];
+            [npc.transform Translate:0 :0 :-1 * npcStepSize];
+            break;
+        case 1:
+            [npc.collider Move: -1 * npcStepSize : 0];
+            [npc.transform Translate:-1 * npcStepSize :0 :0];
+            break;
+        case 2:
+            [npc.collider Move: 0 : 1 * npcStepSize];
+            [npc.transform Translate:0 :0 :1 * npcStepSize];
+            break;
+        case 3:
+            [npc.collider Move: 1 * npcStepSize : 0];
+            [npc.transform Translate:1 * npcStepSize :0 :0];
+            break;
+        default:
+            break;
+    }
+    int result = 0;
+    result = [self CheckCollisions];
+    if (result == 1) {
+        switch (direction) {
+            case 0:
+                direction = 2;
+                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
+                [npc.collider Move: 0 : 1 * npcStepSize];
+                [npc.transform Translate:0 :0 :1 * npcStepSize];
+                break;
+            case 1:
+                direction = 3;
+                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
+                [npc.collider Move: 1 * npcStepSize : 0];
+                [npc.transform Translate:1 * npcStepSize :0 :0];
+                break;
+            case 2:
+                direction = 0;
+                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
+                [npc.collider Move: 0 : -1 * npcStepSize];
+                [npc.transform Translate:0 :0 :-1 * npcStepSize];
+                break;
+            case 3:
+                direction = 1;
+                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
+                [npc.collider Move: -1 * npcStepSize : 0];
+                [npc.transform Translate:-1 * npcStepSize :0 :0];
+                break;
+            default:
+                break;
+        }
+    }
+    
+}
 
+//
+- (int)CheckCollisions {
+    for (int i = 0; i < gameObjects.count-1; i++) {
+        if ([gameObjects objectAtIndex:i] == npc){
+            continue;
+        }
+        GameObject* test = [gameObjects objectAtIndex:i];
+        if (npc.collider.position.x <= test.collider.position.x - test.collider.radius && npc.collider.position.x >= test.collider.position.x + test.collider.radius) {
+            return 1;
+        }
+        if (npc.collider.position.z <= test.collider.position.z - test.collider.radius && npc.collider.position.z >= test.collider.position.z + test.collider.radius) {
+            return 1;
+        }
+    }
+    return 0;
+}
 // REGION: GLKIT
 
 - (void)update
@@ -380,7 +524,7 @@ GameObject* npc;
     if (!npcStationary)
     {
         //DO CODE HERE
-        npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y + 1, npc.transform.rotation.z);
+        [self moveNPC];
     }
     
     // minimap
@@ -489,10 +633,12 @@ float yInitialRotation;
     if (sender.value > curVal)
     {
         [npc.transform Translate :npcStepSize :0 :0];
+        [npc.collider Translate :npcStepSize :0 :0];
     }
     else
     {
         [npc.transform Translate :-npcStepSize :0 :0];
+        [npc.collider Translate :-npcStepSize :0 :0];
     }
     
     curVal = sender.value;
@@ -506,10 +652,12 @@ float yInitialRotation;
     if (sender.value > curVal)
     {
         [npc.transform Translate :0 :npcStepSize :0];
+        [npc.collider Translate :0 :npcStepSize :0];
     }
     else
     {
         [npc.transform Translate :0 :-npcStepSize :0];
+        [npc.collider Translate :0 :-npcStepSize :0];
     }
     
     curVal = sender.value;
@@ -523,10 +671,12 @@ float yInitialRotation;
     if (sender.value > curVal)
     {
         [npc.transform Translate :0 :0 :npcStepSize];
+        [npc.collider Translate :0 :0 :npcStepSize];
     }
     else
     {
         [npc.transform Translate :0 :0 :-npcStepSize];
+        [npc.collider Translate :0 :0 :-npcStepSize];
     }
     
     curVal = sender.value;
@@ -536,6 +686,7 @@ float yInitialRotation;
     if (!npcStationary) { return; }
 
     [npc.transform SetScale:sender.value];
+    [npc.collider setScale:npc.transform.scale];
 }
 
 - (IBAction)OnXRotChange:(UISlider*)sender {

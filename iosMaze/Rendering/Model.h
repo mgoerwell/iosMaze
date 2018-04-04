@@ -24,6 +24,7 @@ struct VertexData {
 @property float* normal;
 @property float* uv;
 @property uint* indices;
+// below ok
 @property int numIndices;
 @property struct VertexData* vertices;
 @property int numVertices;

@@ -19,6 +19,7 @@
         _transform = [[Transform alloc] init];
         _model     = [[Model alloc] init];
         _material  = [[Material alloc] init];
+        _collider  = [[Collider alloc] init];
     }
     return self;
 }

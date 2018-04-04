@@ -45,6 +45,7 @@
 
 /* Begin PBXFileReference section */
 		5F49739A20756DDF0052918F /* Collider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Collider.m; sourceTree = "<group>"; };
+		5F49739C20756F1D0052918F /* Collider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Collider.h; sourceTree = "<group>"; };
 		7BF0B7F5206D58E700C7E0EA /* raw_cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = raw_cube.obj; sourceTree = "<group>"; };
 		C954592720582ADD004A9342 /* floor.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = floor.jpg; sourceTree = "<group>"; };
 		C954592820582ADD004A9342 /* wallBothSides.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wallBothSides.jpg; sourceTree = "<group>"; };
@@ -221,6 +222,7 @@
 				DEC41C2C2060AE8800B7373E /* Transform.h */,
 				DEC41C232060AE3600B7373E /* Transform.m */,
 				5F49739A20756DDF0052918F /* Collider.m */,
+				5F49739C20756F1D0052918F /* Collider.h */,
 			);
 			path = Rendering;
 			sourceTree = "<group>";

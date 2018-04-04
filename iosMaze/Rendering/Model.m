@@ -104,6 +104,9 @@ uint vertexCount;
         memcpy(vertBuf[v].uv, &_uv[v*2], sizeof(vertBuf[0].uv));
     }
     
+    self.vertices = vertBuf;
+    self.numVertices = vertexCount;
+    
     // Create VAO
     glGenVertexArrays(1, &_VAO);
     glBindVertexArray(_VAO);
