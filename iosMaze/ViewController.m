@@ -379,6 +379,7 @@ GameObject* npc;
     
     if (!npcStationary)
     {
+        //DO CODE HERE
         npc.transform.rotation = GLKVector3Make(npc.transform.rotation.x, npc.transform.rotation.y + 1, npc.transform.rotation.z);
     }
     
