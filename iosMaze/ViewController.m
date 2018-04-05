@@ -72,7 +72,7 @@ Model* wallModel;
     
     // npc
     npc = [[GameObject alloc] init];
-    npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, 1);
+    npc.transform.position = GLKVector3Make(MAZE_SIZE/2, -0.5, 1);
     [npc.transform SetScale:0.5f];
     npc.collider.position = npc.transform.position;
 
@@ -121,24 +121,24 @@ Model* wallModel;
 //                       :Model.GetCubeIndices
 //                       :24 :36];
     
-    Material* sharedMat = [[Material alloc] init];
-    [sharedMat LoadTexture:@"wallNoSides.jpg"];
-    
-    GameObject* go2 = [[GameObject alloc] init];
-    go2.transform = [[Transform alloc] init];
-    go2.transform.position = GLKVector3Make(MAZE_SIZE/2 - 1, 0.5, -1);
-    go2.model = cubeModel;
-    go2.material = sharedMat;
-    
-    GameObject* go3 = [[GameObject alloc] init];
-    go3.transform = [[Transform alloc] init];
-    go3.transform.position = GLKVector3Make(MAZE_SIZE/2 + 1, 0.5, -1);
-    go3.model = cubeModel;
-    go3.material = sharedMat;
-    
-    // [gameObjects addObject:go];
-    [gameObjects addObject:go2];
-    [gameObjects addObject:go3];
+//    Material* sharedMat = [[Material alloc] init];
+//    [sharedMat LoadTexture:@"wallNoSides.jpg"];
+//
+//    GameObject* go2 = [[GameObject alloc] init];
+//    go2.transform = [[Transform alloc] init];
+//    go2.transform.position = GLKVector3Make(MAZE_SIZE/2 - 1, 0.5, -1);
+//    go2.model = cubeModel;
+//    go2.material = sharedMat;
+//
+//    GameObject* go3 = [[GameObject alloc] init];
+//    go3.transform = [[Transform alloc] init];
+//    go3.transform.position = GLKVector3Make(MAZE_SIZE/2 + 1, 0.5, -1);
+//    go3.model = cubeModel;
+//    go3.material = sharedMat;
+//
+//    // [gameObjects addObject:go];
+//    [gameObjects addObject:go2];
+//    [gameObjects addObject:go3];
 }
 
 - (void)setupMaterial
@@ -469,6 +469,13 @@ Model* wallModel;
 
 //
 - (int)CheckCollisions {
+    // check collisions w/ maze boundary
+    if (npc.transform.position.x < -0.5 || npc.transform.position.z < -0.5 || npc.transform.position.x > MAZE_SIZE - 0.5 || npc.transform.position.z > MAZE_SIZE - 0.5)
+    {
+        return 1;
+    }
+    
+    // check collisions w/ walls
     for (int i = 0; i < gameObjects.count-1; i++) {
         GameObject* test = [gameObjects objectAtIndex:i];
         if (test == npc){
