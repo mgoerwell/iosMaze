@@ -73,9 +73,9 @@ Model* wallModel;
     // npc
     npc = [[GameObject alloc] init];
     npc.transform.position = GLKVector3Make(MAZE_SIZE/2, 0, 1);
-    npc.collider.x_pos = npc.transform.position.x;
-    npc.collider.z_pos = npc.transform.position.z;
-    
+    [npc.transform SetScale:0.5f];
+    npc.collider.position = npc.transform.position;
+
     npc.model = npcModel;
     [npc.material LoadTexture:@"storm_trooper.png"];
     [self checkModelBounds:npc];
@@ -208,8 +208,6 @@ Model* wallModel;
                 go.transform.position = GLKVector3Make(x, 0, y + 0.4);
                 go.model = wallModel;
                 [self checkModelBounds:go];
-                [go.collider setScale: go.transform.scale];
-                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
 
                 [gameObjects addObject:go];
@@ -223,11 +221,8 @@ Model* wallModel;
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x + 0.4, 0, y);
                 go.transform.rotation = GLKVector3Make(0, 90, 0);
-
                 go.model = wallModel;
                 [self checkModelBounds:go];
-                [go.collider setScale: go.transform.scale];
-                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
                 
                 [gameObjects addObject:go];
@@ -242,8 +237,6 @@ Model* wallModel;
                 go.transform.position = GLKVector3Make(x, 0, y - 0.4);
                 go.model = wallModel;
                 [self checkModelBounds:go];
-                [go.collider setScale: go.transform.scale];
-                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
                 
                 [gameObjects addObject:go];
@@ -259,8 +252,6 @@ Model* wallModel;
                 go.transform.rotation = GLKVector3Make(0, 90, 0);
                 go.model = wallModel;
                 [self checkModelBounds:go];
-                [go.collider setScale: go.transform.scale];
-                go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
                 
                 [gameObjects addObject:go];
@@ -408,89 +399,70 @@ Model* wallModel;
     size[1] *= Go.transform.scale.z;
     
     if (Go.model == wallModel) {
-        for (float f = Go.transform.rotation.y; f >= 0; f -= 90) {
+        
+        if (fmodf(Go.transform.rotation.y, 180.0) == 90)
+        {
             float temp = size[0];
             size[0] = size[1];
             size[1] = temp;
         }
+    
     }
     
-    Go.collider.radiusX = size[1]/2;
-    Go.collider.radiusZ = size[0]/2;
+    Go.collider.radiusX = size[0];
+    Go.collider.radiusZ = size[1];
+    Go.collider.position = Go.transform.position;
 }
 
 //move npc
 -(void)moveNPC {
-    if (!npc.collider.moving) {
-        direction = arc4random() % 4;
-        switch (direction) {
-            case 0:
-                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos -1];
-                break;
-            case 1:
-                [npc.collider SetDest:npc.collider.x_pos -1 :npc.collider.z_pos];
-                break;
-            case 2:
-                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos +1];
-                break;
-            case 3:
-                [npc.collider SetDest:npc.collider.x_pos +1 :npc.collider.z_pos];
-                break;
-            default:
-                break;
-        }
-    }
+
+    if (npcStationary) { return; }
+
     switch (direction) {
         case 0:
-            [npc.collider Move: 0 : -1 * npcStepSize];
-            [npc.transform Translate:0 :0 :-1 * npcStepSize];
+            [npc.transform Translate :0 :0 :-npcStepSize];
             break;
         case 1:
-            [npc.collider Move: -1 * npcStepSize : 0];
-            [npc.transform Translate:-1 * npcStepSize :0 :0];
+            [npc.transform Translate :-npcStepSize :0 :0];
             break;
         case 2:
-            [npc.collider Move: 0 : 1 * npcStepSize];
-            [npc.transform Translate:0 :0 :1 * npcStepSize];
+            [npc.transform Translate :0 :0 :npcStepSize];
             break;
         case 3:
-            [npc.collider Move: 1 * npcStepSize : 0];
-            [npc.transform Translate:1 * npcStepSize :0 :0];
+            [npc.transform Translate :npcStepSize :0 :0];
             break;
         default:
             break;
     }
-    int result = 0;
-    result = [self CheckCollisions];
+    npc.collider.position = npc.transform.position;
+
+    int result = [self CheckCollisions];
+    
+    // if collided push npc back and change direction
     if (result == 1) {
         switch (direction) {
             case 0:
-                direction = 2;
-                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
-                [npc.collider Move: 0 : 1 * npcStepSize];
-                [npc.transform Translate:0 :0 :1 * npcStepSize];
+                direction = 1;
+                [npc.transform Translate :0 :0 :npcStepSize];
                 break;
             case 1:
-                direction = 3;
-                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
-                [npc.collider Move: 1 * npcStepSize : 0];
-                [npc.transform Translate:1 * npcStepSize :0 :0];
+                direction = 2;
+                [npc.transform Translate :npcStepSize :0 :0];
                 break;
             case 2:
-                direction = 0;
-                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
-                [npc.collider Move: 0 : -1 * npcStepSize];
-                [npc.transform Translate:0 :0 :-1 * npcStepSize];
+                direction = 3;
+                [npc.transform Translate :0 :0 :-npcStepSize];
                 break;
             case 3:
-                direction = 1;
-                [npc.collider SetDest:npc.collider.x_pos :npc.collider.z_pos];
-                [npc.collider Move: -1 * npcStepSize : 0];
-                [npc.transform Translate:-1 * npcStepSize :0 :0];
+                direction = 0;
+                [npc.transform Translate :-npcStepSize :0 :0];
                 break;
             default:
                 break;
         }
+        
+        npc.collider.position = npc.transform.position;
     }
     
 }
@@ -498,11 +470,16 @@ Model* wallModel;
 //
 - (int)CheckCollisions {
     for (int i = 0; i < gameObjects.count-1; i++) {
-        if ([gameObjects objectAtIndex:i] == npc){
+        GameObject* test = [gameObjects objectAtIndex:i];
+        if (test == npc){
             continue;
         }
-        GameObject* test = [gameObjects objectAtIndex:i];
-        if (fabs(npc.transform.position.x - test.transform.position.x) <= test.collider.radiusX + npc.collider.radiusX && fabs(npc.transform.position.z - test.transform.position.z) <= test.collider.radiusZ + npc.collider.radiusZ) {
+        if (test.collider.radiusX == 0 && test.collider.radiusZ == 0) {
+            continue;
+        }
+        
+        if (fabs(npc.transform.position.x - test.transform.position.x) <= test.collider.radiusX + npc.collider.radiusX && fabs(npc.transform.position.z - test.transform.position.z) <= test.collider.radiusZ + npc.collider.radiusZ)
+        {
             NSLog(@" npc-x:%f npc-z:%f", npc.transform.position.x, npc.transform.position.z);
             NSLog(@" test-x:%f test-z:%f", test.transform.position.x, test.transform.position.z);
             return 1;
