@@ -78,7 +78,7 @@ Model* wallModel;
     
     npc.model = npcModel;
     [npc.material LoadTexture:@"storm_trooper.png"];
-    [npc.collider SetRadius:[self checkModelBounds:npc]];
+    [self checkModelBounds:npc];
     [npc.collider setScale:npc.transform.scale];
     npc.collider.position = npc.transform.position;
     
@@ -207,7 +207,7 @@ Model* wallModel;
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x, 0, y + 0.4);
                 go.model = wallModel;
-                [go.collider setRadius:[self checkModelBounds:go]];
+                [self checkModelBounds:go];
                 [go.collider setScale: go.transform.scale];
                 go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
@@ -225,7 +225,7 @@ Model* wallModel;
                 go.transform.rotation = GLKVector3Make(0, 90, 0);
 
                 go.model = wallModel;
-                [go.collider SetRadius:[self checkModelBounds:go]];
+                [self checkModelBounds:go];
                 [go.collider setScale: go.transform.scale];
                 go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
@@ -241,7 +241,7 @@ Model* wallModel;
                 GameObject* go = [[GameObject alloc] init];
                 go.transform.position = GLKVector3Make(x, 0, y - 0.4);
                 go.model = wallModel;
-                [go.collider SetRadius:[self checkModelBounds:go]];
+                [self checkModelBounds:go];
                 [go.collider setScale: go.transform.scale];
                 go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
@@ -258,7 +258,7 @@ Model* wallModel;
                 go.transform.position = GLKVector3Make(x - 0.4, 0, y);
                 go.transform.rotation = GLKVector3Make(0, 90, 0);
                 go.model = wallModel;
-                [go.collider SetRadius:[self checkModelBounds:go]];
+                [self checkModelBounds:go];
                 [go.collider setScale: go.transform.scale];
                 go.collider.position = go.transform.position;
                 [self selectTexture:go selection:rightTexture];
@@ -391,36 +391,32 @@ Model* wallModel;
 // endregion
 
 //Collider Setup
--(float) checkModelBounds : (GameObject*) Go {
-    float length;
-    float min_x = 0;
-    float max_x = 0;
-    float min_z = 0;
-    float max_z = 0;
-    for (int i = 0; i < Go.model.numVertices; i++) {
-        if (Go.model.vertices[i].position[0] < min_x) {
-            min_x = Go.model.vertices[i].position[0];
-        }
-        if (Go.model.vertices[i].position[0] < max_x) {
-            max_x = Go.model.vertices[i].position[0];
-        }
-        if (Go.model.vertices[i].position[2] < min_z) {
-            min_z = Go.model.vertices[i].position[2];
-        }
-        if (Go.model.vertices[i].position[2] < max_z) {
-            max_z = Go.model.vertices[i].position[2];
+-(void) checkModelBounds : (GameObject*) Go {
+    GLfloat size[2] = {0.1, 0.1};
+    //3278
+    
+    float *modelVertices;
+    if (Go.model == wallModel) {
+        modelVertices = Model.GetWallVertices;
+        for (int i = 0; i < fmin(Go.model.numVertices, 24); i++) {
+            size[0] = fmax(fabs(modelVertices[3 * i]), size[0]);
+            size[1] = fmax(fabs(modelVertices[3 * i + 2]), size[1]);
         }
     }
-//    if (Go.model == wallModel) {
-//        length = max_z - min_z;
-//    } else {
-        if (max_x - min_x > max_z - min_z) {
-            length = max_x - min_x;
-        } else {
-            length = max_z - min_z;
-        }
     
-    return length;
+    size[0] *= Go.transform.scale.x;
+    size[1] *= Go.transform.scale.z;
+    
+    if (Go.model == wallModel) {
+        for (float f = Go.transform.rotation.y; f >= 0; f -= 90) {
+            float temp = size[0];
+            size[0] = size[1];
+            size[1] = temp;
+        }
+    }
+    
+    Go.collider.radiusX = size[1]/2;
+    Go.collider.radiusZ = size[0]/2;
 }
 
 //move npc
@@ -506,10 +502,9 @@ Model* wallModel;
             continue;
         }
         GameObject* test = [gameObjects objectAtIndex:i];
-        if (npc.collider.position.x <= test.collider.position.x - test.collider.radius && npc.collider.position.x >= test.collider.position.x + test.collider.radius) {
-            return 1;
-        }
-        if (npc.collider.position.z <= test.collider.position.z - test.collider.radius && npc.collider.position.z >= test.collider.position.z + test.collider.radius) {
+        if (fabs(npc.transform.position.x - test.transform.position.x) <= test.collider.radiusX + npc.collider.radiusX && fabs(npc.transform.position.z - test.transform.position.z) <= test.collider.radiusZ + npc.collider.radiusZ) {
+            NSLog(@" npc-x:%f npc-z:%f", npc.transform.position.x, npc.transform.position.z);
+            NSLog(@" test-x:%f test-z:%f", test.transform.position.x, test.transform.position.z);
             return 1;
         }
     }

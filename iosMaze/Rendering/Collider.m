@@ -30,7 +30,8 @@ int dest[2];
 
 -(void)SetScale:(float)scale {
     _scale = GLKVector3Make(scale, scale, scale);
-    _radius = _radius * scale;
+    _radiusX = _radiusX * scale;
+    _radiusZ = _radiusZ * scale;
 }
 
 -(void)Move : (float)x :(float)z {
@@ -53,10 +54,6 @@ int dest[2];
     dest[0] = x;
     dest[1] = z;
     _moving = true;
-}
-
--(void)SetRadius:(float)radius {
-    _radius = radius*1.25;
 }
 
 -(void)Translate :(float)x :(float)y :(float)z

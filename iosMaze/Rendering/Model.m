@@ -94,7 +94,7 @@ uint vertexCount;
     struct VertexData vertBuf[vertexCount];
     
     for (int v=0; v<vertexCount; v++) {
-        memcpy(vertBuf[v].position, &_position[v*3], sizeof(vertBuf[0].position));
+        memcpy(vertBuf[v].position, &_position[v*3], 3 * sizeof(float));
 //        memcpy(vertBuf[v].color, &_color[v*4], sizeof(vertBuf[0].color));
         vertBuf[v].color[0] = 1.0f;
         vertBuf[v].color[1] = 0.0f;

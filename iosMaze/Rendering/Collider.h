@@ -15,13 +15,14 @@
 @property bool moving;
 @property int x_pos;
 @property int z_pos;
-@property float radius;
+@property float radiusX;
+@property float radiusZ;
 
 -(void)SetScale :(float)scale;
 -(void)Translate :(float)x :(float)y :(float)z;
 -(void)DefineMaze :(int)size :(int)x :(int)z;
 -(void)Move : (float)x :(float)z;
 -(void)SetDest : (int)x : (int)z;
--(void)SetRadius:(float)radius;
+
 
 @end
